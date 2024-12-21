@@ -17,7 +17,7 @@ class MonsterSystem extends System
 	public function new()
 	{
 		query = new Query({
-			all: [Monster],
+			all: [Monster, Collider],
 			none: [IsDestroyed, Path],
 		});
 
@@ -35,7 +35,7 @@ class MonsterSystem extends System
 						return Math.POSITIVE_INFINITY;
 					}
 
-					var hasCollisions = world.systems.colliders.hasCollisions(collider, [FLG_BUILDING, FLG_OBJECT]);
+					var hasCollisions = world.systems.colliders.hasCollisions(collider, [FLG_BUILDING, FLG_OBJECT], b);
 
 					if (hasCollisions)
 					{
@@ -45,13 +45,15 @@ class MonsterSystem extends System
 					return Distance.Diagonal(a, b);
 				}
 			});
+
 			if (p.success)
 			{
-				e.add(new Path(p.path));
+				e.add(new Path(p.path, [FLG_UNIT, FLG_BUILDING, FLG_OBJECT]));
 			}
 			else
 			{
 				trace('no path found');
+				e.remove(Path);
 			}
 		});
 	}

@@ -1,20 +1,23 @@
 package domain.components;
 
 import common.struct.IntPoint;
+import domain.systems.ColliderSystem.ColliderFlag;
 import ecs.Component;
 
 class Path extends Component
 {
 	@save public var instructions:Array<IntPoint>;
+	@save public var collider_flags:Array<ColliderFlag>;
 	@save public var curIdx:Int;
 
 	public var length(get, never):Int;
 	public var remaining(get, never):Int;
 	public var current(get, never):IntPoint;
 
-	public function new(instructions:Array<IntPoint>)
+	public function new(instructions:Array<IntPoint>, collider_flags:Array<ColliderFlag>)
 	{
 		this.instructions = instructions;
+		this.collider_flags = collider_flags;
 		curIdx = 0;
 	}
 

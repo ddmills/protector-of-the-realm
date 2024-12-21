@@ -25,6 +25,7 @@ class OgrePrefab extends Prefab
 
 		e.add(sprite);
 		e.add(new Collider(POINT, new IntPoint(0, 0), [FLG_UNIT]));
+		// e.add(new Collider(CIRCLE(1), new IntPoint(0, 0), [FLG_UNIT]));
 		e.add(new Monster());
 		e.add(new Interactive(32));
 

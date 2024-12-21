@@ -1,6 +1,7 @@
 package domain.components;
 
 import common.struct.Coordinate;
+import domain.systems.ColliderSystem.ColliderFlag;
 import ecs.Component;
 
 enum Tween
@@ -13,8 +14,8 @@ enum Tween
 class Move extends Component
 {
 	@save public var goal:Coordinate;
-	@save public var tween:Tween;
 	@save public var speed:Float;
+	@save public var tween:Tween;
 	@save public var epsilon:Float;
 
 	public function new(goal:Coordinate, speed:Float = 0.05, tween:Tween = LINEAR, epsilon:Float = .0075)

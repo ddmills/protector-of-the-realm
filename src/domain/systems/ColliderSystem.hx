@@ -7,6 +7,7 @@ import core.Frame;
 import core.Game;
 import domain.components.Collider;
 import domain.components.IsDetached;
+import domain.components.Move;
 import domain.components.Moved;
 import ecs.Entity;
 import ecs.Query;
@@ -43,7 +44,13 @@ class ColliderSystem extends System
 			none: [IsDetached],
 		});
 
+		var move = new Query({
+			all: [Collider, Move],
+			none: [IsDetached],
+		});
+
 		moved.onEntityAdded(onEntityMoved);
+		move.onEntityAdded(onEntityMove);
 	}
 
 	override function update(frame:Frame)
@@ -106,13 +113,13 @@ class ColliderSystem extends System
 		return false;
 	}
 
-	public function hasCollisions(collider:Collider, flags:Array<ColliderFlag>):Bool
+	public function hasCollisions(collider:Collider, flags:Array<ColliderFlag>, ?pos:IntPoint):Bool
 	{
-		var footprint = collider.getFootprint();
+		var footprint = collider.getFootprint(pos);
 
-		for (pos in footprint)
+		for (fp in footprint)
 		{
-			var colliders = getCollidersAt(pos);
+			var colliders = getCollidersAt(fp);
 
 			if (colliders.exists(c -> c != collider && c.hasAnyFlags(flags)))
 			{
@@ -152,6 +159,20 @@ class ColliderSystem extends System
 		}
 
 		var newFootprint = collider.getFootprint(moved.current.toIntPoint());
+		for (pos in newFootprint)
+		{
+			addGridId(pos, e.id);
+		}
+
+		redrawDebug = true;
+	}
+
+	private function onEntityMove(e:Entity)
+	{
+		var move = e.get(Move);
+		var collider = e.get(Collider);
+
+		var newFootprint = collider.getFootprint(move.goal.toIntPoint());
 		for (pos in newFootprint)
 		{
 			addGridId(pos, e.id);

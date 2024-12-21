@@ -47,9 +47,9 @@ class PathFollowSystem extends System
 			{
 				var next = path.next();
 
-				var entities = world.systems.colliders.getEntityIdsAt(next);
+				var collisions = world.systems.colliders.getCollisionsAt(next, path.collider_flags);
 
-				if (entities.exists(v -> v != e.id))
+				if (collisions.exists(v -> v != e.id))
 				{
 					e.remove(path);
 					continue;
@@ -58,7 +58,7 @@ class PathFollowSystem extends System
 				var target = new Coordinate(next.x + .5, next.y + .5, WORLD);
 				var speed = .03;
 
-				e.add(new Move(target, speed, LINEAR));
+				e.add(new Move(target, speed));
 				redrawDebug = true;
 			}
 			else

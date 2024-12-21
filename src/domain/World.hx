@@ -65,15 +65,15 @@ class World
 		{
 			for (y in 0...mapHeight)
 			{
-				if (rand.bool(.05) && p.get(x, y, 16, 3) < .4)
+				if (rand.bool(.15) && p.get(x, y, 16, 3) < .4)
 				{
 					Spawner.Spawn(TREE_PINE, new Coordinate(x + .5, y + .5, WORLD));
 				}
-				else if (rand.bool(.005))
+				else if (rand.bool(.0005))
 				{
 					Spawner.Spawn(HERO, new Coordinate(x + .5, y + .5, WORLD));
 				}
-				else if (rand.bool(.0025))
+				else if (rand.bool(.00025))
 				{
 					Spawner.Spawn(OGRE, new Coordinate(x + .5, y + .5, WORLD));
 				}

@@ -22,6 +22,7 @@ typedef DebugInfo =
 	pos:Text,
 	clock:Text,
 	monster:Text,
+	entities:Text,
 	grid:h2d.Graphics,
 }
 
@@ -57,6 +58,7 @@ class PlayScreen extends Screen
 		var w = game.input.mouse.toWorld().floor().toString();
 		debugInfo.pos.text = '$w $px';
 		debugInfo.monster.text = 'monsters ${monsters.count().toString()}';
+		debugInfo.entities.text = 'entities ${game.registry.size.toString()}';
 		debugInfo.clock.text = '${game.clock.tick.floor()} (${game.clock.speed})';
 
 		while (game.commands.hasNext())
@@ -80,7 +82,11 @@ class PlayScreen extends Screen
 
 		if (game.input.lmb)
 		{
-			// Spawner.Spawn(MINOTAUR, pos.toWorld().floor().add(offset));
+			Spawner.Spawn(HERO, pos.toWorld().floor().add(offset));
+		}
+		if (game.input.rmb)
+		{
+			Spawner.Spawn(TREE_PINE, pos.toWorld().floor().add(offset));
 		}
 	}
 
@@ -156,9 +162,13 @@ class PlayScreen extends Screen
 		monster.color = game.TEXT_COLOR.toHxdColor();
 		monster.y = 32;
 
+		var entities = new Text(TextResources.BIZCAT, ob);
+		entities.color = game.TEXT_COLOR.toHxdColor();
+		entities.y = 48;
+
 		var clock = new Text(TextResources.BIZCAT, ob);
 		clock.color = game.TEXT_COLOR.toHxdColor();
-		clock.y = 48;
+		clock.y = 64;
 
 		var grid = new h2d.Graphics();
 		grid.visible = false;
@@ -206,6 +216,7 @@ class PlayScreen extends Screen
 			pos: pos,
 			clock: clock,
 			monster: monster,
+			entities: entities,
 			grid: grid,
 		};
 
