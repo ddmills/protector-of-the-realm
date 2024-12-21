@@ -1,0 +1,8 @@
+build/*/output.js
+build/*/output.hl
+build/*/output.js.map
+saves/*
+*.tmp
+*.dump
+*.blend1
+profile.json
