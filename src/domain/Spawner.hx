@@ -7,6 +7,7 @@ import domain.events.EntitySpawnedEvent;
 import domain.prefabs.GuildHallPrefab;
 import domain.prefabs.OgrePrefab;
 import domain.prefabs.PaladinPrefab;
+import domain.prefabs.PineTreePrefab;
 import domain.prefabs.WeedPrefab;
 
 class Spawner
@@ -21,6 +22,7 @@ class Spawner
 		prefabs.set(GUILD_HALL, new GuildHallPrefab());
 		prefabs.set(HERO, new PaladinPrefab());
 		prefabs.set(OGRE, new OgrePrefab());
+		prefabs.set(TREE_PINE, new PineTreePrefab());
 	}
 
 	public function spawn(type:SpawnableType, ?pos:Coordinate, ?options:Dynamic)

@@ -6,4 +6,5 @@ enum SpawnableType
 	WEED;
 	HERO;
 	OGRE;
+	TREE_PINE;
 }

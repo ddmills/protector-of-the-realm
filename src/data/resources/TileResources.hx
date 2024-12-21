@@ -29,9 +29,22 @@ class TileResources
 		var env = hxd.Res.environment;
 
 		tiles.set(TK_UNKNOWN, Tile.fromColor(0xff00ff, Game.TILE_SIZE, Game.TILE_SIZE, .25));
-		tiles.set(TK_WEED_01, env.Weed_01.toTile());
-		tiles.set(TK_WEED_02, env.Weed_02.toTile());
-		tiles.set(TK_WEED_03, env.Weed_03.toTile());
+		tiles.set(TK_WEED_01, env.weed_01.toTile());
+		tiles.set(TK_WEED_02, env.weed_02.toTile());
+		tiles.set(TK_WEED_03, env.weed_03.toTile());
+
+		var trees = hxd.Res.environment.trees;
+
+		tiles.set(TK_TREE_PINE_01, trees.pine_01.toTile());
+		tiles.set(TK_TREE_PINE_02, trees.pine_02.toTile());
+		tiles.set(TK_TREE_PINE_03, trees.pine_03.toTile());
+		tiles.set(TK_TREE_PINE_04, trees.pine_04.toTile());
+		tiles.set(TK_TREE_PINE_05, trees.pine_05.toTile());
+		tiles.set(TK_TREE_PINE_06, trees.pine_06.toTile());
+		tiles.set(TK_TREE_PINE_07, trees.pine_07.toTile());
+		tiles.set(TK_TREE_PINE_08, trees.pine_08.toTile());
+		tiles.set(TK_TREE_PINE_09, trees.pine_09.toTile());
+		tiles.set(TK_TREE_PINE_10, trees.pine_10.toTile());
 
 		var act = hxd.Res.actors;
 

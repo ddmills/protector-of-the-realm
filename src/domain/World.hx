@@ -67,7 +67,7 @@ class World
 			{
 				if (rand.bool(.05) && p.get(x, y, 16, 3) < .4)
 				{
-					Spawner.Spawn(WEED, new Coordinate(x + .5, y + .5, WORLD));
+					Spawner.Spawn(TREE_PINE, new Coordinate(x + .5, y + .5, WORLD));
 				}
 				else if (rand.bool(.005))
 				{

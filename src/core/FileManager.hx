@@ -16,7 +16,7 @@ class FileManager
 	public function setSaveName(name:String)
 	{
 		saveName = name;
-		FileSystem.createDirectory(filePath(['chunks']));
+		FileSystem.createDirectory(filePath([]));
 	}
 
 	private function filePath(parts:Array<String>):String
