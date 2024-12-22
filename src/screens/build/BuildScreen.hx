@@ -49,7 +49,6 @@ class BuildScreen extends Screen
 
 		var building = e.get(Building);
 
-		g.clear();
 		var pos = e.pos.toPx();
 
 		var flags = [FLG_BUILDING, FLG_OBJECT, FLG_UNIT];
@@ -57,18 +56,22 @@ class BuildScreen extends Screen
 
 		var sprite = e.get(Sprite);
 		sprite.bm.alpha = .5;
+		g.clear();
+
 		if (isValid)
 		{
 			sprite.bm.color = 0xffffff.toHxdColor(1);
-			g.lineStyle(8, 0xffffff, .25);
+			g.lineStyle(4, 0xffffff, .25);
 		}
 		else
 		{
 			sprite.bm.color = 0xff0000.toHxdColor(1);
-			g.lineStyle(8, 0xff0000, .25);
+			g.lineStyle(4, 0xff0000, .25);
 		}
 
-		g.drawEllipse(pos.x, pos.y, building.bufferRadiusX * Game.TILE_SIZE, building.bufferRadiusY * Game.TILE_SIZE);
+		var rectWidth = building.width * Game.TILE_SIZE;
+		var rectHeight = building.height * Game.TILE_SIZE;
+		g.drawRect(pos.x - (rectWidth / 2).floor(), pos.y - (rectHeight / 2).floor(), rectWidth, rectHeight);
 	}
 
 	override function onMouseDown(pos:Coordinate)
@@ -78,7 +81,7 @@ class BuildScreen extends Screen
 			var building = e.get(Building);
 			e.get(Sprite).bm.alpha = 1;
 			e.add(c);
-			world.terrain.splat(e.pos, building.bufferRadiusX, building.bufferRadiusY);
+			world.terrain.splat(e.pos, building.width, building.height);
 			game.screens.pop();
 		}
 	}

@@ -18,7 +18,8 @@ class ShapeExtensions
 			case CIRCLE(radius):
 				return Bresenham.getCircle(source, radius, true);
 			case RECTANGLE(w, h):
-				return Bresenham.getRect(source, w, h);
+				var offset = source.sub((w / 2).floor(), (h / 2).floor());
+				return Bresenham.getRect(offset, w, h);
 		}
 	}
 }
