@@ -5,6 +5,7 @@ import core.Frame;
 import core.Game;
 import core.Screen;
 import core.input.Command;
+import data.input.groups.CameraInputGroup;
 import domain.Spawner;
 import domain.components.Building;
 import domain.components.Collider;
@@ -22,7 +23,7 @@ class BuildScreen extends Screen
 
 	public function new()
 	{
-		inputDomain = INPUT_DOMAIN_BUILD;
+		inputDomain = INPUT_DOMAIN_PLAY;
 		e = Spawner.Spawn(GUILD_HALL, game.input.mouse);
 		c = e.get(Collider);
 		e.remove(Collider);
@@ -88,16 +89,23 @@ class BuildScreen extends Screen
 
 	override function onMouseMove(pos:Coordinate, previous:Coordinate)
 	{
-		if (game.input.mmb)
-		{
-			var diff = previous.sub(pos).toFloatPoint().multiply(0.1);
-			game.camera.pos = game.camera.pos.add(diff.asWorld());
-		}
-		else
-		{
-			e.pos = pos.toWorld().floor().add(new Coordinate(.5, .5));
-		}
+		CameraInputGroup.onMouseMove(pos, previous);
+
+		e.pos = pos.toWorld().floor().add(new Coordinate(.5, .5));
 	}
 
-	public function handle(command:Command) {}
+	public override function onMouseWheelDown(wheelDelta:Float)
+	{
+		CameraInputGroup.onMouseWheelDown(wheelDelta);
+	}
+
+	public override function onMouseWheelUp(wheelDelta:Float)
+	{
+		CameraInputGroup.onMouseWheelUp(wheelDelta);
+	}
+
+	public function handle(command:Command)
+	{
+		CameraInputGroup.handle(command);
+	}
 }

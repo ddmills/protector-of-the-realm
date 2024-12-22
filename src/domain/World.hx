@@ -65,7 +65,7 @@ class World
 		{
 			for (y in 0...mapHeight)
 			{
-				if (rand.bool(.15) && p.get(x, y, 16, 3) < .4)
+				if (rand.bool(.25) && p.get(x, y, 16, 3) < .4)
 				{
 					Spawner.Spawn(TREE_PINE, new Coordinate(x + .5, y + .5, WORLD));
 				}

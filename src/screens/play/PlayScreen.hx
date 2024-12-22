@@ -5,6 +5,7 @@ import core.Frame;
 import core.Screen;
 import core.input.Command;
 import core.input.KeyCode;
+import data.input.groups.CameraInputGroup;
 import domain.Spawner;
 import screens.build.BuildScreen;
 import screens.play.components.InspectBuildingView;
@@ -31,11 +32,7 @@ class PlayScreen extends Screen
 
 	public override function onMouseMove(pos:Coordinate, previous:Coordinate)
 	{
-		if (game.input.mmb)
-		{
-			var diff = previous.sub(pos).toFloatPoint().multiply((1 / game.camera.zoom) * .1);
-			game.camera.pos = game.camera.pos.add(diff.asWorld());
-		}
+		CameraInputGroup.onMouseMove(pos, previous);
 	}
 
 	public override function onMouseDown(pos:Coordinate)
@@ -56,12 +53,12 @@ class PlayScreen extends Screen
 
 	public override function onMouseWheelDown(wheelDelta:Float)
 	{
-		game.camera.zoomTo(game.input.mouse, game.camera.zoom * 1.20);
+		CameraInputGroup.onMouseWheelDown(wheelDelta);
 	}
 
 	public override function onMouseWheelUp(wheelDelta:Float)
 	{
-		game.camera.zoomTo(game.input.mouse, game.camera.zoom * .8);
+		CameraInputGroup.onMouseWheelUp(wheelDelta);
 	}
 
 	function handle(command:Command)
@@ -70,17 +67,8 @@ class PlayScreen extends Screen
 		{
 			case CMD_SAVE:
 				game.screens.push(new SaveScreen(true));
-			case CMD_PAUSE:
-				game.clock.isPaused = !game.clock.isPaused;
-			case CMD_SPEED_1:
-				game.clock.speed = .5;
-			case CMD_SPEED_2:
-				game.clock.speed = 1;
-			case CMD_SPEED_3:
-				game.clock.speed = 2;
-			case CMD_SPEED_4:
-				game.clock.speed = 3;
 			case _:
+				CameraInputGroup.handle(command);
 		}
 	}
 
