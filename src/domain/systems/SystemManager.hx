@@ -11,6 +11,7 @@ class SystemManager
 	public var colliders(default, null):ColliderSystem;
 	public var destroy(default, null):DestroySystem;
 	public var interactive(default, null):InteractiveSystem;
+	public var debugInfo(default, null):DebugInfoSystem;
 
 	public function new() {}
 
@@ -23,6 +24,7 @@ class SystemManager
 		colliders = new ColliderSystem();
 		destroy = new DestroySystem();
 		interactive = new InteractiveSystem();
+		debugInfo = new DebugInfoSystem();
 	}
 
 	public function update(frame:Frame)
@@ -34,5 +36,6 @@ class SystemManager
 		colliders.update(frame);
 		destroy.update(frame);
 		interactive.update(frame);
+		debugInfo.update(frame);
 	}
 }
