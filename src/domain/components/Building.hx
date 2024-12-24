@@ -6,15 +6,13 @@ import ecs.Component;
 
 class Building extends Component
 {
-	@save public var name:String;
 	@save public var width:Int;
 	@save public var height:Int;
 
 	public var footprint(get, never):Array<IntPoint>;
 
-	public function new(name:String, width:Int, height:Int)
+	public function new(width:Int, height:Int)
 	{
-		this.name = name;
 		this.width = width;
 		this.height = height;
 	}

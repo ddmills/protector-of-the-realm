@@ -3,7 +3,7 @@ import data.input.Commands;
 import data.resources.AnimationResources;
 import data.resources.AudioResources;
 import data.resources.Bitmasks;
-import data.resources.TextResources;
+import data.resources.FontResources;
 import data.resources.TileResources;
 import screens.splash.SplashScreen;
 
@@ -13,7 +13,8 @@ class Main extends hxd.App
 
 	static function main()
 	{
-		hxd.Res.initEmbed();
+		// hxd.Res.initEmbed();
+		hxd.Res.initLocal();
 		new Main();
 	}
 
@@ -22,7 +23,7 @@ class Main extends hxd.App
 		// hack to fix audio not playing more than once
 		@:privateAccess haxe.MainLoop.add(() -> {});
 
-		TextResources.Init();
+		FontResources.Init();
 		TileResources.Init();
 		AnimationResources.Init();
 		AudioResources.Init();

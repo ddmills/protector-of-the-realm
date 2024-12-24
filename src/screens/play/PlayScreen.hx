@@ -8,7 +8,7 @@ import core.input.KeyCode;
 import data.input.groups.CameraInputGroup;
 import domain.Spawner;
 import screens.build.BuildScreen;
-import screens.play.components.InspectBuildingView;
+import screens.inspect.InspectScreen;
 import screens.save.SaveScreen;
 
 class PlayScreen extends Screen
@@ -28,6 +28,11 @@ class PlayScreen extends Screen
 		{
 			handle(game.commands.next());
 		}
+
+		if (world.inspection.isInspecting)
+		{
+			game.screens.push(new InspectScreen(world.inspection.selected));
+		}
 	}
 
 	public override function onMouseMove(pos:Coordinate, previous:Coordinate)
@@ -41,10 +46,9 @@ class PlayScreen extends Screen
 
 		if (game.input.lmb)
 		{
-			Spawner.Spawn(HERO, pos.toWorld().floor().add(offset));
-			var view = new InspectBuildingView("hello world?");
-			game.render(HUD, view);
+			// Spawner.Spawn(HERO, pos.toWorld().floor().add(offset));
 		}
+
 		if (game.input.rmb)
 		{
 			Spawner.Spawn(TREE_PINE, pos.toWorld().floor().add(offset));

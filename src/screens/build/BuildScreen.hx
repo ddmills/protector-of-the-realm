@@ -18,12 +18,14 @@ class BuildScreen extends Screen
 {
 	var e:Entity;
 	var isValid:Bool;
+	var isPlaced:Bool;
 	var c:Collider;
 	var g:Graphics;
 
 	public function new()
 	{
 		inputDomain = INPUT_DOMAIN_PLAY;
+		isPlaced = false;
 		e = Spawner.Spawn(GUILD_HALL, game.input.mouse);
 		c = e.get(Collider);
 		e.remove(Collider);
@@ -38,15 +40,16 @@ class BuildScreen extends Screen
 	override function onDestroy()
 	{
 		g.remove();
+
+		if (!isPlaced)
+		{
+			e.destroy();
+		}
 	}
 
 	override function update(frame:Frame)
 	{
 		world.updateSystems();
-		while (game.commands.hasNext())
-		{
-			handle(game.commands.next());
-		}
 
 		var building = e.get(Building);
 
@@ -73,16 +76,28 @@ class BuildScreen extends Screen
 		var rectWidth = building.width * Game.TILE_SIZE;
 		var rectHeight = building.height * Game.TILE_SIZE;
 		g.drawRect(pos.x - (rectWidth / 2).floor(), pos.y - (rectHeight / 2).floor(), rectWidth, rectHeight);
+
+		while (game.commands.hasNext())
+		{
+			handle(game.commands.next());
+		}
 	}
 
 	override function onMouseDown(pos:Coordinate)
 	{
+		if (game.input.rmb)
+		{
+			game.screens.pop();
+			return;
+		}
+
 		if (game.input.lmb && isValid)
 		{
 			var building = e.get(Building);
 			e.get(Sprite).bm.alpha = 1;
 			e.add(c);
 			world.terrain.splat(e.pos, building.width, building.height);
+			isPlaced = true;
 			game.screens.pop();
 		}
 	}
@@ -104,8 +119,14 @@ class BuildScreen extends Screen
 		CameraInputGroup.onMouseWheelUp(wheelDelta);
 	}
 
-	public function handle(command:Command)
+	function handle(command:Command)
 	{
-		CameraInputGroup.handle(command);
+		switch (command.type)
+		{
+			case CMD_CANCEL:
+				game.screens.pop();
+			case _:
+				CameraInputGroup.handle(command);
+		}
 	}
 }

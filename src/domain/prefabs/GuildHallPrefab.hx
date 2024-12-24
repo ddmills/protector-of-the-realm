@@ -6,7 +6,7 @@ import common.struct.IntPoint;
 import core.Game;
 import domain.components.Building;
 import domain.components.Collider;
-import domain.components.Interactive;
+import domain.components.Inspectable;
 import domain.components.Sprite;
 import ecs.Entity;
 
@@ -16,7 +16,7 @@ class GuildHallPrefab extends Prefab
 	{
 		var e = new Entity(pos);
 
-		e.add(new Building("Guild Hall", 9, 9));
+		e.add(new Building(9, 9));
 
 		var sprite = new Sprite(TK_GUILD_HALL);
 
@@ -30,7 +30,7 @@ class GuildHallPrefab extends Prefab
 		var collider = new Collider(RECTANGLE(5, 5), new IntPoint(0, 0), [FLG_BUILDING]);
 		e.add(collider);
 
-		e.add(new Interactive(64));
+		e.add(new Inspectable("Guild Hall", 64));
 
 		return e;
 	}

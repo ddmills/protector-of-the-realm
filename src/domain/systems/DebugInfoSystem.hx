@@ -2,7 +2,7 @@ package domain.systems;
 
 import core.Frame;
 import core.Game;
-import data.resources.TextResources;
+import data.resources.FontResources;
 import domain.components.Monster;
 import ecs.Query;
 import ecs.System;
@@ -39,12 +39,29 @@ class DebugInfoSystem extends System
 	{
 		var px = game.input.mouse.toPx().floor().toString();
 		var w = game.input.mouse.toWorld().floor().toString();
+		var fps = frame.fps.floor();
 
-		debugInfo.fps.text = frame.fps.floor().toString();
+		debugInfo.fps.text = fps.toString();
+		debugInfo.fps.color = getFpsColor(fps).toHxdColor();
 		debugInfo.pos.text = '$w $px';
 		debugInfo.monster.text = 'monsters ${monsters.count().toString()}';
 		debugInfo.entities.text = 'entities ${game.registry.size.toString()}';
 		debugInfo.clock.text = '${game.clock.tick.floor()} (${game.clock.speed})';
+	}
+
+	function getFpsColor(fps:Int):Int
+	{
+		if (fps < 60)
+		{
+			return 0xbe7474;
+		}
+
+		if (fps < 100)
+		{
+			return 0xe0de62;
+		}
+
+		return 0x92e08b;
 	}
 
 	public function toggleGridVisibility():Bool
@@ -59,23 +76,23 @@ class DebugInfoSystem extends System
 		ob.x = 16;
 		ob.y = 16;
 
-		var fps = new Text(TextResources.BIZCAT, ob);
+		var fps = new Text(FontResources.BIZCAT, ob);
 		fps.color = game.TEXT_COLOR_FOCUS.toHxdColor();
 		fps.y = 0;
 
-		var pos = new Text(TextResources.BIZCAT, ob);
+		var pos = new Text(FontResources.BIZCAT, ob);
 		pos.color = game.TEXT_COLOR.toHxdColor();
 		pos.y = 16;
 
-		var monster = new Text(TextResources.BIZCAT, ob);
+		var monster = new Text(FontResources.BIZCAT, ob);
 		monster.color = game.TEXT_COLOR.toHxdColor();
 		monster.y = 32;
 
-		var entities = new Text(TextResources.BIZCAT, ob);
+		var entities = new Text(FontResources.BIZCAT, ob);
 		entities.color = game.TEXT_COLOR.toHxdColor();
 		entities.y = 48;
 
-		var clock = new Text(TextResources.BIZCAT, ob);
+		var clock = new Text(FontResources.BIZCAT, ob);
 		clock.color = game.TEXT_COLOR.toHxdColor();
 		clock.y = 64;
 

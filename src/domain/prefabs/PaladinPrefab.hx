@@ -5,7 +5,7 @@ import common.struct.IntPoint;
 import core.Game;
 import data.resources.TileKey;
 import domain.components.Collider;
-import domain.components.Interactive;
+import domain.components.Inspectable;
 import domain.components.Monster;
 import domain.components.Sprite;
 import ecs.Entity;
@@ -25,7 +25,7 @@ class PaladinPrefab extends Prefab
 		e.add(sprite);
 		e.add(new Collider(POINT, new IntPoint(0, 0), [FLG_UNIT]));
 		e.add(new Monster());
-		e.add(new Interactive(32));
+		e.add(new Inspectable("Paladin", 32));
 
 		return e;
 	}

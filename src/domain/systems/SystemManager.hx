@@ -10,7 +10,7 @@ class SystemManager
 	public var sprites(default, null):SpriteSystem;
 	public var colliders(default, null):ColliderSystem;
 	public var destroy(default, null):DestroySystem;
-	public var interactive(default, null):InteractiveSystem;
+	public var inspection(default, null):InspectionSystem;
 	public var debugInfo(default, null):DebugInfoSystem;
 
 	public function new() {}
@@ -23,7 +23,7 @@ class SystemManager
 		sprites = new SpriteSystem();
 		colliders = new ColliderSystem();
 		destroy = new DestroySystem();
-		interactive = new InteractiveSystem();
+		inspection = new InspectionSystem();
 		debugInfo = new DebugInfoSystem();
 	}
 
@@ -35,7 +35,7 @@ class SystemManager
 		sprites.update(frame);
 		colliders.update(frame);
 		destroy.update(frame);
-		interactive.update(frame);
+		inspection.update(frame);
 		debugInfo.update(frame);
 	}
 }

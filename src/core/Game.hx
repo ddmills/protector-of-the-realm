@@ -5,7 +5,7 @@ import core.input.CommandManager;
 import core.input.InputManager;
 import core.rendering.RenderLayerManager;
 import data.core.ColorKey;
-import data.resources.TextResources;
+import data.resources.FontResources;
 import domain.World;
 import ecs.Registry;
 import h2d.Console;
@@ -51,7 +51,7 @@ class Game
 		camera = new Camera();
 		input = new InputManager();
 		commands = new CommandManager();
-		console = new Console(TextResources.BIZCAT);
+		console = new Console(FontResources.BIZCAT);
 		registry = new Registry();
 
 		ConsoleConfig.Config(console);

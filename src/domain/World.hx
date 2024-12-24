@@ -20,6 +20,7 @@ class World
 	public var mapWidth(default, null):Int;
 	public var mapHeight(default, null):Int;
 	public var terrain(default, null):Terrain;
+	public var inspection(default, null):Inspection;
 
 	public var seed:Int = 2;
 
@@ -34,9 +35,10 @@ class World
 
 	public function initialize()
 	{
-		rand = new Rand(seed);
 		mapWidth = 320;
 		mapHeight = 320;
+		rand = new Rand(seed);
+		inspection = new Inspection();
 		systems.initialize();
 	}
 
@@ -69,7 +71,7 @@ class World
 				{
 					Spawner.Spawn(TREE_PINE, new Coordinate(x + .5, y + .5, WORLD));
 				}
-				else if (rand.bool(.0005))
+				else if (rand.bool(.001))
 				{
 					Spawner.Spawn(HERO, new Coordinate(x + .5, y + .5, WORLD));
 				}
