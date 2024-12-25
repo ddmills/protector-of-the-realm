@@ -4,7 +4,7 @@ enum SpawnableType
 {
 	GUILD_HALL;
 	WEED;
-	HERO;
+	PALADIN;
 	OGRE;
 	TREE_PINE;
 }

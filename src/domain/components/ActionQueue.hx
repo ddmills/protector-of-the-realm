@@ -1,8 +1,7 @@
 package domain.components;
 
-import domain.events.QueryActionsEvent.EntityAction;
-import domain.events.QueryActionsEvent.EntityActionType;
-import domain.events.QueueActionEvent;
+import domain.events.HireActorEvent;
+import domain.events.QueryActionsEvent;
 import ecs.Component;
 
 class ActionQueue extends Component
@@ -16,13 +15,12 @@ class ActionQueue extends Component
 		trace(a);
 
 		this.actions = [];
-		addHandler(QueueActionEvent, onQueueAction);
+		addHandler(QueryActionsEvent, onQueryActions);
 	}
 
-	function onQueueAction(evt:QueueActionEvent)
+	function onQueryActions(evt:QueryActionsEvent)
 	{
-		trace('queue action');
-		actions.push(evt.action);
+		evt.actions.push(SELF_DESTRUCT);
 	}
 
 	public function updateActions(delta:Float)
@@ -35,8 +33,6 @@ class ActionQueue extends Component
 
 			if (action.current > action.duration)
 			{
-				trace('ACTION COMPLETED', action.actionType);
-				// entity.fireEvent(action.evt);
 				completed.push(action);
 			}
 		}
@@ -44,6 +40,18 @@ class ActionQueue extends Component
 		for (action in completed)
 		{
 			actions.remove(action);
+
+			switch action.actionType
+			{
+				case SELF_DESTRUCT:
+					{
+						entity.add(new IsDestroyed());
+					}
+				case HIRE_ACTOR(actorType):
+					{
+						entity.fireEvent(new HireActorEvent(actorType));
+					};
+			}
 		}
 	}
 }

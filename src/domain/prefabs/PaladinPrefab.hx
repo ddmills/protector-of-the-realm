@@ -4,6 +4,7 @@ import common.struct.Coordinate;
 import common.struct.IntPoint;
 import core.Game;
 import data.resources.TileKey;
+import domain.components.ActionQueue;
 import domain.components.Collider;
 import domain.components.Inspectable;
 import domain.components.Monster;
@@ -17,8 +18,7 @@ class PaladinPrefab extends Prefab
 		var e = new Entity(pos);
 
 		var r = Game.instance.world.rand;
-		var k = r.pick([TK_PALADIN, TK_WIZARD, TK_ROGUE]);
-		var sprite = new Sprite(k, OBJECTS);
+		var sprite = new Sprite(TK_PALADIN, OBJECTS);
 
 		sprite.bm.filter = new h2d.filter.Outline(.5, 0x1C1C1C, .3, true);
 
@@ -26,6 +26,7 @@ class PaladinPrefab extends Prefab
 		e.add(new Collider(POINT, new IntPoint(0, 0), [FLG_UNIT]));
 		e.add(new Monster());
 		e.add(new Inspectable("Paladin", 32));
+		e.add(new ActionQueue());
 
 		return e;
 	}

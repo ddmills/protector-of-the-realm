@@ -55,8 +55,9 @@ class BuildScreen extends Screen
 
 		var pos = e.pos.toPx();
 
-		var flags = [FLG_BUILDING, FLG_OBJECT, FLG_UNIT];
-		isValid = !world.systems.colliders.footprintHasCollisions(building.getFootprint(e, true), flags);
+		var extendedArea = world.systems.colliders.footprintHasCollisions(building.getFootprint(e, true), [FLG_BUILDING, FLG_OBJECT]);
+		var immediateArea = world.systems.colliders.footprintHasCollisions(building.getFootprint(e, false), [FLG_BUILDING, FLG_OBJECT, FLG_UNIT]);
+		isValid = !extendedArea && !immediateArea;
 
 		var sprite = e.get(Sprite);
 		sprite.bm.alpha = .5;

@@ -20,7 +20,7 @@ class Spawner
 	{
 		prefabs.set(WEED, new WeedPrefab());
 		prefabs.set(GUILD_HALL, new GuildHallPrefab());
-		prefabs.set(HERO, new PaladinPrefab());
+		prefabs.set(PALADIN, new PaladinPrefab());
 		prefabs.set(OGRE, new OgrePrefab());
 		prefabs.set(TREE_PINE, new PineTreePrefab());
 	}

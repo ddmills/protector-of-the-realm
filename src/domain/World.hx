@@ -75,7 +75,7 @@ class World
 				}
 				else if (rand.bool(.001))
 				{
-					Spawner.Spawn(HERO, new Coordinate(x + .5, y + .5, WORLD));
+					Spawner.Spawn(PALADIN, new Coordinate(x + .5, y + .5, WORLD));
 				}
 				else if (rand.bool(.00025))
 				{

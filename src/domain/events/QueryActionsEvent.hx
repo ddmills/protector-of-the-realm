@@ -6,6 +6,7 @@ import ecs.EntityEvent;
 enum EntityActionType
 {
 	HIRE_ACTOR(actorType:ActorType);
+	SELF_DESTRUCT;
 }
 
 typedef EntityAction =

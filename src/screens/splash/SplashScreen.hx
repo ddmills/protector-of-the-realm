@@ -82,6 +82,13 @@ class SplashScreen extends Screen
 	{
 		game.files.setSaveName('test');
 		var data = game.files.tryReadWorld();
+
+		if (data == null)
+		{
+			trace('COULD NOT READ SAVE');
+			return;
+		}
+
 		game.setWorld(new World());
 		game.world.initialize();
 		game.world.load(data);

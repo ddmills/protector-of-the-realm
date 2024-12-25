@@ -1,6 +1,7 @@
 package screens.inspect;
 
 import common.struct.Coordinate;
+import core.Data;
 import core.Frame;
 import core.Screen;
 import core.input.Command;
@@ -9,7 +10,6 @@ import data.resources.FontResources;
 import domain.components.ActionQueue;
 import domain.components.Inspectable;
 import domain.events.QueryActionsEvent;
-import domain.systems.ActionQueueSystem;
 import ecs.Entity;
 import h2d.Bitmap;
 import ui.components.Button;
@@ -61,11 +61,6 @@ class InspectScreen extends Screen
 	}
 
 	override function onEnter()
-	{
-		reRenderUi();
-	}
-
-	function reRenderUi()
 	{
 		y = 0;
 
@@ -128,27 +123,18 @@ class InspectScreen extends Screen
 
 		for (action in evt.actions)
 		{
-			// var title = '${action.actionType} ${action.current.format(1)}/${action.duration}';
 			var btn = new Button('test', ui.actionsOb);
 			btn.width = width;
-
-			// if (action.current > 0)
-			// {
-			// 	btn.backgroundColor = 0xff0000;
-			// }
-
 			btn.y = y;
 			btn.onClick = (e) ->
 			{
-				// inspectableEntity.fireEvent(new QueueActionEvent(action));
 				var queue = inspectableEntity.get(ActionQueue);
 				btn.disabled = true;
 				queue.actions.push({
 					actionType: action,
 					current: .01,
-					duration: 5,
+					duration: 4,
 				});
-				trace('on click btn', getActionTitle(action));
 			};
 
 			y += btn.height;
@@ -164,7 +150,11 @@ class InspectScreen extends Screen
 	{
 		return switch actionType
 		{
-			case HIRE_ACTOR(actorType): 'Hire $actorType';
+			case SELF_DESTRUCT: 'Self Destruct';
+			case HIRE_ACTOR(actorType): {
+					var actor = Data.Actors.get(actorType);
+					return 'Hire ${actor.actorTypeName}';
+				}
 		}
 	}
 
