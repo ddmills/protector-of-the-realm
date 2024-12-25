@@ -58,6 +58,8 @@ class World
 		this.seed = seed;
 		rand = new Rand(seed);
 		terrain = new Terrain(mapWidth, mapHeight);
+		inspection = new Inspection();
+
 		game.render(GROUND, terrain);
 		game.clock.reset();
 
@@ -90,6 +92,7 @@ class World
 		seed = data.seed;
 		rand = new Rand(seed);
 		terrain = new Terrain(mapWidth, mapHeight);
+		inspection = new Inspection();
 		game.render(GROUND, terrain);
 		game.clock.load(data.clock);
 

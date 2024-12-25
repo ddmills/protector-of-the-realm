@@ -39,12 +39,16 @@ class CameraInputGroup
 				game.clock.isPaused = !game.clock.isPaused;
 			case CMD_SPEED_1:
 				game.clock.speed = .5;
+				game.clock.isPaused = false;
 			case CMD_SPEED_2:
 				game.clock.speed = 1;
+				game.clock.isPaused = false;
 			case CMD_SPEED_3:
 				game.clock.speed = 2;
+				game.clock.isPaused = false;
 			case CMD_SPEED_4:
 				game.clock.speed = 3;
+				game.clock.isPaused = false;
 			case _:
 		}
 	}

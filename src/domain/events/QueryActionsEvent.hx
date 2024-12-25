@@ -1,30 +1,35 @@
 package domain.events;
 
+import data.domain.ActorType;
 import ecs.EntityEvent;
+
+enum EntityActionType
+{
+	HIRE_ACTOR(actorType:ActorType);
+}
 
 typedef EntityAction =
 {
-	name:String,
-	evt:EntityEvent,
+	actionType:EntityActionType,
 	current:Float,
 	duration:Float,
 }
 
 class QueryActionsEvent extends EntityEvent
 {
-	public var actions(default, null):Array<EntityAction>;
+	public var actions(default, null):Array<EntityActionType>;
 
 	public function new()
 	{
 		actions = new Array();
 	}
 
-	public function add(action:EntityAction)
+	public function add(action:EntityActionType)
 	{
 		actions.push(action);
 	}
 
-	public function addAll(actions:Array<EntityAction>)
+	public function addAll(actions:Array<EntityActionType>)
 	{
 		for (action in actions)
 		{

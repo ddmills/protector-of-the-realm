@@ -18,10 +18,12 @@ class ActionQueueSystem extends System
 
 	override function update(frame:Frame)
 	{
+		var dt = game.clock.deltaTick;
+
 		for (e in query)
 		{
 			var queue = e.get(ActionQueue);
-			queue.updateActions(frame.dt);
+			queue.updateActions(dt);
 		}
 	}
 }

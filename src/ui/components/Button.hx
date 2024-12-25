@@ -4,12 +4,16 @@ import data.resources.FontResources;
 import h2d.Bitmap;
 import h2d.Interactive;
 import h2d.Text;
+import hxd.Cursor;
 
 class Button extends h2d.Object
 {
+	var _setWidth:Null<Int>;
+
 	public var width(default, set):Int;
 	public var height(default, set):Int;
 	public var text(default, set):String;
+	public var disabled(default, set):Bool;
 	public var backgroundColor(default, set):Int;
 	public var textColor(default, set):Int;
 	public var textOb(default, null):Text;
@@ -31,6 +35,7 @@ class Button extends h2d.Object
 		interactive.onClick = (e) -> onClick(e);
 
 		width = 128;
+		_setWidth = null;
 		height = 28;
 		backgroundColor = 0x57723a;
 		this.text = text ?? '';
@@ -38,6 +43,7 @@ class Button extends h2d.Object
 
 	function set_width(value:Int):Int
 	{
+		_setWidth = value;
 		bm.width = value;
 		interactive.width = value;
 		textOb.x = value / 2;
@@ -58,7 +64,7 @@ class Button extends h2d.Object
 	{
 		textOb.text = value;
 		text = value;
-		width = textOb.textWidth.round() + 32;
+		width = _setWidth ?? textOb.textWidth.round() + 32;
 		return value;
 	}
 
@@ -77,4 +83,20 @@ class Button extends h2d.Object
 	}
 
 	public dynamic function onClick(e:hxd.Event) {}
+
+	function set_disabled(value:Bool):Bool
+	{
+		if (value)
+		{
+			interactive.cursor = null;
+			interactive.onClick = (e) -> {};
+		}
+		else
+		{
+			interactive.cursor = Cursor.Button;
+			interactive.onClick = onClick;
+		}
+
+		return value;
+	}
 }

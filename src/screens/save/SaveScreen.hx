@@ -18,7 +18,6 @@ class SaveScreen extends Screen
 		{
 			var data = world.save(true);
 			game.files.saveWorld(data);
-			game.setWorld(null);
 			game.screens.set(new SplashScreen());
 		}
 		else

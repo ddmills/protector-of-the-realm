@@ -9,16 +9,23 @@ import data.resources.FontResources;
 import domain.components.ActionQueue;
 import domain.components.Inspectable;
 import domain.events.QueryActionsEvent;
-import domain.events.QueueActionEvent;
+import domain.systems.ActionQueueSystem;
 import ecs.Entity;
 import h2d.Bitmap;
 import ui.components.Button;
+
+typedef ActionBtn =
+{
+	actionType:EntityActionType,
+	btnOb:Button,
+}
 
 typedef InspectScreenUi =
 {
 	rootOb:h2d.Object,
 	titleOb:h2d.Object,
 	actionsOb:h2d.Object,
+	actions:Array<ActionBtn>,
 }
 
 class InspectScreen extends Screen
@@ -44,6 +51,8 @@ class InspectScreen extends Screen
 		{
 			handle(game.commands.next());
 		}
+
+		updateActionProgress();
 
 		if (world.inspection.selected != inspectableEntity && world.inspection.isInspecting)
 		{
@@ -80,6 +89,7 @@ class InspectScreen extends Screen
 			rootOb: rootOb,
 			titleOb: titleOb,
 			actionsOb: actionsOb,
+			actions: [],
 		};
 
 		renderTitle();
@@ -112,28 +122,78 @@ class InspectScreen extends Screen
 		y = 40;
 
 		ui.actionsOb.removeChildren();
+		ui.actions = [];
 
 		var evt = inspectableEntity.fireEvent(new QueryActionsEvent());
 
 		for (action in evt.actions)
 		{
-			var title = '${action.name} ${action.current.format(1)}/${action.duration}';
-
-			var btn = new Button(title, ui.actionsOb);
+			// var title = '${action.actionType} ${action.current.format(1)}/${action.duration}';
+			var btn = new Button('test', ui.actionsOb);
 			btn.width = width;
 
-			if (action.current > 0)
-			{
-				btn.backgroundColor = 0xff0000;
-			}
+			// if (action.current > 0)
+			// {
+			// 	btn.backgroundColor = 0xff0000;
+			// }
 
 			btn.y = y;
 			btn.onClick = (e) ->
 			{
-				inspectableEntity.fireEvent(new QueueActionEvent(action));
+				// inspectableEntity.fireEvent(new QueueActionEvent(action));
+				var queue = inspectableEntity.get(ActionQueue);
+				btn.disabled = true;
+				queue.actions.push({
+					actionType: action,
+					current: .01,
+					duration: 5,
+				});
+				trace('on click btn', getActionTitle(action));
 			};
 
 			y += btn.height;
+
+			ui.actions.push({
+				actionType: action,
+				btnOb: btn,
+			});
+		}
+	}
+
+	private function getActionTitle(actionType:EntityActionType):String
+	{
+		return switch actionType
+		{
+			case HIRE_ACTOR(actorType): 'Hire $actorType';
+		}
+	}
+
+	function updateActionProgress()
+	{
+		var queue = inspectableEntity.get(ActionQueue);
+
+		if (queue == null)
+		{
+			return;
+		}
+
+		for (x in ui.actions)
+		{
+			var cur = queue.actions.find(y -> y.actionType.equals(x.actionType));
+
+			if (cur != null)
+			{
+				x.btnOb.disabled = true;
+				x.btnOb.backgroundColor = 0xa36666;
+				var t = getActionTitle(x.actionType);
+				x.btnOb.text = '${t} ${cur.current.format(1)}/${cur.duration}';
+			}
+			else
+			{
+				x.btnOb.disabled = false;
+				x.btnOb.backgroundColor = 0x679c67;
+				x.btnOb.text = getActionTitle(x.actionType);
+			}
 		}
 	}
 

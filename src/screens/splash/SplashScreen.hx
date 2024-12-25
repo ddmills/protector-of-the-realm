@@ -21,6 +21,8 @@ class SplashScreen extends Screen
 
 	override function onEnter()
 	{
+		game.setWorld(null);
+
 		title = new h2d.Text(hxd.Res.fnt.bizcat.toFont());
 		title.setScale(1);
 		title.text = "myth";

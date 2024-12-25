@@ -24,14 +24,14 @@ class PlayScreen extends Screen
 	{
 		world.updateSystems();
 
-		while (game.commands.hasNext())
-		{
-			handle(game.commands.next());
-		}
-
 		if (world.inspection.isInspecting)
 		{
 			game.screens.push(new InspectScreen(world.inspection.selected));
+		}
+
+		while (game.commands.hasNext())
+		{
+			handle(game.commands.next());
 		}
 	}
 

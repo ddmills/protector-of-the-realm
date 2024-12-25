@@ -20,6 +20,11 @@ class Clock
 	public var tick(default, null):Float;
 
 	/**
+	 * In-game seconds since last frame
+	 */
+	public var deltaTick(default, null):Float;
+
+	/**
 	 * Speed of the game, 2 speed = 2 in-game seconds per actual second 
 	 */
 	public var speed(get, set):Float;
@@ -32,6 +37,7 @@ class Clock
 	public function new()
 	{
 		tick = 0;
+		deltaTick = 0;
 	}
 
 	public function save():SaveClock
@@ -53,13 +59,19 @@ class Clock
 	{
 		if (!isPaused)
 		{
-			tick += frame.dt * speed;
+			deltaTick = frame.dt * speed;
+			tick += deltaTick;
+		}
+		else
+		{
+			deltaTick = 0;
 		}
 	}
 
 	public function reset()
 	{
 		tick = 0;
+		deltaTick = 0;
 		_speed = 1;
 		isPaused = false;
 	}

@@ -3,6 +3,7 @@ package domain.buildings;
 import domain.components.ActionQueue;
 import domain.events.HireActorEvent;
 import domain.events.QueryActionsEvent.EntityAction;
+import domain.events.QueryActionsEvent.EntityActionType;
 import ecs.Entity;
 
 class BuildingGuildHall extends Building
@@ -24,40 +25,8 @@ class BuildingGuildHall extends Building
 		return 5;
 	}
 
-	override function getActions(entity:Entity):Array<EntityAction>
+	override function getActions(entity:Entity):Array<EntityActionType>
 	{
-		var actionQueue = entity.get(ActionQueue);
-
-		if (actionQueue == null)
-		{
-			return [];
-		}
-
-		var baseActions:Array<EntityAction> = [
-			{
-				name: "Hire Paladin",
-				evt: new HireActorEvent(ACTOR_PALADIN),
-				current: 0,
-				duration: 5,
-			},
-			{
-				name: "Hire Ogre",
-				evt: new HireActorEvent(ACTOR_OGRE),
-				current: 0,
-				duration: 5,
-			}
-		];
-
-		for (action in actionQueue.actions)
-		{
-			var idx = baseActions.findIdx(x -> x.name == action.name);
-
-			if (idx > -1)
-			{
-				baseActions[idx] = action;
-			}
-		}
-
-		return baseActions;
+		return [HIRE_ACTOR(ACTOR_PALADIN), HIRE_ACTOR(ACTOR_OGRE),];
 	}
 }

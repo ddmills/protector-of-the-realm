@@ -1,6 +1,7 @@
 package domain.components;
 
 import domain.events.QueryActionsEvent.EntityAction;
+import domain.events.QueryActionsEvent.EntityActionType;
 import domain.events.QueueActionEvent;
 import ecs.Component;
 
@@ -10,6 +11,10 @@ class ActionQueue extends Component
 
 	public function new()
 	{
+		var a = EntityActionType.HIRE_ACTOR(ACTOR_OGRE).equals(EntityActionType.HIRE_ACTOR(ACTOR_PALADIN));
+
+		trace(a);
+
 		this.actions = [];
 		addHandler(QueueActionEvent, onQueueAction);
 	}
@@ -30,8 +35,8 @@ class ActionQueue extends Component
 
 			if (action.current > action.duration)
 			{
-				trace('ACTION COMPLETED', action.name);
-				entity.fireEvent(action.evt);
+				trace('ACTION COMPLETED', action.actionType);
+				// entity.fireEvent(action.evt);
 				completed.push(action);
 			}
 		}

@@ -2,7 +2,7 @@ package domain.buildings;
 
 import common.struct.IntPoint;
 import common.struct.Shape;
-import domain.events.QueryActionsEvent.EntityAction;
+import domain.events.QueryActionsEvent.EntityActionType;
 import ecs.Entity;
 
 class Building
@@ -12,7 +12,7 @@ class Building
 	public var height(get, never):Int;
 	public var placementPadding(get, never):Int;
 
-	public function getActions(entity:Entity):Array<EntityAction>
+	public function getActions(entity:Entity):Array<EntityActionType>
 	{
 		return [];
 	}
