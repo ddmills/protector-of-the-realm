@@ -6,8 +6,10 @@ import core.Screen;
 import core.input.Command;
 import data.input.groups.CameraInputGroup;
 import data.resources.FontResources;
+import domain.components.ActionQueue;
 import domain.components.Inspectable;
 import domain.events.QueryActionsEvent;
+import domain.events.QueueActionEvent;
 import ecs.Entity;
 import h2d.Bitmap;
 import ui.components.Button;
@@ -107,20 +109,30 @@ class InspectScreen extends Screen
 
 	function renderActions()
 	{
+		y = 40;
+
 		ui.actionsOb.removeChildren();
 
 		var evt = inspectableEntity.fireEvent(new QueryActionsEvent());
 
 		for (action in evt.actions)
 		{
-			var btn = new Button(action.name, ui.actionsOb);
+			var title = '${action.name} ${action.current.format(1)}/${action.duration}';
+
+			var btn = new Button(title, ui.actionsOb);
 			btn.width = width;
+
+			if (action.current > 0)
+			{
+				btn.backgroundColor = 0xff0000;
+			}
+
 			btn.y = y;
 			btn.onClick = (e) ->
 			{
-				inspectableEntity.fireEvent(action.evt);
-				reRenderUi();
+				inspectableEntity.fireEvent(new QueueActionEvent(action));
 			};
+
 			y += btn.height;
 		}
 	}

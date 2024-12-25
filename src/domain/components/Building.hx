@@ -2,25 +2,22 @@ package domain.components;
 
 import core.Data;
 import data.domain.BuildingType;
-import domain.buildings.BuildingQueue.BuildingQueueJob;
+import domain.events.HireActorEvent;
 import domain.events.QueryActionsEvent;
-import domain.events.QueueBuildingJobEvent;
 import ecs.Component;
 
 class Building extends Component
 {
 	@save public var buildingType:BuildingType;
-	@save public var queue:Array<BuildingQueueJob>;
 
 	public var building(get, never):domain.buildings.Building;
 
 	public function new(buildingType:BuildingType)
 	{
 		this.buildingType = buildingType;
-		this.queue = [];
 
 		addHandler(QueryActionsEvent, onQueryActions);
-		addHandler(QueueBuildingJobEvent, onQueueBuildingJob);
+		addHandler(HireActorEvent, onHireActor);
 	}
 
 	private function onQueryActions(evt:QueryActionsEvent)
@@ -30,10 +27,9 @@ class Building extends Component
 		evt.addAll(actions);
 	}
 
-	private function onQueueBuildingJob(evt:QueueBuildingJobEvent)
+	private function onHireActor(evt:HireActorEvent)
 	{
-		trace('JOB', evt.job.jobType);
-		queue.push(evt.job);
+		trace('SPAWN ACTOR', evt.actorType);
 	}
 
 	function get_building():domain.buildings.Building

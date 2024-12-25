@@ -4,6 +4,7 @@ import core.Frame;
 
 class SystemManager
 {
+	public var actionQueue(default, null):ActionQueueSystem;
 	public var pathing(default, null):PathFollowSystem;
 	public var monsters(default, null):MonsterSystem;
 	public var movement(default, null):MovementSystem;
@@ -17,6 +18,7 @@ class SystemManager
 
 	public function initialize()
 	{
+		actionQueue = new ActionQueueSystem();
 		pathing = new PathFollowSystem();
 		monsters = new MonsterSystem();
 		movement = new MovementSystem();
@@ -29,6 +31,7 @@ class SystemManager
 
 	public function update(frame:Frame)
 	{
+		actionQueue.update(frame);
 		pathing.update(frame);
 		monsters.update(frame);
 		movement.update(frame);

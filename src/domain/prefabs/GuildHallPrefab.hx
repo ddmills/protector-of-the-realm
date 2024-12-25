@@ -5,6 +5,7 @@ import common.struct.FloatPoint;
 import common.struct.IntPoint;
 import core.Data;
 import core.Game;
+import domain.components.ActionQueue;
 import domain.components.Building;
 import domain.components.Collider;
 import domain.components.Inspectable;
@@ -19,6 +20,7 @@ class GuildHallPrefab extends Prefab
 		var building = Data.Buildings.get(BLDG_GUILD_HALL);
 
 		e.add(new Building(BLDG_GUILD_HALL));
+		e.add(new ActionQueue());
 
 		var sprite = new Sprite(TK_GUILD_HALL);
 

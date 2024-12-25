@@ -6,6 +6,8 @@ typedef EntityAction =
 {
 	name:String,
 	evt:EntityEvent,
+	current:Float,
+	duration:Float,
 }
 
 class QueryActionsEvent extends EntityEvent
