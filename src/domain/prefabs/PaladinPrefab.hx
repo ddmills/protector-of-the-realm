@@ -3,7 +3,6 @@ package domain.prefabs;
 import common.struct.Coordinate;
 import common.struct.IntPoint;
 import core.Game;
-import data.resources.TileKey;
 import domain.components.ActionQueue;
 import domain.components.Collider;
 import domain.components.Inspectable;
@@ -25,7 +24,7 @@ class PaladinPrefab extends Prefab
 		e.add(sprite);
 		e.add(new Collider(POINT, new IntPoint(0, 0), [FLG_UNIT]));
 		e.add(new Monster());
-		e.add(new Inspectable("Paladin", 32));
+		e.add(new Inspectable("Paladin", 16));
 		e.add(new ActionQueue());
 
 		return e;

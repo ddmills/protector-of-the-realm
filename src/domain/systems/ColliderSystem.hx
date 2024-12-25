@@ -6,6 +6,7 @@ import common.struct.Set;
 import core.Frame;
 import core.Game;
 import domain.components.Collider;
+import domain.components.IsDestroyed;
 import domain.components.IsDetached;
 import domain.components.Move;
 import domain.components.Moved;
@@ -49,8 +50,13 @@ class ColliderSystem extends System
 			none: [IsDetached],
 		});
 
+		var destroyed = new Query({
+			all: [Collider, IsDestroyed],
+		});
+
 		moved.onEntityAdded(onEntityMoved);
 		move.onEntityAdded(onEntityMove);
+		destroyed.onEntityAdded(onEntityDestroyed);
 	}
 
 	override function update(frame:Frame)
@@ -147,19 +153,31 @@ class ColliderSystem extends System
 		});
 	}
 
+	private function onEntityDestroyed(e:Entity)
+	{
+		trace('cleanup entity', e.id);
+		var collider = e.get(Collider);
+
+		for (pos in collider.spots)
+		{
+			removeGridId(pos, e.id);
+		}
+
+		collider.spots = [];
+	}
+
 	private function onEntityMoved(e:Entity)
 	{
 		var moved = e.get(Moved);
 		var collider = e.get(Collider);
 
-		var oldFootprint = collider.getFootprint(moved.previous.toIntPoint());
-		for (pos in oldFootprint)
+		for (pos in collider.spots)
 		{
 			removeGridId(pos, e.id);
 		}
 
-		var newFootprint = collider.getFootprint(moved.current.toIntPoint());
-		for (pos in newFootprint)
+		collider.spots = collider.getFootprint(moved.current.toIntPoint());
+		for (pos in collider.spots)
 		{
 			addGridId(pos, e.id);
 		}
@@ -176,6 +194,7 @@ class ColliderSystem extends System
 		for (pos in newFootprint)
 		{
 			addGridId(pos, e.id);
+			collider.spots.push(pos);
 		}
 
 		redrawDebug = true;
@@ -188,6 +207,7 @@ class ColliderSystem extends System
 		for (pos in footprint)
 		{
 			addGridId(pos, collider.entity.id);
+			collider.spots.push(pos);
 		}
 
 		redrawDebug = true;
@@ -195,12 +215,12 @@ class ColliderSystem extends System
 
 	public function remove(collider:Collider)
 	{
-		var footprint = collider.getFootprint();
-
-		for (pos in footprint)
+		for (pos in collider.spots)
 		{
 			removeGridId(pos, collider.entity.id);
 		}
+
+		collider.spots = [];
 
 		redrawDebug = true;
 	}

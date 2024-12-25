@@ -12,11 +12,13 @@ class Collider extends Component
 	@save public var shape(default, set):Shape = CIRCLE(1);
 	@save public var offset(default, set):IntPoint = new IntPoint(0, 0);
 	@save public var flags(default, default):Int = 0;
+	@save public var spots(default, default):Array<IntPoint>;
 
 	public function new(shape:Shape, offset:IntPoint, flags:Array<ColliderFlag>)
 	{
 		this.shape = shape;
 		this.offset = offset;
+		this.spots = [];
 		flags?.each(addFlag);
 	}
 

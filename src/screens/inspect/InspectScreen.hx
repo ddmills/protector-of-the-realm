@@ -54,6 +54,12 @@ class InspectScreen extends Screen
 
 		updateActionProgress();
 
+		if (inspectableEntity.isDestroyed)
+		{
+			game.screens.pop();
+			return;
+		}
+
 		if (world.inspection.selected != inspectableEntity && world.inspection.isInspecting)
 		{
 			game.screens.replace(new InspectScreen(world.inspection.selected));
