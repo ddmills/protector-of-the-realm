@@ -1,3 +1,4 @@
+import core.Data;
 import core.Game;
 import data.input.Commands;
 import data.resources.AnimationResources;
@@ -23,6 +24,7 @@ class Main extends hxd.App
 		// hack to fix audio not playing more than once
 		@:privateAccess haxe.MainLoop.add(() -> {});
 
+		Data.Init();
 		FontResources.Init();
 		TileResources.Init();
 		AnimationResources.Init();

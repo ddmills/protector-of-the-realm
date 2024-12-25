@@ -51,12 +51,12 @@ class BuildScreen extends Screen
 	{
 		world.updateSystems();
 
-		var building = e.get(Building);
+		var building = e.get(Building).building;
 
 		var pos = e.pos.toPx();
 
 		var flags = [FLG_BUILDING, FLG_OBJECT, FLG_UNIT];
-		isValid = !world.systems.colliders.footprintHasCollisions(building.footprint, flags);
+		isValid = !world.systems.colliders.footprintHasCollisions(building.getFootprint(e, true), flags);
 
 		var sprite = e.get(Sprite);
 		sprite.bm.alpha = .5;
@@ -73,8 +73,8 @@ class BuildScreen extends Screen
 			g.lineStyle(4, 0xff0000, .25);
 		}
 
-		var rectWidth = building.width * Game.TILE_SIZE;
-		var rectHeight = building.height * Game.TILE_SIZE;
+		var rectWidth = (building.width + (building.placementPadding * 2)) * Game.TILE_SIZE;
+		var rectHeight = (building.height + (building.placementPadding * 2)) * Game.TILE_SIZE;
 		g.drawRect(pos.x - (rectWidth / 2).floor(), pos.y - (rectHeight / 2).floor(), rectWidth, rectHeight);
 
 		while (game.commands.hasNext())
@@ -93,7 +93,7 @@ class BuildScreen extends Screen
 
 		if (game.input.lmb && isValid)
 		{
-			var building = e.get(Building);
+			var building = e.get(Building).building;
 			e.get(Sprite).bm.alpha = 1;
 			e.add(c);
 			world.terrain.splat(e.pos, building.width, building.height);

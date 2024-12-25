@@ -1,24 +1,43 @@
 package domain.components;
 
-import common.struct.IntPoint;
-import common.struct.Shape;
+import core.Data;
+import data.domain.BuildingType;
+import domain.buildings.BuildingQueue.BuildingQueueJob;
+import domain.events.QueryActionsEvent;
+import domain.events.QueueBuildingJobEvent;
 import ecs.Component;
 
 class Building extends Component
 {
-	@save public var width:Int;
-	@save public var height:Int;
+	@save public var buildingType:BuildingType;
+	@save public var queue:Array<BuildingQueueJob>;
 
-	public var footprint(get, never):Array<IntPoint>;
+	public var building(get, never):domain.buildings.Building;
 
-	public function new(width:Int, height:Int)
+	public function new(buildingType:BuildingType)
 	{
-		this.width = width;
-		this.height = height;
+		this.buildingType = buildingType;
+		this.queue = [];
+
+		addHandler(QueryActionsEvent, onQueryActions);
+		addHandler(QueueBuildingJobEvent, onQueueBuildingJob);
 	}
 
-	function get_footprint():Array<IntPoint>
+	private function onQueryActions(evt:QueryActionsEvent)
 	{
-		return Shape.RECTANGLE(width, height).getFootprint(entity.pos.toIntPoint());
+		var actions = building.getActions(entity);
+
+		evt.addAll(actions);
+	}
+
+	private function onQueueBuildingJob(evt:QueueBuildingJobEvent)
+	{
+		trace('JOB', evt.job.jobType);
+		queue.push(evt.job);
+	}
+
+	function get_building():domain.buildings.Building
+	{
+		return Data.Buildings.get(buildingType);
 	}
 }

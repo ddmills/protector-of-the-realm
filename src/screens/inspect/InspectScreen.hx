@@ -7,6 +7,7 @@ import core.input.Command;
 import data.input.groups.CameraInputGroup;
 import data.resources.FontResources;
 import domain.components.Inspectable;
+import domain.events.QueryActionsEvent;
 import ecs.Entity;
 import h2d.Bitmap;
 import ui.components.Button;
@@ -50,6 +51,18 @@ class InspectScreen extends Screen
 
 	override function onEnter()
 	{
+		reRenderUi();
+	}
+
+	function reRenderUi()
+	{
+		y = 0;
+
+		if (ui?.rootOb != null)
+		{
+			ui.rootOb.remove();
+		}
+
 		var rootOb = new Bitmap();
 		rootOb.tile = h2d.Tile.fromColor(0x242529, 1, 1);
 		rootOb.width = width;
@@ -64,11 +77,12 @@ class InspectScreen extends Screen
 		ui = {
 			rootOb: rootOb,
 			titleOb: titleOb,
-			actionsOb: actionsOb
+			actionsOb: actionsOb,
 		};
 
 		renderTitle();
 		renderActions();
+
 		game.render(HUD, ui.rootOb);
 	}
 
@@ -95,11 +109,20 @@ class InspectScreen extends Screen
 	{
 		ui.actionsOb.removeChildren();
 
-		var action = new Button("hello world", ui.actionsOb);
-		action.width = width;
-		action.y = y;
-		action.onClick = (e) -> trace('click');
-		y += action.height;
+		var evt = inspectableEntity.fireEvent(new QueryActionsEvent());
+
+		for (action in evt.actions)
+		{
+			var btn = new Button(action.name, ui.actionsOb);
+			btn.width = width;
+			btn.y = y;
+			btn.onClick = (e) ->
+			{
+				inspectableEntity.fireEvent(action.evt);
+				reRenderUi();
+			};
+			y += btn.height;
+		}
 	}
 
 	public override function onMouseDown(pos:Coordinate)
