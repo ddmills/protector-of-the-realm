@@ -230,8 +230,9 @@ class Entity
 		_x = w.x;
 		_y = w.y;
 
-		if (!isDetached && w.x.floor() != previous.x.floor() || w.y.floor() != previous.y.floor())
+		if (w.x.floor() != previous.x.floor() || w.y.floor() != previous.y.floor())
 		{
+			Game.instance.world.map.position.updateEntityPosition(id, _x.floor(), _y.floor());
 			add(new Moved(value, previous));
 		}
 

@@ -23,4 +23,9 @@ class System
 	 * Called on every frame
 	 */
 	public function update(frame:Frame) {}
+
+	/**
+	 * Called on teardown
+	 */
+	public function teardown() {}
 }

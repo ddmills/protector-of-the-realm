@@ -44,4 +44,18 @@ class SystemManager
 		inspection.update(frame);
 		debugInfo.update(frame);
 	}
+
+	public function teardown()
+	{
+		actionQueue.teardown();
+		vision.teardown();
+		pathing.teardown();
+		monsters.teardown();
+		movement.teardown();
+		sprites.teardown();
+		colliders.teardown();
+		destroy.teardown();
+		inspection.teardown();
+		debugInfo.teardown();
+	}
 }

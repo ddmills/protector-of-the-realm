@@ -86,14 +86,14 @@ class VisionSystem extends System
 		if (value)
 		{
 			debugGraphics.clear();
-			debugGraphics.beginFill(0x00ff22, .5);
+			debugGraphics.beginFill(0xd9ff00, .5);
 
-			for (cell in layer.grid)
+			for (cell in layer.visible)
 			{
 				var count = cell.value.count();
 				if (count > 0)
 				{
-					debugGraphics.beginFill(0x00ff22, .2 * count);
+					debugGraphics.beginFill(0xd9ff00, .2 * count);
 					debugGraphics.drawRect(cell.x * Game.TILE_SIZE, cell.y * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
 				}
 			}

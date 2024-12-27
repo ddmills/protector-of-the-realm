@@ -9,6 +9,7 @@ import domain.components.ActionQueue;
 import domain.components.Building;
 import domain.components.Collider;
 import domain.components.Inspectable;
+import domain.components.Label;
 import domain.components.Sprite;
 import domain.components.Vision;
 import ecs.Entity;
@@ -20,6 +21,7 @@ class GuildHallPrefab extends Prefab
 		var e = new Entity(pos);
 		var building = Data.Buildings.get(BLDG_GUILD_HALL);
 
+		e.add(new Label('Guild Hall'));
 		e.add(new Building(BLDG_GUILD_HALL));
 		e.add(new ActionQueue());
 

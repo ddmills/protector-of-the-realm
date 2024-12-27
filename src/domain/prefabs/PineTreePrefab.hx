@@ -6,6 +6,7 @@ import common.struct.IntPoint;
 import core.Game;
 import data.resources.TileKey;
 import domain.components.Collider;
+import domain.components.Label;
 import domain.components.Sprite;
 import ecs.Entity;
 
@@ -14,6 +15,7 @@ class PineTreePrefab extends Prefab
 	public function Create(options:Dynamic, pos:Coordinate):Entity
 	{
 		var e = new Entity(pos);
+		e.add(new Label('Pine Tree'));
 
 		var r = Game.instance.world.rand;
 		var k = r.pick([

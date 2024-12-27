@@ -20,14 +20,17 @@ class GameMap
 	public var height(default, null):Int = 320;
 	public var vision(default, null):VisionLayer;
 	public var collision(default, null):CollisionLayer;
+	public var position(default, null):PositionLayer;
 
 	public function new()
 	{
 		vision = new VisionLayer(this);
 		collision = new CollisionLayer(this);
+		position = new PositionLayer(this);
 
 		vision.init();
 		collision.init();
+		position.init();
 	}
 
 	public function save():SaveGameMap
@@ -64,47 +67,14 @@ class GameMap
 		};
 	}
 
-	public inline function getEntitiesAt(pos:IntPoint):Array<Entity>
+	public inline function getEntitiesAt(x:Int, y:Int):Array<Entity>
 	{
-		// return ids.map((id:String) -> game.registry.getEntity(id));
-		return new Array<Entity>();
+		return getEntityIdsAt(x, y).map((id:String) -> Game.instance.registry.getEntity(id));
 	}
 
-	public function getEntitiesInRect(pos:IntPoint, width, height):Array<Entity>
+	public inline function getEntityIdsAt(x:Int, y:Int):Array<String>
 	{
-		var entities:Array<Entity> = [];
-
-		for (x in pos.x...(pos.x + width))
-		{
-			for (y in pos.y...(pos.y + height))
-			{
-				entities = entities.concat(getEntitiesAt(new IntPoint(x, y)));
-			}
-		}
-
-		return entities;
-	}
-
-	public function getEntitiesInRange(pos:IntPoint, range:Int):Array<Entity>
-	{
-		var diameter = (range * 2) + 1;
-		var topLeft = pos.sub(new IntPoint(range, range));
-		return getEntitiesInRect(topLeft, diameter, diameter);
-	}
-
-	public function getNeighborEntities(pos:IntPoint):Array<Array<Entity>>
-	{
-		// todo - just make faster by removing cardinal calls?
-		return [
-			getEntitiesAt(pos.add(Cardinal.NORTH_WEST.toOffset())), // NORTH_WEST
-			getEntitiesAt(pos.add(Cardinal.NORTH.toOffset())), // NORTH
-			getEntitiesAt(pos.add(Cardinal.NORTH_EAST.toOffset())), // NORTH_EAST
-			getEntitiesAt(pos.add(Cardinal.WEST.toOffset())), // WEST
-			getEntitiesAt(pos.add(Cardinal.EAST.toOffset())), // EAST
-			getEntitiesAt(pos.add(Cardinal.SOUTH_WEST.toOffset())), // SOUTH_WEST
-			getEntitiesAt(pos.add(Cardinal.SOUTH.toOffset())), // SOUTH
-			getEntitiesAt(pos.add(Cardinal.SOUTH_EAST.toOffset())), // SOUTH_EAST
-		];
+		return position.getEntityIdsAt(x, y);
 	}
 
 	inline function get_world():World

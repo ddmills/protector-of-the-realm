@@ -5,6 +5,7 @@ import common.struct.FloatPoint;
 import common.struct.IntPoint;
 import domain.components.Collider;
 import domain.components.Inspectable;
+import domain.components.Label;
 import domain.components.Monster;
 import domain.components.Sprite;
 import domain.components.Vision;
@@ -15,6 +16,7 @@ class OgrePrefab extends Prefab
 	public function Create(options:Dynamic, pos:Coordinate):Entity
 	{
 		var e = new Entity(pos);
+		e.add(new Label('Ogre'));
 
 		var sprite = new Sprite(TK_OGRE, OBJECTS);
 

@@ -121,17 +121,14 @@ class World
 	{
 		Performance.start('world-save');
 
-		if (teardown)
-		{
-			fow.remove();
-			terrain.remove();
-		}
-
 		var entities = game.registry.map((e) ->
 		{
 			var entitySaveData = e.save();
 
-			e.destroy();
+			if (teardown)
+			{
+				e.destroy();
+			}
 
 			return entitySaveData;
 		});
@@ -143,6 +140,13 @@ class World
 			entities: entities,
 			camera: game.camera.save(),
 		};
+
+		if (teardown)
+		{
+			fow.remove();
+			terrain.remove();
+			systems.teardown();
+		}
 
 		Performance.stop('world-save', true);
 

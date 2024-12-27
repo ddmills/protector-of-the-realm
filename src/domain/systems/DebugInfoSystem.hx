@@ -3,6 +3,7 @@ package domain.systems;
 import core.Frame;
 import core.Game;
 import data.resources.FontResources;
+import domain.components.Label;
 import domain.components.Monster;
 import ecs.Query;
 import ecs.System;
@@ -17,6 +18,7 @@ typedef DebugInfo =
 	clock:Text,
 	monster:Text,
 	entities:Text,
+	cursor:Text,
 	grid:h2d.Graphics,
 }
 
@@ -37,16 +39,29 @@ class DebugInfoSystem extends System
 
 	override function update(frame:Frame)
 	{
+		var w = game.input.mouse.toWorld().toIntPoint();
 		var px = game.input.mouse.toPx().floor().toString();
-		var w = game.input.mouse.toWorld().floor().toString();
+		var wtext = w.toString();
 		var fps = frame.fps.floor();
+
+		var entities = world.map.getEntitiesAt(w.x, w.y);
+		var eString = entities
+			.map(x -> x.get(Label)?.text ?? 'Unknown')
+			.join(', ');
 
 		debugInfo.fps.text = fps.toString();
 		debugInfo.fps.color = getFpsColor(fps).toHxdColor();
-		debugInfo.pos.text = '$w $px';
+		debugInfo.pos.text = '$wtext $px';
 		debugInfo.monster.text = 'monsters ${monsters.count().toString()}';
 		debugInfo.entities.text = 'entities ${game.registry.size.toString()}';
+		debugInfo.cursor.text = eString;
 		debugInfo.clock.text = '${game.clock.tick.floor()} (${game.clock.speed})';
+	}
+
+	override function teardown()
+	{
+		debugInfo.ob.remove();
+		debugInfo.grid.remove();
 	}
 
 	function getFpsColor(fps:Int):Int
@@ -95,6 +110,10 @@ class DebugInfoSystem extends System
 		var clock = new Text(FontResources.BIZCAT, ob);
 		clock.color = game.TEXT_COLOR.toHxdColor();
 		clock.y = 64;
+
+		var cursor = new Text(FontResources.BIZCAT, ob);
+		cursor.color = game.TEXT_COLOR.toHxdColor();
+		cursor.y = 80;
 
 		var grid = new h2d.Graphics();
 		grid.visible = false;
@@ -145,6 +164,7 @@ class DebugInfoSystem extends System
 			clock: clock,
 			monster: monster,
 			entities: entities,
+			cursor: cursor,
 			grid: grid,
 		};
 

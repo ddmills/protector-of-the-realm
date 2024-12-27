@@ -6,20 +6,21 @@ import core.Game;
 
 typedef SaveVisionLayer =
 {
-	var grid:GridSave<Array<String>>;
+	var visible:GridSave<Array<String>>;
 	var exploration:GridSave<Bool>;
 }
 
-class VisionLayer extends MapLayer<Set<String>>
+class VisionLayer extends MapLayer
 {
+	public var visible:Grid<Set<String>>;
 	public var exploration:Grid<Bool>;
 
 	var fow(get, never):FogOfWar;
 
 	public function init()
 	{
-		grid = new Grid(map.width, map.height);
-		grid.fillFn(i -> new Set());
+		visible = new Grid(map.width, map.height);
+		visible.fillFn(i -> new Set());
 		exploration = new Grid(map.width, map.height);
 		exploration.fill(false);
 	}
@@ -27,14 +28,14 @@ class VisionLayer extends MapLayer<Set<String>>
 	public function save():SaveVisionLayer
 	{
 		return {
-			grid: grid.save(x -> x.items),
+			visible: visible.save(x -> x.items),
 			exploration: exploration.save(x -> x),
 		};
 	}
 
 	public function load(data:SaveVisionLayer)
 	{
-		grid.load(data.grid, x -> new Set(x));
+		visible.load(data.visible, x -> new Set(x));
 		exploration.load(data.exploration, x -> x);
 
 		for (cell in exploration)
@@ -53,7 +54,7 @@ class VisionLayer extends MapLayer<Set<String>>
 
 	public function addEntity(x:Int, y:Int, entityId:String)
 	{
-		var m = get(x, y);
+		var m = visible.get(x, y);
 
 		if (m != null)
 		{
@@ -65,7 +66,7 @@ class VisionLayer extends MapLayer<Set<String>>
 
 	public function removeEntity(x:Int, y:Int, entityId:String)
 	{
-		var m = get(x, y);
+		var m = visible.get(x, y);
 
 		if (m != null)
 		{
