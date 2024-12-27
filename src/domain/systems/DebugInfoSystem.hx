@@ -100,7 +100,7 @@ class DebugInfoSystem extends System
 		grid.visible = false;
 		grid.beginFill(0x00FF00, 0);
 
-		for (x in 0...world.mapWidth)
+		for (x in 0...world.map.width)
 		{
 			if (x % 16 == 0)
 			{
@@ -116,10 +116,10 @@ class DebugInfoSystem extends System
 			}
 
 			grid.moveTo(x * Game.TILE_SIZE, 0);
-			grid.lineTo(x * Game.TILE_SIZE, world.mapHeight * Game.TILE_SIZE);
+			grid.lineTo(x * Game.TILE_SIZE, world.map.height * Game.TILE_SIZE);
 		}
 
-		for (y in 0...world.mapHeight)
+		for (y in 0...world.map.height)
 		{
 			if (y % 16 == 0)
 			{
@@ -135,7 +135,7 @@ class DebugInfoSystem extends System
 			}
 
 			grid.moveTo(0, y * Game.TILE_SIZE);
-			grid.lineTo(world.mapWidth * Game.TILE_SIZE, y * Game.TILE_SIZE);
+			grid.lineTo(world.map.width * Game.TILE_SIZE, y * Game.TILE_SIZE);
 		}
 
 		debugInfo = {

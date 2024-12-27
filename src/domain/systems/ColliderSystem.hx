@@ -1,6 +1,5 @@
 package domain.systems;
 
-import common.struct.Grid;
 import common.struct.IntPoint;
 import common.struct.Set;
 import core.Frame;
@@ -10,6 +9,7 @@ import domain.components.IsDestroyed;
 import domain.components.IsDetached;
 import domain.components.Move;
 import domain.components.Moved;
+import domain.map.CollisionLayer;
 import ecs.Entity;
 import ecs.Query;
 import ecs.System;
@@ -24,10 +24,8 @@ enum abstract ColliderFlag(Int) to Int from Int
 
 class ColliderSystem extends System
 {
-	var resolution:Int = 1;
-
-	public var grid:Grid<Set<String>>;
 	public var debug(default, set):Bool;
+	public var layer(get, never):CollisionLayer;
 
 	var debugGraphics:Graphics;
 	var redrawDebug:Bool = false;
@@ -36,9 +34,6 @@ class ColliderSystem extends System
 	{
 		debugGraphics = new Graphics();
 		game.render(OVERLAY, debugGraphics);
-
-		grid = new Grid(world.mapWidth, world.mapHeight);
-		grid.fillFn((i) -> new Set());
 
 		var moved = new Query({
 			all: [Collider, Moved],
@@ -51,7 +46,8 @@ class ColliderSystem extends System
 		});
 
 		var destroyed = new Query({
-			all: [Collider, IsDestroyed],
+			all: [Collider],
+			any: [IsDestroyed, IsDetached],
 		});
 
 		moved.onEntityAdded(onEntityMoved);
@@ -69,7 +65,7 @@ class ColliderSystem extends System
 
 	public function getEntityIdsAt(pos:IntPoint):Array<String>
 	{
-		var ids = grid.get(pos.x, pos.y);
+		var ids = layer.get(pos.x, pos.y);
 
 		if (ids == null)
 		{
@@ -138,7 +134,7 @@ class ColliderSystem extends System
 
 	private function getCollidersAt(pos:IntPoint):Array<Collider>
 	{
-		var m = grid.get(pos.x, pos.y);
+		var m = layer.get(pos.x, pos.y);
 		var colliders = new Array<Collider>();
 
 		if (m == null)
@@ -155,7 +151,6 @@ class ColliderSystem extends System
 
 	private function onEntityDestroyed(e:Entity)
 	{
-		trace('cleanup entity', e.id);
 		var collider = e.get(Collider);
 
 		for (pos in collider.spots)
@@ -227,7 +222,7 @@ class ColliderSystem extends System
 
 	private function addGridId(pos:IntPoint, entityId:String)
 	{
-		var m = grid.get(pos.x, pos.y);
+		var m = layer.get(pos.x, pos.y);
 		if (m == null)
 		{
 			return;
@@ -238,7 +233,7 @@ class ColliderSystem extends System
 
 	private function removeGridId(pos:IntPoint, entityId:String)
 	{
-		var m = grid.get(pos.x, pos.y);
+		var m = layer.get(pos.x, pos.y);
 		if (m == null)
 		{
 			return;
@@ -254,7 +249,7 @@ class ColliderSystem extends System
 			debugGraphics.clear();
 			debugGraphics.beginFill(0xff00ee, .5);
 
-			for (cell in grid)
+			for (cell in layer.grid)
 			{
 				var count = cell.value.count();
 				if (count > 0)
@@ -274,5 +269,10 @@ class ColliderSystem extends System
 	function set_debug(value:Bool):Bool
 	{
 		return debug = value;
+	}
+
+	function get_layer():CollisionLayer
+	{
+		return world.map.collision;
 	}
 }

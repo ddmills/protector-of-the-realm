@@ -30,7 +30,7 @@ class MonsterSystem extends System
 				allowDiagonals: true,
 				cost: (a, b) ->
 				{
-					if (world.isOutOfBounds(b))
+					if (world.map.isOutOfBounds(b))
 					{
 						return Math.POSITIVE_INFINITY;
 					}
@@ -63,7 +63,7 @@ class MonsterSystem extends System
 		for (i in 0...10)
 		{
 			var p = getRandPointInCircle(pos, 25);
-			if (world.systems.colliders.grid.isOutOfBounds(p.x, p.y))
+			if (world.map.isOutOfBounds(p))
 			{
 				continue;
 			}

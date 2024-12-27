@@ -94,6 +94,10 @@ class PlayScreen extends Screen
 		{
 			world.systems.pathing.debug = !world.systems.pathing.debug;
 		}
+		if (key == KEY_V)
+		{
+			world.systems.vision.debug = !world.systems.vision.debug;
+		}
 		if (key == KEY_B)
 		{
 			game.screens.push(new BuildScreen());

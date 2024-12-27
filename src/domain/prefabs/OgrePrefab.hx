@@ -7,6 +7,7 @@ import domain.components.Collider;
 import domain.components.Inspectable;
 import domain.components.Monster;
 import domain.components.Sprite;
+import domain.components.Vision;
 import ecs.Entity;
 
 class OgrePrefab extends Prefab
@@ -27,6 +28,7 @@ class OgrePrefab extends Prefab
 		e.add(new Collider(POINT, new IntPoint(0, 0), [FLG_UNIT]));
 		// e.add(new Collider(CIRCLE(1), new IntPoint(0, 0), [FLG_UNIT]));
 		e.add(new Monster());
+		e.add(new Vision(4));
 		e.add(new Inspectable("Ogre", 32));
 
 		return e;

@@ -1,6 +1,5 @@
 package domain;
 
-import common.struct.Cardinal;
 import common.struct.Coordinate;
 import common.struct.IntPoint;
 import common.tools.Performance;
@@ -8,6 +7,7 @@ import core.Game;
 import data.resources.AudioKey;
 import data.save.SaveWorld;
 import domain.Spawner;
+import domain.map.GameMap;
 import domain.systems.SystemManager;
 import ecs.Entity;
 import hxd.Rand;
@@ -17,10 +17,9 @@ class World
 	public var game(get, null):Game;
 	public var systems(default, null):SystemManager;
 	public var spawner(default, null):Spawner;
-	public var mapWidth(default, null):Int;
-	public var mapHeight(default, null):Int;
 	public var terrain(default, null):Terrain;
 	public var inspection(default, null):Inspection;
+	public var map(default, null):GameMap;
 
 	public var seed:Int = 2;
 
@@ -35,9 +34,8 @@ class World
 
 	public function initialize()
 	{
-		mapWidth = 320;
-		mapHeight = 320;
 		rand = new Rand(seed);
+		map = new GameMap();
 		inspection = new Inspection();
 		systems.initialize();
 	}
@@ -57,17 +55,18 @@ class World
 	{
 		this.seed = seed;
 		rand = new Rand(seed);
-		terrain = new Terrain(mapWidth, mapHeight);
+		map = new GameMap();
 		inspection = new Inspection();
+		terrain = new Terrain(map.width, map.height);
 
 		game.render(GROUND, terrain);
 		game.clock.reset();
 
 		var p = new common.rand.Perlin(1);
 
-		for (x in 0...mapWidth)
+		for (x in 0...map.width)
 		{
-			for (y in 0...mapHeight)
+			for (y in 0...map.height)
 			{
 				if (rand.bool(.25) && p.get(x, y, 16, 3) < .4)
 				{
@@ -91,7 +90,8 @@ class World
 
 		seed = data.seed;
 		rand = new Rand(seed);
-		terrain = new Terrain(mapWidth, mapHeight);
+		map = new GameMap();
+		terrain = new Terrain(map.width, map.height);
 		inspection = new Inspection();
 		game.render(GROUND, terrain);
 		game.clock.load(data.clock);
@@ -136,75 +136,8 @@ class World
 		return s;
 	}
 
-	public overload extern inline function getEntitiesAt(pos:IntPoint):Array<Entity>
-	{
-		// return ids.map((id:String) -> game.registry.getEntity(id));
-		return new Array<Entity>();
-	}
-
-	public overload extern inline function getEntitiesAt(pos:Coordinate):Array<Entity>
-	{
-		return getEntitiesAt(pos.toWorld().toIntPoint());
-	}
-
-	public function getEntitiesInRect(pos:IntPoint, width, height):Array<Entity>
-	{
-		var entities:Array<Entity> = [];
-
-		for (x in pos.x...(pos.x + width))
-		{
-			for (y in pos.y...(pos.y + height))
-			{
-				entities = entities.concat(getEntitiesAt(new IntPoint(x, y)));
-			}
-		}
-
-		return entities;
-	}
-
-	public function getEntitiesInRange(pos:IntPoint, range:Int):Array<Entity>
-	{
-		var diameter = (range * 2) + 1;
-		var topLeft = pos.sub(new IntPoint(range, range));
-		return getEntitiesInRect(topLeft, diameter, diameter);
-	}
-
-	public function getNeighborEntities(pos:IntPoint):Array<Array<Entity>>
-	{
-		// todo - just make faster by removing cardinal calls?
-		return [
-			getEntitiesAt(pos.add(Cardinal.NORTH_WEST.toOffset())), // NORTH_WEST
-			getEntitiesAt(pos.add(Cardinal.NORTH.toOffset())), // NORTH
-			getEntitiesAt(pos.add(Cardinal.NORTH_EAST.toOffset())), // NORTH_EAST
-			getEntitiesAt(pos.add(Cardinal.WEST.toOffset())), // WEST
-			getEntitiesAt(pos.add(Cardinal.EAST.toOffset())), // EAST
-			getEntitiesAt(pos.add(Cardinal.SOUTH_WEST.toOffset())), // SOUTH_WEST
-			getEntitiesAt(pos.add(Cardinal.SOUTH.toOffset())), // SOUTH
-			getEntitiesAt(pos.add(Cardinal.SOUTH_EAST.toOffset())), // SOUTH_EAST
-		];
-	}
-
 	inline function get_game():Game
 	{
 		return Game.instance;
-	}
-
-	public inline function isOutOfBounds(pos:IntPoint)
-	{
-		return pos.x < 0 || pos.y < 0 || pos.x > mapWidth || pos.y > mapHeight;
-	}
-
-	public inline function getTileIdx(pos:IntPoint)
-	{
-		return pos.y * mapWidth + pos.x;
-	}
-
-	public inline function getTilePos(idx:Int):IntPoint
-	{
-		var w = mapWidth;
-		return {
-			x: Math.floor(idx % w),
-			y: Math.floor(idx / w),
-		}
 	}
 }

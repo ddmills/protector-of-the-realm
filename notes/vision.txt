@@ -2,3 +2,10 @@ goals:
 - manage a fog of war map. units can explore the map
 - line-of-sight checks (can unit see other)
 - units have different ranges of sight
+- visible/explored/unexplored states
+
+- whenever an entity _moves_:
+	- mark any "visible" tiles as "explored"
+	- recalculate new visible tiles
+- each "team" has a vision map
+

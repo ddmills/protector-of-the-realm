@@ -10,6 +10,7 @@ import domain.components.Building;
 import domain.components.Collider;
 import domain.components.Inspectable;
 import domain.components.Sprite;
+import domain.components.Vision;
 import ecs.Entity;
 
 class GuildHallPrefab extends Prefab
@@ -35,6 +36,7 @@ class GuildHallPrefab extends Prefab
 		e.add(collider);
 
 		e.add(new Inspectable(building.name, 64));
+		e.add(new Vision(12));
 
 		return e;
 	}

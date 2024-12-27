@@ -8,7 +8,6 @@ import domain.components.Drawable;
 import domain.components.IsDetached;
 import domain.components.Moved;
 import domain.events.EntityLoadedEvent;
-import domain.events.EntityWorldMovedEvent;
 
 class Entity
 {
@@ -233,7 +232,6 @@ class Entity
 
 		if (!isDetached && w.x.floor() != previous.x.floor() || w.y.floor() != previous.y.floor())
 		{
-			fireEvent(new EntityWorldMovedEvent(value, previous));
 			add(new Moved(value, previous));
 		}
 

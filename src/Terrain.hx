@@ -3,8 +3,6 @@ import common.struct.IntPoint;
 import core.Game;
 import h2d.Bitmap;
 import h2d.Object;
-import h2d.Tile;
-import hxd.Rand;
 import hxd.res.Image;
 import shaders.SplatShader;
 import shaders.TerrainShader;

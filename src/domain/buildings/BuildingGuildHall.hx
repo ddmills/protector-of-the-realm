@@ -1,8 +1,5 @@
 package domain.buildings;
 
-import domain.components.ActionQueue;
-import domain.events.HireActorEvent;
-import domain.events.QueryActionsEvent.EntityAction;
 import domain.events.QueryActionsEvent.EntityActionType;
 import ecs.Entity;
 
