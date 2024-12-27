@@ -3,7 +3,15 @@ package domain.map;
 import common.struct.Cardinal;
 import common.struct.IntPoint;
 import core.Game;
+import domain.map.VisionLayer.SaveVisionLayer;
 import ecs.Entity;
+
+typedef SaveGameMap =
+{
+	width:Int,
+	height:Int,
+	vision:SaveVisionLayer,
+}
 
 class GameMap
 {
@@ -20,6 +28,22 @@ class GameMap
 
 		vision.init();
 		collision.init();
+	}
+
+	public function save():SaveGameMap
+	{
+		return {
+			width: width,
+			height: height,
+			vision: vision.save(),
+		};
+	}
+
+	public function load(data:SaveGameMap)
+	{
+		width = data.width;
+		height = data.height;
+		vision.load(data.vision);
 	}
 
 	public inline function isOutOfBounds(pos:IntPoint)

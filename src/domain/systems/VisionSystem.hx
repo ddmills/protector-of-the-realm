@@ -42,6 +42,7 @@ class VisionSystem extends System
 
 	override function update(frame:Frame)
 	{
+		layer.update();
 		if (redrawDebug && frame.tick % 32 == 0)
 		{
 			updateDebug(debug);
@@ -55,14 +56,14 @@ class VisionSystem extends System
 
 		for (pos in vision.current)
 		{
-			removeGridId(pos, e.id);
+			layer.removeEntity(pos.x, pos.y, e.id);
 		}
 
 		vision.current = vision.getFootprint(moved.current.toIntPoint());
 
 		for (pos in vision.current)
 		{
-			addGridId(pos, e.id);
+			layer.addEntity(pos.x, pos.y, e.id);
 		}
 
 		redrawDebug = true;
@@ -74,34 +75,10 @@ class VisionSystem extends System
 
 		for (pos in collider.current)
 		{
-			removeGridId(pos, e.id);
+			layer.removeEntity(pos.x, pos.y, e.id);
 		}
 
 		collider.current = [];
-	}
-
-	private function addGridId(pos:IntPoint, entityId:String)
-	{
-		var m = layer.get(pos.x, pos.y);
-
-		if (m == null)
-		{
-			return;
-		}
-
-		m.add(entityId);
-	}
-
-	private function removeGridId(pos:IntPoint, entityId:String)
-	{
-		var m = layer.get(pos.x, pos.y);
-
-		if (m == null)
-		{
-			return;
-		}
-
-		m.remove(entityId);
 	}
 
 	private function updateDebug(value:Bool)

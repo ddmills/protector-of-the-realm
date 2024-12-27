@@ -6,9 +6,9 @@ package common.struct;
 	public var isEmpty(get, never):Bool;
 	public var length(get, never):Int;
 
-	public function new()
+	public function new(?items:Array<T>)
 	{
-		items = new Array();
+		this.items = items ?? new Array();
 	}
 
 	public function has(v:T):Bool

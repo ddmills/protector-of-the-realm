@@ -7,7 +7,9 @@ import core.Game;
 import data.resources.AudioKey;
 import data.save.SaveWorld;
 import domain.Spawner;
+import domain.map.FogOfWar;
 import domain.map.GameMap;
+import domain.map.Terrain;
 import domain.systems.SystemManager;
 import ecs.Entity;
 import hxd.Rand;
@@ -18,6 +20,7 @@ class World
 	public var systems(default, null):SystemManager;
 	public var spawner(default, null):Spawner;
 	public var terrain(default, null):Terrain;
+	public var fow(default, null):FogOfWar;
 	public var inspection(default, null):Inspection;
 	public var map(default, null):GameMap;
 
@@ -58,8 +61,11 @@ class World
 		map = new GameMap();
 		inspection = new Inspection();
 		terrain = new Terrain(map.width, map.height);
+		fow = new FogOfWar(map.width, map.height);
 
 		game.render(GROUND, terrain);
+		game.render(FOG, fow);
+
 		game.clock.reset();
 
 		var p = new common.rand.Perlin(1);
@@ -72,11 +78,11 @@ class World
 				{
 					Spawner.Spawn(TREE_PINE, new Coordinate(x + .5, y + .5, WORLD));
 				}
-				else if (rand.bool(.001))
+				else if (rand.bool(.0004))
 				{
 					Spawner.Spawn(PALADIN, new Coordinate(x + .5, y + .5, WORLD));
 				}
-				else if (rand.bool(.00025))
+				else if (rand.bool(.00005))
 				{
 					Spawner.Spawn(OGRE, new Coordinate(x + .5, y + .5, WORLD));
 				}
@@ -91,10 +97,15 @@ class World
 		seed = data.seed;
 		rand = new Rand(seed);
 		map = new GameMap();
+
 		terrain = new Terrain(map.width, map.height);
-		inspection = new Inspection();
+		fow = new FogOfWar(map.width, map.height);
 		game.render(GROUND, terrain);
+		game.render(FOG, fow);
+
+		inspection = new Inspection();
 		game.clock.load(data.clock);
+		map.load(data.map);
 
 		for (data in data.entities)
 		{
@@ -112,6 +123,7 @@ class World
 
 		if (teardown)
 		{
+			fow.remove();
 			terrain.remove();
 		}
 
@@ -124,8 +136,9 @@ class World
 			return entitySaveData;
 		});
 
-		var s = {
+		var s:SaveWorld = {
 			seed: seed,
+			map: map.save(),
 			clock: game.clock.save(),
 			entities: entities,
 			camera: game.camera.save(),

@@ -10,7 +10,6 @@ import domain.Spawner;
 import domain.components.Building;
 import domain.components.Collider;
 import domain.components.Sprite;
-import domain.systems.ColliderSystem.ColliderFlag;
 import ecs.Entity;
 import h2d.Graphics;
 
@@ -26,7 +25,8 @@ class BuildScreen extends Screen
 	{
 		inputDomain = INPUT_DOMAIN_PLAY;
 		isPlaced = false;
-		e = Spawner.Spawn(GUILD_HALL, game.input.mouse);
+		var pos = game.input.mouse.toWorld().floor().add(new Coordinate(.5, .5));
+		e = Spawner.Spawn(GUILD_HALL, pos);
 		c = e.get(Collider);
 		e.remove(Collider);
 	}
@@ -66,6 +66,7 @@ class BuildScreen extends Screen
 		if (isValid)
 		{
 			sprite.bm.color = 0xffffff.toHxdColor(1);
+			g.bevel = 1;
 			g.lineStyle(4, 0xffffff, .25);
 		}
 		else

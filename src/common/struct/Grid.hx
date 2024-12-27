@@ -58,7 +58,7 @@ import common.struct.IntPoint;
 		return data[idx];
 	}
 
-	public function get(x:Int, y:Int):T
+	public function get(x:Int, y:Int):Null<T>
 	{
 		if (isOutOfBounds(x, y))
 		{

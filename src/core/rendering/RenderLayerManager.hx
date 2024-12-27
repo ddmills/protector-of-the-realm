@@ -9,6 +9,7 @@ enum RenderLayerType
 {
 	BACKGROUND;
 	GROUND;
+	FOG;
 	OBJECTS;
 	FX;
 	OVERLAY;
@@ -40,6 +41,7 @@ class RenderLayerManager
 
 		createLayer(BACKGROUND, WORLD);
 		createLayer(GROUND, WORLD);
+		createLayer(FOG, WORLD);
 		createLayer(OBJECTS, WORLD);
 		createLayer(FX, WORLD);
 		createLayer(OVERLAY, WORLD);

@@ -1,3 +1,5 @@
+package domain.map;
+
 import common.struct.Coordinate;
 import common.struct.IntPoint;
 import core.Game;
