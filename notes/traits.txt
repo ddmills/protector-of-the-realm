@@ -1,0 +1,12 @@
+
+
+- Brave / Coward
+- Ambitious / Content
+- Strong / Frail
+- Greedy / Generous
+- Eagle Eyed / Short Sighted
+
+- X Hunter (gains additional xp when killing X monsters)
+- X-phobia (fear of some monster)
+- Werewolf (turns into a Werewolf during a full moon)
+- Drunkard / Teetotaler

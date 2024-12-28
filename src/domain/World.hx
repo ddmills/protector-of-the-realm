@@ -4,6 +4,7 @@ import common.struct.Coordinate;
 import common.struct.IntPoint;
 import common.tools.Performance;
 import core.Game;
+import data.domain.SpawnableType;
 import data.resources.AudioKey;
 import data.save.SaveWorld;
 import domain.Spawner;
@@ -80,11 +81,12 @@ class World
 				}
 				else if (rand.bool(.0004))
 				{
-					Spawner.Spawn(PALADIN, new Coordinate(x + .5, y + .5, WORLD));
+					var s:SpawnableType = rand.pick([PALADIN, ROGUE, WIZARD, RANGER, OGRE, GOBLIN, SKELETON]);
+					Spawner.Spawn(s, new Coordinate(x + .5, y + .5, WORLD));
 				}
 				else if (rand.bool(.00005))
 				{
-					Spawner.Spawn(OGRE, new Coordinate(x + .5, y + .5, WORLD));
+					// Spawner.Spawn(OGRE, new Coordinate(x + .5, y + .5, WORLD));
 				}
 			}
 		}

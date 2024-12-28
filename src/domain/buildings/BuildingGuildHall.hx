@@ -24,6 +24,14 @@ class BuildingGuildHall extends Building
 
 	override function getActions(entity:Entity):Array<EntityActionType>
 	{
-		return [HIRE_ACTOR(ACTOR_PALADIN), HIRE_ACTOR(ACTOR_OGRE),];
+		return [
+			HIRE_ACTOR(ACTOR_PALADIN),
+			HIRE_ACTOR(ACTOR_ROGUE),
+			HIRE_ACTOR(ACTOR_WIZARD),
+			HIRE_ACTOR(ACTOR_RANGER),
+			HIRE_ACTOR(ACTOR_SKELETON),
+			HIRE_ACTOR(ACTOR_GOBLIN),
+			HIRE_ACTOR(ACTOR_OGRE)
+		];
 	}
 }

@@ -4,15 +4,16 @@ import common.struct.Coordinate;
 import domain.prefabs.decorators.ActorDecorator;
 import ecs.Entity;
 
-class PaladinPrefab extends Prefab
+class RangerPrefab extends Prefab
 {
 	public function Create(options:Dynamic, pos:Coordinate):Entity
 	{
 		var e = new Entity(pos);
 
 		ActorDecorator.Decorate(e, {
-			actorType: ACTOR_PALADIN,
-			tileKey: TK_PALADIN,
+			actorType: ACTOR_RANGER,
+			tileKey: TK_RANGER,
+			visionRange: 10,
 		});
 
 		return e;

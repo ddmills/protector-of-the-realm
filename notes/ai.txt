@@ -1,0 +1,10 @@
+- [ ] "Supporting x"
+- [ ] "Hunting x" (monster type)
+- [ ] "Fleeing from x"
+- [ ] "Daydreaming"
+- [ ] "Researching x at y"
+- [ ] "Buying a new x at y"
+- [ ] "Looking for treasure"
+- [ ] "Defending x"
+- [ ] "Attacking x"
+- [ ] "Loitering"

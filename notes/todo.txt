@@ -1,0 +1,5 @@
+- [ ] "follow" camera
+- [ ] add coins
+- [ ] actions can cost coin
+- [ ] add audio
+- [ ] unit AI

@@ -51,7 +51,11 @@ class TileResources
 		tiles.set(TK_WIZARD, act.wizard.toTile());
 		tiles.set(TK_PALADIN, act.paladin.toTile());
 		tiles.set(TK_ROGUE, act.rogue.toTile());
+		tiles.set(TK_RANGER, act.ranger.toTile());
+
 		tiles.set(TK_OGRE, act.ogre.toTile());
+		tiles.set(TK_GOBLIN, act.goblin.toTile());
+		tiles.set(TK_SKELETON, act.skeleton.toTile());
 
 		var bld = hxd.Res.buildings;
 

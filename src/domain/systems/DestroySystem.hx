@@ -24,6 +24,7 @@ class DestroySystem extends System
 
 			if (destroying.pass > 0)
 			{
+				world.map.position.removeEntity(entity.id);
 				entity.destroy();
 			}
 			else

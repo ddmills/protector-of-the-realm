@@ -3,5 +3,10 @@ package data.domain;
 enum ActorType
 {
 	ACTOR_PALADIN;
+	ACTOR_ROGUE;
+	ACTOR_WIZARD;
+	ACTOR_RANGER;
 	ACTOR_OGRE;
+	ACTOR_GOBLIN;
+	ACTOR_SKELETON;
 }

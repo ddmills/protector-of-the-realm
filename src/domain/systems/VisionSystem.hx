@@ -72,7 +72,10 @@ class VisionSystem extends System
 		{
 			if (!e.has(IsExplorable))
 			{
-				e.drawable.isVisible = false;
+				if (e.drawable != null)
+				{
+					e.drawable.isVisible = false;
+				}
 			}
 			else
 			{

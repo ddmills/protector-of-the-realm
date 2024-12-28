@@ -4,11 +4,16 @@ import common.struct.Coordinate;
 import core.Game;
 import data.domain.SpawnableType;
 import domain.events.EntitySpawnedEvent;
+import domain.prefabs.GoblinPrefab;
 import domain.prefabs.GuildHallPrefab;
 import domain.prefabs.OgrePrefab;
 import domain.prefabs.PaladinPrefab;
 import domain.prefabs.PineTreePrefab;
+import domain.prefabs.RangerPrefab;
+import domain.prefabs.RoguePrefab;
+import domain.prefabs.SkeletonPrefab;
 import domain.prefabs.WeedPrefab;
+import domain.prefabs.WizardPrefab;
 
 class Spawner
 {
@@ -21,7 +26,12 @@ class Spawner
 		prefabs.set(WEED, new WeedPrefab());
 		prefabs.set(GUILD_HALL, new GuildHallPrefab());
 		prefabs.set(PALADIN, new PaladinPrefab());
+		prefabs.set(ROGUE, new RoguePrefab());
+		prefabs.set(WIZARD, new WizardPrefab());
+		prefabs.set(RANGER, new RangerPrefab());
 		prefabs.set(OGRE, new OgrePrefab());
+		prefabs.set(GOBLIN, new GoblinPrefab());
+		prefabs.set(SKELETON, new SkeletonPrefab());
 		prefabs.set(TREE_PINE, new PineTreePrefab());
 	}
 
