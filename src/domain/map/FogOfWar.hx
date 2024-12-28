@@ -17,7 +17,7 @@ class FogOfWar extends Object
 
 	var colorVisible:Int = 0x00000000;
 	var colorExplored:Int = 0x940A111A;
-	var colorUnexplored:Int = 0xFF030911;
+	var colorUnexplored:Int = 0xFF091120;
 
 	public function new(width:Int, height:Int)
 	{

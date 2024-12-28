@@ -21,13 +21,13 @@ class PaladinPrefab extends Prefab
 		var r = Game.instance.world.rand;
 		var sprite = new Sprite(TK_PALADIN, OBJECTS);
 
-		sprite.bm.filter = new h2d.filter.Outline(.5, 0x1C1C1C, .3, true);
+		sprite.bm.filter = new h2d.filter.Outline(.5, 0x1C1C1C, .5, true);
 
 		e.add(sprite);
 		e.add(new Label('Paladin'));
 		e.add(new Collider(POINT, new IntPoint(0, 0), [FLG_UNIT]));
 		e.add(new Monster());
-		e.add(new Vision(6));
+		e.add(new Vision(8));
 		e.add(new Inspectable("Paladin", 16));
 		e.add(new ActionQueue());
 

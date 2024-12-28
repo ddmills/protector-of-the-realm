@@ -9,6 +9,7 @@ import domain.components.ActionQueue;
 import domain.components.Building;
 import domain.components.Collider;
 import domain.components.Inspectable;
+import domain.components.IsExplorable;
 import domain.components.Label;
 import domain.components.Sprite;
 import domain.components.Vision;
@@ -38,7 +39,8 @@ class GuildHallPrefab extends Prefab
 		e.add(collider);
 
 		e.add(new Inspectable(building.name, 64));
-		e.add(new Vision(12));
+		e.add(new IsExplorable());
+		e.add(new Vision(10));
 
 		return e;
 	}

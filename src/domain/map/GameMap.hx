@@ -51,7 +51,7 @@ class GameMap
 
 	public inline function isOutOfBounds(pos:IntPoint)
 	{
-		return pos.x < 0 || pos.y < 0 || pos.x > width || pos.y > height;
+		return pos.x < 0 || pos.y < 0 || pos.x >= width || pos.y >= height;
 	}
 
 	public inline function getTileIdx(pos:IntPoint)

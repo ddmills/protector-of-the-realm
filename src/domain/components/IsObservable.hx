@@ -2,7 +2,7 @@ package domain.components;
 
 import ecs.Component;
 
-class IsVisible extends Component
+class IsObservable extends Component
 {
 	public function new() {}
 }

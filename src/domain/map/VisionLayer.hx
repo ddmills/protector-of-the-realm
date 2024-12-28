@@ -3,6 +3,10 @@ package domain.map;
 import common.struct.Grid;
 import common.struct.Set;
 import core.Game;
+import domain.components.IsExplorable;
+import domain.components.IsExplored;
+import domain.components.IsVisible;
+import ecs.Entity;
 
 typedef SaveVisionLayer =
 {
@@ -52,7 +56,12 @@ class VisionLayer extends MapLayer
 		fow.update();
 	}
 
-	public function addEntity(x:Int, y:Int, entityId:String)
+	public function isVisible(x:Int, y:Int):Bool
+	{
+		return !visible.get(x, y).isEmpty;
+	}
+
+	public function markVisibleForEntity(x:Int, y:Int, entityId:String)
 	{
 		var m = visible.get(x, y);
 
@@ -61,10 +70,25 @@ class VisionLayer extends MapLayer
 			m.add(entityId);
 			exploration.set(x, y, true);
 			fow.markVisible(x, y);
+
+			var registry = Game.instance.registry;
+			map.position
+				.getEntityIdsAt(x, y)
+				.each((id:String) ->
+				{
+					var e = registry.getEntity(id);
+
+					if (e.has(IsExplorable))
+					{
+						e.add(new IsExplored());
+					}
+
+					e.add(new IsVisible());
+				});
 		}
 	}
 
-	public function removeEntity(x:Int, y:Int, entityId:String)
+	public function removeVisibleForEntity(x:Int, y:Int, entityId:String)
 	{
 		var m = visible.get(x, y);
 
@@ -75,6 +99,14 @@ class VisionLayer extends MapLayer
 			if (m.isEmpty)
 			{
 				fow.markExplored(x, y);
+
+				var registry = Game.instance.registry;
+				map.position
+					.getEntityIdsAt(x, y)
+					.each((id:String) ->
+					{
+						registry.getEntity(id).remove(IsVisible);
+					});
 			}
 		}
 	}

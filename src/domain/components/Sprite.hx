@@ -23,6 +23,7 @@ class Sprite extends Drawable
 		this.tileKey = tileKey;
 		super(layer);
 		bm = new Bitmap(tile, ob);
+		bm.addShader(shader);
 		recomputeOrigin();
 	}
 

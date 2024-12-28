@@ -1,5 +1,7 @@
 package common.extensions;
 
+import h3d.Vector;
+
 class IntExtensions
 {
 	static public inline function toString(n:Int):String
@@ -34,6 +36,15 @@ class IntExtensions
 		var r = (n >> 16) & 0xff;
 
 		return new h3d.Vector4(r / 255, g / 255, b / 255, a);
+	}
+
+	static public inline function toVector(n:Int):Vector
+	{
+		var b = n & 0xff;
+		var g = (n >> 8) & 0xff;
+		var r = (n >> 16) & 0xff;
+
+		return new Vector(r / 255, g / 255, b / 255);
 	}
 
 	static public inline function clampUpper(n:Int, max:Int):Int

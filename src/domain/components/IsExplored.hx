@@ -4,5 +4,5 @@ import ecs.Component;
 
 class IsExplored extends Component
 {
-	public function new();
+	public function new() {}
 }

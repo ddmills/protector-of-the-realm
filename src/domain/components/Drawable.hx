@@ -4,6 +4,7 @@ import common.struct.FloatPoint;
 import core.rendering.RenderLayerManager.RenderLayerType;
 import ecs.Component;
 import h2d.Graphics;
+import shaders.SpriteShader;
 
 abstract class Drawable extends Component
 {
@@ -14,6 +15,7 @@ abstract class Drawable extends Component
 	@save public var origin(default, set):FloatPoint = new FloatPoint(.5, .5);
 
 	public var ob(default, null):h2d.Object;
+	public var shader(default, null):SpriteShader;
 	public var drawable(get, never):h2d.Drawable;
 
 	public var debug(default, set):Bool;
@@ -22,6 +24,8 @@ abstract class Drawable extends Component
 
 	public function new(layer = OBJECTS)
 	{
+		shader = new SpriteShader();
+
 		this.layer = layer;
 		this.ob = new h2d.Object();
 	}

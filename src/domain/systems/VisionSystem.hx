@@ -5,6 +5,10 @@ import core.Frame;
 import core.Game;
 import domain.components.IsDestroyed;
 import domain.components.IsDetached;
+import domain.components.IsExplorable;
+import domain.components.IsExplored;
+import domain.components.IsObservable;
+import domain.components.IsVisible;
 import domain.components.Moved;
 import domain.components.Vision;
 import domain.map.VisionLayer;
@@ -25,6 +29,69 @@ class VisionSystem extends System
 	{
 		debugGraphics = new Graphics();
 		game.render(OVERLAY, debugGraphics);
+
+		var hidden = new Query({
+			all: [IsObservable, Moved],
+		});
+
+		hidden.onEntityAdded(e ->
+		{
+			if (world.map.vision.isVisible(e.x.floor(), e.y.floor()))
+			{
+				e.add(new IsVisible());
+				e.drawable.isVisible = true;
+			}
+			else
+			{
+				e.remove(IsVisible);
+				e.drawable.isVisible = false;
+			}
+		});
+
+		var shrouded = new Query({
+			all: [IsExplored],
+			none: [IsVisible],
+		});
+
+		var visible = new Query({
+			all: [IsVisible],
+		});
+
+		shrouded.onEntityAdded(e ->
+		{
+			e.drawable.isVisible = true;
+			e.drawable.shader.setShrouded(true);
+		});
+
+		visible.onEntityAdded(e ->
+		{
+			e.drawable.isVisible = true;
+			e.drawable.shader.setShrouded(false);
+		});
+		visible.onEntityRemoved(e ->
+		{
+			if (!e.has(IsExplorable))
+			{
+				e.drawable.isVisible = false;
+			}
+			else
+			{
+				e.drawable.shader.setShrouded(true);
+			}
+		});
+
+		var unexplored = new Query({
+			all: [IsExplorable],
+			none: [IsExplored],
+		});
+
+		unexplored.onEntityAdded(e ->
+		{
+			if (e.drawable != null)
+			{
+				e.drawable.isVisible = false;
+			}
+		});
 
 		var moved = new Query({
 			all: [Vision, Moved],
@@ -54,16 +121,17 @@ class VisionSystem extends System
 		var moved = e.get(Moved);
 		var vision = e.get(Vision);
 
+		// TODO, don't add/remove so much!
 		for (pos in vision.current)
 		{
-			layer.removeEntity(pos.x, pos.y, e.id);
+			layer.removeVisibleForEntity(pos.x, pos.y, e.id);
 		}
 
 		vision.current = vision.getFootprint(moved.current.toIntPoint());
 
 		for (pos in vision.current)
 		{
-			layer.addEntity(pos.x, pos.y, e.id);
+			layer.markVisibleForEntity(pos.x, pos.y, e.id);
 		}
 
 		redrawDebug = true;
@@ -75,7 +143,7 @@ class VisionSystem extends System
 
 		for (pos in collider.current)
 		{
-			layer.removeEntity(pos.x, pos.y, e.id);
+			layer.removeVisibleForEntity(pos.x, pos.y, e.id);
 		}
 
 		collider.current = [];
