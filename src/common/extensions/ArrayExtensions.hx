@@ -50,7 +50,7 @@ class ArrayExtensions
 		for (i in 0...it.length)
 		{
 			var freq = 1;
-			for (k in(i + 1)...it.length)
+			for (k in (i + 1)...it.length)
 			{
 				if (it[i] == it[k])
 				{

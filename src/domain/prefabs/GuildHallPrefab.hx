@@ -32,7 +32,6 @@ class GuildHallPrefab extends Prefab
 		sprite.height = Game.TILE_SIZE * 5;
 		sprite.origin = new FloatPoint(.5, .5);
 
-		sprite.bm.filter = new h2d.filter.Outline(.25, 0x1C1C1C, .3, true);
 		e.add(sprite);
 
 		var collider = new Collider(RECTANGLE(building.width, building.height), new IntPoint(0, 0), [FLG_BUILDING]);

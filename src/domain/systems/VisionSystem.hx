@@ -124,15 +124,22 @@ class VisionSystem extends System
 		var moved = e.get(Moved);
 		var vision = e.get(Vision);
 
-		// TODO, don't add/remove so much!
+		var newFp = vision.getFootprint(moved.current.toIntPoint());
+		var copyFp = newFp.copy();
+
 		for (pos in vision.current)
 		{
-			layer.removeVisibleForEntity(pos.x, pos.y, e.id);
+			var removed = newFp.findRemove(v -> v.equals(pos));
+
+			if (!removed)
+			{
+				layer.removeVisibleForEntity(pos.x, pos.y, e.id);
+			}
 		}
 
-		vision.current = vision.getFootprint(moved.current.toIntPoint());
+		vision.current = copyFp;
 
-		for (pos in vision.current)
+		for (pos in newFp)
 		{
 			layer.markVisibleForEntity(pos.x, pos.y, e.id);
 		}

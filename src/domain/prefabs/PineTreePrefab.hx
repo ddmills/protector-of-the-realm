@@ -37,8 +37,6 @@ class PineTreePrefab extends Prefab
 
 		s.origin = new FloatPoint(.5, .9);
 
-		s.bm.filter = new h2d.filter.Outline(.25, 0x1C1C1C, .5, true);
-
 		e.add(s);
 		e.add(new Collider(POINT, new IntPoint(0, 0), [FLG_OBJECT]));
 		e.add(new IsExplorable());

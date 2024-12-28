@@ -27,10 +27,8 @@ class ActorDecorator
 	public static function Decorate(entity:Entity, options:ActorOptions)
 	{
 		var actor = Data.Actors.get(options.actorType);
-		var sprite = new Sprite(options.tileKey.or(TK_UNKNOWN), OBJECTS);
-		sprite.bm.filter = new h2d.filter.Outline(.25, 0x1C1C1C, .5, true);
 
-		entity.add(sprite);
+		entity.add(new Sprite(options.tileKey.or(TK_UNKNOWN), OBJECTS));
 		entity.add(new Label(actor.actorTypeName));
 		entity.add(new Collider(POINT, new IntPoint(0, 0), [FLG_UNIT]));
 		entity.add(new Vision(options.visionRange.or(6)));

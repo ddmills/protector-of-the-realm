@@ -79,14 +79,10 @@ class World
 				{
 					Spawner.Spawn(TREE_PINE, new Coordinate(x + .5, y + .5, WORLD));
 				}
-				else if (rand.bool(.0004))
+				else if (rand.bool(.001))
 				{
 					var s:SpawnableType = rand.pick([PALADIN, ROGUE, WIZARD, RANGER, OGRE, GOBLIN, SKELETON]);
 					Spawner.Spawn(s, new Coordinate(x + .5, y + .5, WORLD));
-				}
-				else if (rand.bool(.00005))
-				{
-					// Spawner.Spawn(OGRE, new Coordinate(x + .5, y + .5, WORLD));
 				}
 			}
 		}
