@@ -5,9 +5,11 @@ import core.Data;
 import data.domain.ActorType;
 import data.resources.TileKey;
 import domain.components.ActionQueue;
+import domain.components.Actor;
 import domain.components.Collider;
 import domain.components.Inspectable;
 import domain.components.IsObservable;
+import domain.components.IsPlayer;
 import domain.components.Label;
 import domain.components.Monster;
 import domain.components.Sprite;
@@ -20,6 +22,7 @@ typedef ActorOptions =
 	?tileKey:Null<TileKey>,
 	?visionRange:Null<Int>,
 	?clickRadius:Null<Int>,
+	?isPlayer:Bool,
 }
 
 class ActorDecorator
@@ -27,6 +30,13 @@ class ActorDecorator
 	public static function Decorate(entity:Entity, options:ActorOptions)
 	{
 		var actor = Data.Actors.get(options.actorType);
+
+		entity.add(new Actor(options.actorType));
+
+		if (options.isPlayer == true)
+		{
+			entity.add(new IsPlayer());
+		}
 
 		entity.add(new Sprite(options.tileKey.or(TK_UNKNOWN), OBJECTS));
 		entity.add(new Label(actor.actorTypeName));

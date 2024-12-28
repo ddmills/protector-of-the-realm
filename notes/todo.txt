@@ -3,3 +3,4 @@
 - [ ] actions can cost coin
 - [ ] add audio
 - [ ] unit AI
+- [ ] vision restricted to player-owned stuff

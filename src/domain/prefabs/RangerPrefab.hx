@@ -14,6 +14,7 @@ class RangerPrefab extends Prefab
 			actorType: ACTOR_RANGER,
 			tileKey: TK_RANGER,
 			visionRange: 10,
+			isPlayer: true,
 		});
 
 		return e;

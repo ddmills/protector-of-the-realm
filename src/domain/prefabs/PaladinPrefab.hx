@@ -13,6 +13,8 @@ class PaladinPrefab extends Prefab
 		ActorDecorator.Decorate(e, {
 			actorType: ACTOR_PALADIN,
 			tileKey: TK_PALADIN,
+			isPlayer: true,
+			visionRange: 5,
 		});
 
 		return e;

@@ -1,6 +1,5 @@
 package domain.systems;
 
-import common.struct.IntPoint;
 import core.Frame;
 import core.Game;
 import domain.components.IsDestroyed;
@@ -8,6 +7,7 @@ import domain.components.IsDetached;
 import domain.components.IsExplorable;
 import domain.components.IsExplored;
 import domain.components.IsObservable;
+import domain.components.IsPlayer;
 import domain.components.IsVisible;
 import domain.components.Moved;
 import domain.components.Vision;
@@ -53,14 +53,14 @@ class VisionSystem extends System
 			none: [IsVisible],
 		});
 
-		var visible = new Query({
-			all: [IsVisible],
-		});
-
 		shrouded.onEntityAdded(e ->
 		{
 			e.drawable.isVisible = true;
 			e.drawable.shader.setShrouded(true);
+		});
+
+		var visible = new Query({
+			all: [IsVisible],
 		});
 
 		visible.onEntityAdded(e ->
@@ -68,6 +68,7 @@ class VisionSystem extends System
 			e.drawable.isVisible = true;
 			e.drawable.shader.setShrouded(false);
 		});
+
 		visible.onEntityRemoved(e ->
 		{
 			if (!e.has(IsExplorable))
@@ -83,6 +84,7 @@ class VisionSystem extends System
 			}
 		});
 
+		// mark any unexplored tiles as invisible to start
 		var unexplored = new Query({
 			all: [IsExplorable],
 			none: [IsExplored],
@@ -97,12 +99,12 @@ class VisionSystem extends System
 		});
 
 		var moved = new Query({
-			all: [Vision, Moved],
+			all: [Vision, IsPlayer, Moved],
 			none: [IsDestroyed, IsDetached],
 		});
 
 		var destroyed = new Query({
-			all: [Vision],
+			all: [Vision, IsPlayer],
 			any: [IsDestroyed, IsDetached],
 		});
 

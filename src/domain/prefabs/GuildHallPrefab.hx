@@ -10,6 +10,7 @@ import domain.components.Building;
 import domain.components.Collider;
 import domain.components.Inspectable;
 import domain.components.IsExplorable;
+import domain.components.IsPlayer;
 import domain.components.Label;
 import domain.components.Sprite;
 import domain.components.Vision;
@@ -25,6 +26,7 @@ class GuildHallPrefab extends Prefab
 		e.add(new Label('Guild Hall'));
 		e.add(new Building(BLDG_GUILD_HALL));
 		e.add(new ActionQueue());
+		e.add(new IsPlayer());
 
 		var sprite = new Sprite(TK_GUILD_HALL);
 
