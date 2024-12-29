@@ -28,7 +28,7 @@ class TileResources
 	{
 		var env = hxd.Res.environment;
 
-		tiles.set(TK_UNKNOWN, Tile.fromColor(0xff00ff, Game.TILE_SIZE, Game.TILE_SIZE, .25));
+		tiles.set(TK_UNKNOWN, Tile.fromColor(0xff00ff, Game.TILE_WIDTH, Game.TILE_HEIGHT, .25));
 		tiles.set(TK_WEED_01, env.weed_01.toTile());
 		tiles.set(TK_WEED_02, env.weed_02.toTile());
 		tiles.set(TK_WEED_03, env.weed_03.toTile());

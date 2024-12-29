@@ -1,9 +1,6 @@
 package domain.map;
 
-import core.Game;
-import h2d.Bitmap;
 import h2d.Object;
-import h2d.Tile;
 import haxe.io.Bytes;
 import hxd.Pixels;
 import hxsl.Types.Texture;
@@ -16,12 +13,14 @@ class FogOfWar extends Object
 	var pixels:Pixels;
 
 	var colorVisible:Int = 0x00000000;
-	var colorExplored:Int = 0x940A111A;
-	var colorUnexplored:Int = 0xFF091120;
+	var colorExplored:Int = 0xa11c2020;
+	var colorUnexplored:Int = 0xff1C2020;
 
 	public function new(width:Int, height:Int)
 	{
 		super();
+
+		this.y = 300;
 
 		var bytes = Bytes.alloc(width * height * 4);
 		pixels = new Pixels(width, height, bytes, RGBA);
@@ -34,17 +33,7 @@ class FogOfWar extends Object
 			}
 		}
 
-		renderTexture = Texture.fromPixels(pixels);
-
-		var t = Tile.fromTexture(renderTexture);
-		var bm = new Bitmap(t);
-		var blur = new h2d.filter.Blur(60, 1, 1, 1);
-		bm.filter = blur;
-
-		bm.width = width * Game.TILE_SIZE;
-		bm.height = height * Game.TILE_SIZE;
-
-		addChild(bm);
+		renderTexture = new Texture(width, height, [Dynamic]);
 	}
 
 	public function update()
@@ -58,13 +47,19 @@ class FogOfWar extends Object
 
 	public function markExplored(x:Int, y:Int)
 	{
-		pixels.setPixel(x, y, colorExplored);
-		isDirty = true;
+		if (x > 0 && y > 0 && x < (pixels.width - 1) && y < (pixels.height - 1))
+		{
+			pixels.setPixel(x, y, colorExplored);
+			isDirty = true;
+		}
 	}
 
 	public function markVisible(x:Int, y:Int)
 	{
-		pixels.setPixel(x, y, colorVisible);
-		isDirty = true;
+		if (x > 0 && y > 0 && x < (pixels.width - 1) && y < (pixels.height - 1))
+		{
+			pixels.setPixel(x, y, colorVisible);
+			isDirty = true;
+		}
 	}
 }

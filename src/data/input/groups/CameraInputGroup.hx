@@ -12,21 +12,23 @@ class CameraInputGroup
 
 		if (game.input.mmb)
 		{
-			var diff = previous.sub(pos).toFloatPoint().multiply((1 / game.camera.zoom) * .1);
-			game.camera.pos = game.camera.pos.add(diff.asWorld());
+			var diff = previous.sub(pos).toFloatPoint().multiply((1 / game.camera.zoom));
+
+			game.camera.scroller.x -= diff.x * 10;
+			game.camera.scroller.y -= diff.y * 10;
 		}
 	}
 
 	public static function onMouseWheelDown(wheelDelta:Float)
 	{
 		var game = Game.instance;
-		game.camera.zoomTo(game.input.mouse, game.camera.zoom * 1.20);
+		game.camera.zoomTo(game.input.mouse, game.camera.zoom + .1);
 	}
 
 	public static function onMouseWheelUp(wheelDelta:Float)
 	{
 		var game = Game.instance;
-		game.camera.zoomTo(game.input.mouse, game.camera.zoom * .8);
+		game.camera.zoomTo(game.input.mouse, game.camera.zoom - .1);
 	}
 
 	public static function handle(command:Command)

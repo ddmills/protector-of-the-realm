@@ -1,90 +1,93 @@
 package domain.map;
 
-import common.struct.Coordinate;
-import common.struct.IntPoint;
+import common.struct.Grid;
 import core.Game;
 import h2d.Bitmap;
 import h2d.Object;
 import h2d.Tile;
-import hxd.Pixels;
-import hxd.res.Image;
-import hxsl.Types.Texture;
-import shaders.SplatShader;
-import shaders.TerrainShader;
+import h2d.TileGroup;
+import shaders.FogShader;
+
+enum TerrainType
+{
+	GRASS;
+	WATER;
+}
 
 class Terrain extends Object
 {
-	var bm:Bitmap;
-	var texture:Texture;
-	var pixels:Pixels;
-	var splats:Array<Bitmap>;
-	var textureScale = 4;
-	var worldToTex:Float;
+	var width:Int;
+	var height:Int;
+
+	var terrain:Grid<TerrainType>;
+
+	var tileGroup:TileGroup;
+	var tiles:Array<Array<Tile>>;
 
 	public function new(width:Int, height:Int, ?parent:Object)
 	{
 		super(parent);
-		texture = hxd.Res.terrain.Control.toTexture();
-		pixels = texture.capturePixels();
-		bm = new Bitmap(Tile.fromTexture(texture));
+		this.width = width;
+		this.height = height;
 
-		var splat0 = hxd.Res.terrain.Dirt_02.toTexture();
-		splat0.wrap = Repeat;
-		var splat1 = hxd.Res.terrain.Grass_01.toTexture();
-		splat1.wrap = Repeat;
-		var splat2 = hxd.Res.terrain.Grass_04.toTexture();
-		splat2.wrap = Repeat;
-		var splat3 = hxd.Res.terrain.Ground_04.toTexture();
-		splat3.wrap = Repeat;
-		var splat4 = hxd.Res.terrain.Dirt_05.toTexture();
-		splat4.wrap = Repeat;
+		terrain = new Grid(width, height);
+		terrain.fill(GRASS);
 
-		bm.width = width * Game.TILE_SIZE;
-		bm.height = height * Game.TILE_SIZE;
+		var tex = hxd.Res.terrain.terrain_32.toTile();
 
-		worldToTex = texture.width / width;
+		tiles = tex.divide(4, 2);
+		tileGroup = new TileGroup(tex, this);
 
-		trace(worldToTex);
+		var fogt = Tile.fromColor(0x000000);
+		var fogbm = new Bitmap(fogt, this);
 
-		var shader = new TerrainShader(splat0, splat1, splat2, splat3, splat4, width / textureScale);
-		bm.addShader(shader);
-		addChild(bm);
+		fogbm.width = width * Game.TILE_WIDTH;
+		fogbm.height = height * Game.TILE_HEIGHT;
+		fogbm.x -= (width * Game.TILE_WIDTH_HALF);
+
+		fogbm.addShader(new FogShader());
+
+		generate();
 	}
 
-	public function setPx(x:Int, y:Int, color:Int)
+	private function generate()
 	{
-		var size = worldToTex.round();
-		var ofx = (worldToTex * x).floor();
-		var ofy = (worldToTex * y).floor();
+		var p = new common.rand.Perlin(1);
+		var waterline = .4;
 
-		for (px in 0...size)
+		for (x in 0...width)
 		{
-			for (py in 0...size)
+			for (y in 0...height)
 			{
-				pixels.setPixel(ofx + px, ofy + py, color);
+				if (p.get(x, y, 16, 3) < waterline)
+				{
+					setTerrain(x, y, WATER);
+				}
+				else
+				{
+					setTerrain(x, y, GRASS);
+				}
 			}
 		}
 	}
 
-	public function uploadPx()
+	function setTerrain(x:Int, y:Int, terrainType:TerrainType)
 	{
-		texture.uploadPixels(pixels);
+		terrain.set(x, y, terrainType);
+		var tile = getTile(terrainType);
+
+		var px = ((x - y) * 16) - Game.TILE_WIDTH_HALF;
+		var py = (x + y) * 8;
+
+		tileGroup.add(px, py, tile);
 	}
 
-	public function splat(pos:Coordinate, worldWidth:Int, worldHeight:Int)
+	function getTile(terrainType:TerrainType):Tile
 	{
-		var splat = hxd.Res.terrain.Splat_01.toTile();
-		var splatBm = new Bitmap(splat, bm);
-		var offset = new IntPoint((splatBm.width / 2).round(), (splatBm.height / 2).round());
-		var targetPos = pos.toPx().toIntPoint().sub(offset);
-
-		splatBm.width = worldWidth * Game.TILE_SIZE;
-		splatBm.height = worldHeight * Game.TILE_SIZE;
-		splatBm.x = targetPos.x;
-		splatBm.y = targetPos.y;
-
-		var grnd = hxd.Res.terrain.Ground_04.toTexture();
-		grnd.wrap = Repeat;
-		splatBm.addShader(new SplatShader(grnd, worldWidth / textureScale));
+		return switch terrainType
+		{
+			case GRASS: tiles[0][2];
+			case WATER: tiles[0][1];
+		}
 	}
 }

@@ -1,5 +1,6 @@
 package domain.prefabs.decorators;
 
+import common.struct.FloatPoint;
 import common.struct.IntPoint;
 import core.Data;
 import data.domain.ActorType;
@@ -38,7 +39,10 @@ class ActorDecorator
 			entity.add(new IsPlayer());
 		}
 
-		entity.add(new Sprite(options.tileKey.or(TK_UNKNOWN), OBJECTS));
+		var sprite = new Sprite(options.tileKey.or(TK_UNKNOWN), OBJECTS);
+		sprite.origin = new FloatPoint(.5, .8);
+
+		entity.add(sprite);
 		entity.add(new Label(actor.actorTypeName));
 		entity.add(new Collider(POINT, new IntPoint(0, 0), [FLG_UNIT]));
 		entity.add(new Vision(options.visionRange.or(6)));

@@ -1,6 +1,5 @@
 package domain.map;
 
-import common.struct.Cardinal;
 import common.struct.IntPoint;
 import core.Game;
 import domain.map.VisionLayer.SaveVisionLayer;
@@ -31,6 +30,9 @@ class GameMap
 		vision.init();
 		collision.init();
 		position.init();
+
+		Game.instance.app.s2d.renderer.globals.set("mapWidth", width);
+		Game.instance.app.s2d.renderer.globals.set("mapHeight", height);
 	}
 
 	public function save():SaveGameMap

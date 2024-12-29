@@ -9,6 +9,7 @@ enum RenderLayerType
 {
 	BACKGROUND;
 	GROUND;
+	GRID;
 	FOG;
 	OBJECTS;
 	FX;

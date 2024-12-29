@@ -2,6 +2,7 @@ package domain.systems;
 
 import common.struct.IntPoint;
 import common.struct.Set;
+import common.util.Projection;
 import core.Frame;
 import core.Game;
 import domain.components.Collider;
@@ -254,8 +255,9 @@ class ColliderSystem extends System
 				var count = cell.value.count();
 				if (count > 0)
 				{
+					var pos = Projection.worldToPx(cell.x, cell.y);
 					debugGraphics.beginFill(0xff00ee, .2 * count);
-					debugGraphics.drawRect(cell.x * Game.TILE_SIZE, cell.y * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+					debugGraphics.drawRect(pos.x, pos.y, Game.TILE_SIZE, Game.TILE_SIZE);
 				}
 			}
 		}

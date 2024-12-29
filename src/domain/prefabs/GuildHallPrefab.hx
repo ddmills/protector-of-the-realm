@@ -30,8 +30,8 @@ class GuildHallPrefab extends Prefab
 
 		var sprite = new Sprite(TK_GUILD_HALL);
 
-		sprite.width = Game.TILE_SIZE * 5;
-		sprite.height = Game.TILE_SIZE * 5;
+		sprite.width = Game.TILE_WIDTH * 5;
+		sprite.height = Game.TILE_HEIGHT * 5;
 		sprite.origin = new FloatPoint(.5, .5);
 
 		e.add(sprite);

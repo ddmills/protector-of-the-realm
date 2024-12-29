@@ -15,6 +15,11 @@ class Game
 {
 	public static var TILE_SIZE:Int = 32;
 
+	public static var TILE_WIDTH:Int = 32;
+	public static var TILE_HEIGHT:Int = 16;
+	public static var TILE_WIDTH_HALF:Int = 16;
+	public static var TILE_HEIGHT_HALF:Int = 8;
+
 	public var CLEAR_COLOR:ColorKey = ColorKey.C_CLEAR;
 	public var TEXT_COLOR:ColorKey = C_TEXT;
 	public var TEXT_COLOR_FOCUS:ColorKey = C_YELLOW;
@@ -58,6 +63,12 @@ class Game
 
 		app.s2d.scaleMode = Fixed(800, 600, 1, Left, Top);
 		app.s2d.addChild(layers.root);
+
+		app.s2d.renderer.globals.set("tileWidth", Game.TILE_WIDTH);
+		app.s2d.renderer.globals.set("tileWidthHalf", Game.TILE_WIDTH_HALF);
+		app.s2d.renderer.globals.set("tileHeight", Game.TILE_HEIGHT);
+		app.s2d.renderer.globals.set("tileHeightHalf", Game.TILE_HEIGHT_HALF);
+		app.s2d.renderer.globals.set("clearColor", CLEAR_COLOR.toVector());
 	}
 
 	public static function Create(app:hxd.App)

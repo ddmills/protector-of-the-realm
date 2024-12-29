@@ -75,8 +75,8 @@ class BuildScreen extends Screen
 			g.lineStyle(4, 0xff0000, .25);
 		}
 
-		var rectWidth = (building.width + (building.placementPadding * 2)) * Game.TILE_SIZE;
-		var rectHeight = (building.height + (building.placementPadding * 2)) * Game.TILE_SIZE;
+		var rectWidth = (building.width + (building.placementPadding * 2)) * Game.TILE_WIDTH;
+		var rectHeight = (building.height + (building.placementPadding * 2)) * Game.TILE_HEIGHT;
 		g.drawRect(pos.x - (rectWidth / 2).floor(), pos.y - (rectHeight / 2).floor(), rectWidth, rectHeight);
 
 		while (game.commands.hasNext())
@@ -95,10 +95,8 @@ class BuildScreen extends Screen
 
 		if (game.input.lmb && isValid)
 		{
-			var building = e.get(Building).building;
 			e.get(Sprite).bm.alpha = 1;
 			e.add(c);
-			world.terrain.splat(e.pos, building.width, building.height);
 			isPlaced = true;
 			game.screens.pop();
 		}

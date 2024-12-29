@@ -25,7 +25,7 @@ class SplashScreen extends Screen
 
 		title = new h2d.Text(hxd.Res.fnt.bizcat.toFont());
 		title.setScale(1);
-		title.text = "myth";
+		title.text = "Protector of the Realm";
 		title.color = new h3d.Vector4(1, 1, .9);
 
 		next = new h2d.Text(hxd.Res.fnt.bizcat.toFont());

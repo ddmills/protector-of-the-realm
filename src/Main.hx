@@ -24,6 +24,15 @@ class Main extends hxd.App
 		// hack to fix audio not playing more than once
 		@:privateAccess haxe.MainLoop.add(() -> {});
 
+		// shader globals
+		s2d.renderer.globals.set("mapWidth", 128);
+		s2d.renderer.globals.set("mapHeight", 128);
+		s2d.renderer.globals.set("tileWidth", 0);
+		s2d.renderer.globals.set("tileWidthHalf", 0);
+		s2d.renderer.globals.set("tileHeight", 0);
+		s2d.renderer.globals.set("tileHeightHalf", 0);
+		s2d.renderer.globals.set("clearColor", 0xff00ff.toVector());
+
 		Data.Init();
 		FontResources.Init();
 		TileResources.Init();
@@ -32,7 +41,7 @@ class Main extends hxd.App
 		Bitmasks.Init();
 		Commands.Init();
 
-		hxd.Window.getInstance().title = "Myth";
+		hxd.Window.getInstance().title = "Protector of the Realm";
 
 		game = Game.Create(this);
 		game.backgroundColor = game.CLEAR_COLOR;

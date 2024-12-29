@@ -21,12 +21,15 @@ class Projection
 
 	public static function worldToPx(wx:Float, wy:Float):Coordinate
 	{
-		return new Coordinate(wx * Game.TILE_SIZE, wy * Game.TILE_SIZE, PIXEL);
+		return new Coordinate((wx - wy) * Game.TILE_WIDTH_HALF, (wx + wy) * Game.TILE_HEIGHT_HALF, PIXEL);
 	}
 
 	public static function pxToWorld(px:Float, py:Float):Coordinate
 	{
-		return new Coordinate(px / Game.TILE_SIZE, py / Game.TILE_SIZE, WORLD);
+		var wx = (px / Game.TILE_WIDTH_HALF + py / Game.TILE_HEIGHT_HALF) / 2;
+		var wy = (py / Game.TILE_HEIGHT_HALF - px / Game.TILE_WIDTH_HALF) / 2;
+
+		return new Coordinate(wx, wy, WORLD);
 	}
 
 	public static function screenToPx(sx:Float, sy:Float):Coordinate

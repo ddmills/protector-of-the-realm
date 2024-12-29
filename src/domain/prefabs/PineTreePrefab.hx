@@ -32,8 +32,8 @@ class PineTreePrefab extends Prefab
 
 		var s = new Sprite(k, OBJECTS);
 
-		s.width = 32 * 1.5;
-		s.height = 80 * 1.5;
+		s.width = 32 * 2;
+		s.height = 80 * 2;
 
 		s.origin = new FloatPoint(.5, .9);
 

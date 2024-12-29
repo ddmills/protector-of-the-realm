@@ -24,7 +24,7 @@ class Camera
 
 	public function new()
 	{
-		zoom = 1;
+		zoom = 2;
 	}
 
 	inline function get_width():Float

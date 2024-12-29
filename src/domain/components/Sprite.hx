@@ -15,8 +15,8 @@ class Sprite extends Drawable
 	public var bm(default, null):Bitmap;
 	public var tile(get, never):Tile;
 
-	@save private var _width:Float = Game.TILE_SIZE;
-	@save private var _height:Float = Game.TILE_SIZE;
+	@save private var _width:Float = Game.TILE_WIDTH;
+	@save private var _height:Float = Game.TILE_WIDTH; // TODO default?
 
 	public function new(tileKey:TileKey, layer = OBJECTS)
 	{

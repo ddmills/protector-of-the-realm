@@ -66,4 +66,9 @@ class FloatPointExtensions
 	{
 		return new Coordinate(p.x, p.y, WORLD);
 	}
+
+	static public inline function asPx(p:FloatPoint)
+	{
+		return new Coordinate(p.x, p.y, PIXEL);
+	}
 }

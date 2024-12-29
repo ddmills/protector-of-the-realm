@@ -61,11 +61,11 @@ class World
 		rand = new Rand(seed);
 		map = new GameMap();
 		inspection = new Inspection();
-		terrain = new Terrain(map.width, map.height);
 		fow = new FogOfWar(map.width, map.height);
+		terrain = new Terrain(map.width, map.height);
 
 		game.render(GROUND, terrain);
-		game.render(FOG, fow);
+		game.render(HUD, fow);
 
 		game.clock.reset();
 
@@ -79,7 +79,7 @@ class World
 				{
 					Spawner.Spawn(TREE_PINE, new Coordinate(x + .5, y + .5, WORLD));
 				}
-				else if (rand.bool(.001))
+				else if (rand.bool(.0005))
 				{
 					var s:SpawnableType = rand.pick([PALADIN, ROGUE, WIZARD, RANGER, OGRE, GOBLIN, SKELETON]);
 					Spawner.Spawn(s, new Coordinate(x + .5, y + .5, WORLD));
@@ -96,10 +96,9 @@ class World
 		rand = new Rand(seed);
 		map = new GameMap();
 
-		terrain = new Terrain(map.width, map.height);
 		fow = new FogOfWar(map.width, map.height);
+		terrain = new Terrain(map.width, map.height);
 		game.render(GROUND, terrain);
-		game.render(FOG, fow);
 
 		inspection = new Inspection();
 		game.clock.load(data.clock);

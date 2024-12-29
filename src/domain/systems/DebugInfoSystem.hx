@@ -1,5 +1,6 @@
 package domain.systems;
 
+import common.struct.Coordinate;
 import core.Frame;
 import core.Game;
 import data.resources.FontResources;
@@ -19,6 +20,7 @@ typedef DebugInfo =
 	monster:Text,
 	entities:Text,
 	cursor:Text,
+	drawCalls:Text,
 	grid:h2d.Graphics,
 }
 
@@ -49,13 +51,14 @@ class DebugInfoSystem extends System
 			.map(x -> x.get(Label)?.text ?? 'Unknown')
 			.join(', ');
 
-		debugInfo.fps.text = fps.toString();
+		debugInfo.fps.text = game.app.engine.fps.floor().toString();
 		debugInfo.fps.color = getFpsColor(fps).toHxdColor();
-		debugInfo.pos.text = '$wtext $px';
+		debugInfo.pos.text = '$wtext $px Z(${game.camera.zoom})';
 		debugInfo.monster.text = 'monsters ${monsters.count().toString()}';
 		debugInfo.entities.text = 'entities ${game.registry.size.toString()}';
 		debugInfo.cursor.text = eString;
 		debugInfo.clock.text = '${game.clock.tick.floor()} (${game.clock.speed})';
+		debugInfo.drawCalls.text = 'draw ${game.app.engine.drawCalls}';
 	}
 
 	override function teardown()
@@ -111,9 +114,13 @@ class DebugInfoSystem extends System
 		clock.color = game.TEXT_COLOR.toHxdColor();
 		clock.y = 64;
 
+		var drawCalls = new Text(FontResources.BIZCAT, ob);
+		drawCalls.color = game.TEXT_COLOR.toHxdColor();
+		drawCalls.y = 80;
+
 		var cursor = new Text(FontResources.BIZCAT, ob);
 		cursor.color = game.TEXT_COLOR.toHxdColor();
-		cursor.y = 80;
+		cursor.y = 96;
 
 		var grid = new h2d.Graphics();
 		grid.visible = false;
@@ -123,38 +130,50 @@ class DebugInfoSystem extends System
 		{
 			if (x % 16 == 0)
 			{
-				grid.lineStyle(3, 0x4373D1, .6);
+				grid.lineStyle(2, 0x4373D1, .6);
 			}
 			else if (x % 4 == 0)
 			{
-				grid.lineStyle(3, 0xFFFFFF, .3);
+				grid.lineStyle(2, 0xFFFFFF, .3);
 			}
 			else
 			{
-				grid.lineStyle(2, 0xFFFFFF, .1);
+				grid.lineStyle(1, 0xFFFFFF, .1);
 			}
 
-			grid.moveTo(x * Game.TILE_SIZE, 0);
-			grid.lineTo(x * Game.TILE_SIZE, world.map.height * Game.TILE_SIZE);
+			var start = new Coordinate(x, 0, WORLD);
+			var end = new Coordinate(x, world.map.height, WORLD);
+
+			var startPx = start.toPx();
+			var endPx = end.toPx();
+
+			grid.moveTo(startPx.x, startPx.y);
+			grid.lineTo(endPx.x, endPx.y);
 		}
 
 		for (y in 0...world.map.height)
 		{
 			if (y % 16 == 0)
 			{
-				grid.lineStyle(3, 0x4373D1, .6);
+				grid.lineStyle(2, 0x4373D1, .6);
 			}
 			else if (y % 4 == 0)
 			{
-				grid.lineStyle(3, 0xFFFFFF, .3);
+				grid.lineStyle(2, 0xFFFFFF, .3);
 			}
 			else
 			{
-				grid.lineStyle(2, 0xFFFFFF, .1);
+				grid.lineStyle(1, 0xFFFFFF, .1);
 			}
 
-			grid.moveTo(0, y * Game.TILE_SIZE);
-			grid.lineTo(world.map.width * Game.TILE_SIZE, y * Game.TILE_SIZE);
+			var start = new Coordinate(0, y, WORLD);
+			var end = new Coordinate(world.map.width, y, WORLD);
+
+			var startPx = start.toPx();
+			var endPx = end.toPx();
+
+			grid.moveTo(startPx.x, startPx.y);
+			grid.lineTo(endPx.x, endPx.y);
 		}
 
 		debugInfo = {
@@ -166,9 +185,10 @@ class DebugInfoSystem extends System
 			entities: entities,
 			cursor: cursor,
 			grid: grid,
+			drawCalls: drawCalls,
 		};
 
-		game.render(OBJECTS, grid);
+		game.render(OVERLAY, grid);
 		game.render(HUD, ob);
 	}
 }
