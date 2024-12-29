@@ -255,9 +255,9 @@ class ColliderSystem extends System
 				var count = cell.value.count();
 				if (count > 0)
 				{
-					var pos = Projection.worldToPx(cell.x, cell.y);
 					debugGraphics.beginFill(0xff00ee, .2 * count);
-					debugGraphics.drawRect(pos.x, pos.y, Game.TILE_SIZE, Game.TILE_SIZE);
+					debugGraphics.drawIsometricTile(cell.x, cell.y);
+					debugGraphics.endFill();
 				}
 			}
 		}

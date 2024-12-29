@@ -11,6 +11,7 @@ using common.extensions.MapExtensions;
 using common.extensions.NullExtensions;
 using common.extensions.ShapeExtensions;
 using common.extensions.StringExtensions;
+using common.extensions.heaps.GraphicsExtensions;
 using common.extensions.heaps.ObjectExtensions;
 using common.extensions.heaps.RandExtensions;
 using common.extensions.heaps.TileExtensions;

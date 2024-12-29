@@ -40,7 +40,9 @@ class ActorDecorator
 		}
 
 		var sprite = new Sprite(options.tileKey.or(TK_UNKNOWN), OBJECTS);
-		sprite.origin = new FloatPoint(.5, .8);
+		sprite.width = 32;
+		sprite.height = 32;
+		sprite.origin = new FloatPoint(.5, .9);
 
 		entity.add(sprite);
 		entity.add(new Label(actor.actorTypeName));

@@ -30,13 +30,13 @@ class GuildHallPrefab extends Prefab
 
 		var sprite = new Sprite(TK_GUILD_HALL);
 
-		sprite.width = Game.TILE_WIDTH * 5;
-		sprite.height = Game.TILE_HEIGHT * 5;
-		sprite.origin = new FloatPoint(.5, .5);
+		sprite.width = 128;
+		sprite.height = 192;
+		sprite.origin = new FloatPoint(.5, 175 / 192);
 
 		e.add(sprite);
 
-		var collider = new Collider(RECTANGLE(building.width, building.height), new IntPoint(0, 0), [FLG_BUILDING]);
+		var collider = new Collider(RECTANGLE(2, 2), new IntPoint(0, 0), [FLG_BUILDING]);
 		e.add(collider);
 
 		e.add(new Inspectable(building.name, 64));

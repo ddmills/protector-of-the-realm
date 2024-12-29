@@ -6,6 +6,7 @@ import h2d.Bitmap;
 import h2d.Object;
 import h2d.Tile;
 import h2d.TileGroup;
+import hxd.Rand;
 import shaders.FogShader;
 
 enum TerrainType
@@ -24,18 +25,21 @@ class Terrain extends Object
 	var tileGroup:TileGroup;
 	var tiles:Array<Array<Tile>>;
 
+	var rand:Rand;
+
 	public function new(width:Int, height:Int, ?parent:Object)
 	{
 		super(parent);
 		this.width = width;
 		this.height = height;
+		this.rand = Rand.create();
 
 		terrain = new Grid(width, height);
 		terrain.fill(GRASS);
 
-		var tex = hxd.Res.terrain.terrain_32.toTile();
+		var tex = hxd.Res.terrain.terrain_64.toTile();
 
-		tiles = tex.divide(4, 2);
+		tiles = tex.divide(4, 4);
 		tileGroup = new TileGroup(tex, this);
 
 		var fogt = Tile.fromColor(0x000000);
@@ -76,8 +80,8 @@ class Terrain extends Object
 		terrain.set(x, y, terrainType);
 		var tile = getTile(terrainType);
 
-		var px = ((x - y) * 16) - Game.TILE_WIDTH_HALF;
-		var py = (x + y) * 8;
+		var px = ((x - y) * Game.TILE_WIDTH_HALF) - Game.TILE_WIDTH_HALF;
+		var py = (x + y) * Game.TILE_HEIGHT_HALF;
 
 		tileGroup.add(px, py, tile);
 	}
@@ -86,8 +90,8 @@ class Terrain extends Object
 	{
 		return switch terrainType
 		{
-			case GRASS: tiles[0][2];
-			case WATER: tiles[0][1];
+			case GRASS: rand.pick(tiles[0]);
+			case WATER: rand.pick(tiles[1]);
 		}
 	}
 }

@@ -174,9 +174,9 @@ class VisionSystem extends System
 				var count = cell.value.count();
 				if (count > 0)
 				{
-					var pos = Projection.worldToPx(cell.x, cell.y);
 					debugGraphics.beginFill(0xd9ff00, .2 * count);
-					debugGraphics.drawRect(pos.x, pos.y, Game.TILE_WIDTH, Game.TILE_HEIGHT);
+					debugGraphics.drawIsometricTile(cell.x, cell.y);
+					debugGraphics.endFill();
 				}
 			}
 		}

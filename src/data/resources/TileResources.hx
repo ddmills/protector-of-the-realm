@@ -59,6 +59,6 @@ class TileResources
 
 		var bld = hxd.Res.buildings;
 
-		tiles.set(TK_GUILD_HALL, bld.guild_hall.toTile());
+		tiles.set(TK_GUILD_HALL, bld.temporary.toTile());
 	}
 }

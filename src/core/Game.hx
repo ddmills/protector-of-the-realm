@@ -13,12 +13,10 @@ import hxd.Window;
 
 class Game
 {
-	public static var TILE_SIZE:Int = 32;
-
-	public static var TILE_WIDTH:Int = 32;
-	public static var TILE_HEIGHT:Int = 16;
-	public static var TILE_WIDTH_HALF:Int = 16;
-	public static var TILE_HEIGHT_HALF:Int = 8;
+	public static var TILE_WIDTH:Int = 64;
+	public static var TILE_HEIGHT:Int = 32;
+	public static var TILE_WIDTH_HALF:Int = 32;
+	public static var TILE_HEIGHT_HALF:Int = 16;
 
 	public var CLEAR_COLOR:ColorKey = ColorKey.C_CLEAR;
 	public var TEXT_COLOR:ColorKey = C_TEXT;
