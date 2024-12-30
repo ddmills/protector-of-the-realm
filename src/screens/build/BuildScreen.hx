@@ -53,31 +53,34 @@ class BuildScreen extends Screen
 
 		var building = e.get(Building).building;
 
-		var pos = e.pos.toPx();
+		var pos = e.pos.toWorld();
 
 		var extendedArea = world.systems.colliders.footprintHasCollisions(building.getFootprint(e, true), [FLG_BUILDING, FLG_OBJECT]);
 		var immediateArea = world.systems.colliders.footprintHasCollisions(building.getFootprint(e, false), [FLG_BUILDING, FLG_OBJECT, FLG_UNIT]);
 		isValid = !extendedArea && !immediateArea;
 
 		var sprite = e.get(Sprite);
-		sprite.bm.alpha = .5;
 		g.clear();
 
 		if (isValid)
 		{
 			sprite.bm.color = 0xffffff.toHxdColor(1);
-			g.bevel = 1;
+			sprite.bm.alpha = 1;
 			g.lineStyle(4, 0xffffff, .25);
 		}
 		else
 		{
 			sprite.bm.color = 0xff0000.toHxdColor(1);
+			sprite.bm.alpha = .25;
 			g.lineStyle(4, 0xff0000, .25);
 		}
 
-		var rectWidth = (building.width + (building.placementPadding * 2)) * Game.TILE_WIDTH;
-		var rectHeight = (building.height + (building.placementPadding * 2)) * Game.TILE_HEIGHT;
-		g.drawRect(pos.x - (rectWidth / 2).floor(), pos.y - (rectHeight / 2).floor(), rectWidth, rectHeight);
+		var rectWidth = (building.width + (building.placementPadding * 2));
+		var rectHeight = (building.height + (building.placementPadding * 2));
+
+		var x = pos.x - (rectWidth / 2).floor();
+		var y = pos.y - (rectHeight / 2).floor();
+		g.drawIsometricTile(x - .5, y - .5, rectWidth, rectHeight);
 
 		while (game.commands.hasNext())
 		{

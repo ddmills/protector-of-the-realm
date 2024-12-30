@@ -14,12 +14,12 @@ class BuildingGuildHall extends Building
 
 	override function get_height():Int
 	{
-		return 5;
+		return 2;
 	}
 
 	override function get_width():Int
 	{
-		return 5;
+		return 2;
 	}
 
 	override function getActions(entity:Entity):Array<EntityActionType>
