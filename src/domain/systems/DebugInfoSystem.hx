@@ -10,6 +10,7 @@ import ecs.Query;
 import ecs.System;
 import h2d.Object;
 import h2d.Text;
+import haxe.EnumTools;
 
 typedef DebugInfo =
 {
@@ -45,6 +46,8 @@ class DebugInfoSystem extends System
 		var px = game.input.mouse.toPx().floor().toString();
 		var wtext = w.toString();
 		var fps = frame.fps.floor();
+		var terrain = world.terrain.terrain.get(w.x, w.y);
+		var terrainString = terrain != null ? EnumValueTools.getName(terrain) : "OOB";
 
 		var entities = world.map.getEntitiesAt(w.x, w.y);
 		var eString = entities
@@ -56,7 +59,7 @@ class DebugInfoSystem extends System
 		debugInfo.pos.text = '$wtext $px Z(${game.camera.zoom})';
 		debugInfo.monster.text = 'monsters ${monsters.count().toString()}';
 		debugInfo.entities.text = 'entities ${game.registry.size.toString()}';
-		debugInfo.cursor.text = eString;
+		debugInfo.cursor.text = '${terrainString} ${eString}';
 		debugInfo.clock.text = '${game.clock.tick.floor()} (${game.clock.speed})';
 		debugInfo.drawCalls.text = 'draw ${game.app.engine.drawCalls}';
 	}

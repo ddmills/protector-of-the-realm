@@ -12,6 +12,7 @@ import shaders.FogShader;
 enum TerrainType
 {
 	GRASS;
+	DIRT;
 	WATER;
 }
 
@@ -20,7 +21,7 @@ class Terrain extends Object
 	var width:Int;
 	var height:Int;
 
-	var terrain:Grid<TerrainType>;
+	public var terrain:Grid<TerrainType>;
 
 	var tileGroup:TileGroup;
 	var tiles:Array<Array<Tile>>;
@@ -58,14 +59,20 @@ class Terrain extends Object
 	{
 		var p = new common.rand.Perlin(1);
 		var waterline = .4;
+		var dirtline = .5;
 
 		for (x in 0...width)
 		{
 			for (y in 0...height)
 			{
-				if (p.get(x, y, 16, 3) < waterline)
+				var h = p.get(x, y, 14, 3);
+				if (h < waterline)
 				{
 					setTerrain(x, y, WATER);
+				}
+				else if (h < dirtline)
+				{
+					setTerrain(x, y, DIRT);
 				}
 				else
 				{
@@ -81,7 +88,7 @@ class Terrain extends Object
 		var tile = getTile(terrainType);
 
 		var px = ((x - y) * Game.TILE_WIDTH_HALF) - Game.TILE_WIDTH_HALF;
-		var py = (x + y) * Game.TILE_HEIGHT_HALF;
+		var py = ((x + y) * Game.TILE_HEIGHT_HALF) - Game.TILE_HEIGHT;
 
 		tileGroup.add(px, py, tile);
 	}
@@ -91,7 +98,8 @@ class Terrain extends Object
 		return switch terrainType
 		{
 			case GRASS: rand.pick(tiles[0]);
-			case WATER: rand.pick(tiles[1]);
+			case DIRT: rand.pick(tiles[1]);
+			case WATER: rand.pick(tiles[2]);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package domain.systems;
 
 import common.struct.Coordinate;
+import common.struct.IntPoint;
 import core.Frame;
 import domain.components.Move;
 import domain.components.Path;
@@ -80,7 +81,7 @@ class PathFollowSystem extends System
 				var p = e.get(Path);
 				var prev = e.pos.toPx();
 
-				for (i in p.curIdx...(p.length - 1))
+				for (i in p.curIdx...(p.length))
 				{
 					var next = p.instructions[i].asWorld().add(offset).toPx();
 
@@ -90,17 +91,17 @@ class PathFollowSystem extends System
 					}
 					else
 					{
-						debugGraphics.lineStyle(2, 0xF08C49, .5);
+						debugGraphics.lineStyle(2, 0xF08C49, .75);
 					}
 
 					debugGraphics.moveTo(prev.x, prev.y);
 					debugGraphics.lineTo(next.x, next.y);
-					debugGraphics.lineStyle(2, 0xff00ff, 0);
-					debugGraphics.beginFill(0xF08C49);
-					debugGraphics.drawCircle(next.x, next.y, 3);
-					debugGraphics.endFill();
 					prev = next;
 				}
+
+				debugGraphics.beginFill(0x00AEFF);
+				debugGraphics.drawCircle(prev.x, prev.y, 3);
+				debugGraphics.endFill();
 			}
 		}
 		else

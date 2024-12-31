@@ -9,6 +9,7 @@ import data.input.groups.CameraInputGroup;
 import domain.Spawner;
 import domain.components.Building;
 import domain.components.Collider;
+import domain.components.IsDestroyed;
 import domain.components.Sprite;
 import ecs.Entity;
 import h2d.Graphics;
@@ -43,7 +44,7 @@ class BuildScreen extends Screen
 
 		if (!isPlaced)
 		{
-			e.destroy();
+			e.add(new IsDestroyed());
 		}
 	}
 

@@ -9,6 +9,7 @@ typedef AStarSettings =
 	start:IntPoint,
 	goal:IntPoint,
 	allowDiagonals:Bool,
+	?includeGoal:Bool,
 	cost:(current:IntPoint, next:IntPoint) -> Float,
 	?maxDepth:Null<Int>,
 };
@@ -32,6 +33,7 @@ class AStar
 		var goal = settings.goal;
 		var cost = settings.cost;
 		var maxDepth = settings.maxDepth.or(10000);
+		var includeGoal = settings.includeGoal ?? true;
 		var depth = 0;
 
 		var open = new PriorityQueue<{key:String, pos:IntPoint}>();
@@ -82,7 +84,8 @@ class AStar
 			for (next in neighbors)
 			{
 				var nextKey = Key(next);
-				var graphCost = nextKey == goalKey ? 0 : cost(current, next);
+
+				var graphCost = (nextKey == goalKey && !includeGoal) ? 0 : cost(current, next);
 
 				if (graphCost == Math.POSITIVE_INFINITY)
 				{

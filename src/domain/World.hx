@@ -75,11 +75,20 @@ class World
 		{
 			for (y in 0...map.height)
 			{
-				if (rand.bool(.25) && p.get(x, y, 16, 3) < .4)
+				var h = p.get(x, y, 14, 3);
+
+				if (h <= .4)
+				{
+					continue;
+				}
+
+				var trees = p.get(x, y, 18, 3);
+
+				if (h > .5 && trees > .55 && rand.bool(.5))
 				{
 					Spawner.Spawn(TREE_PINE, new Coordinate(x + .5, y + .5, WORLD));
 				}
-				else if (rand.bool(.0005))
+				else if (rand.bool(.001))
 				{
 					var s:SpawnableType = rand.pick([PALADIN, ROGUE, WIZARD, RANGER, OGRE, GOBLIN, SKELETON]);
 					Spawner.Spawn(s, new Coordinate(x + .5, y + .5, WORLD));

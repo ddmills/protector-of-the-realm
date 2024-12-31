@@ -42,6 +42,36 @@ class MonsterSystem extends System
 						return Math.POSITIVE_INFINITY;
 					}
 
+					var t = world.terrain.terrain.get(b.x, b.y);
+
+					if (t == WATER)
+					{
+						return Math.POSITIVE_INFINITY;
+					}
+
+					// TODO: check if corners have [BUILDING]
+					if (a.x != b.x && a.y != b.y)
+					{
+						// going diag
+						var c1 = new IntPoint(a.x, b.y);
+						var c2 = new IntPoint(b.x, a.y);
+						var hasCollisions1 = world.systems.colliders.hasCollisions(collider, [FLG_BUILDING, FLG_OBJECT], c1);
+						var hasCollisions2 = world.systems.colliders.hasCollisions(collider, [FLG_BUILDING, FLG_OBJECT], c2);
+
+						if (hasCollisions1 || hasCollisions2)
+						{
+							return Math.POSITIVE_INFINITY;
+						}
+
+						var t1 = world.terrain.terrain.get(c1.x, c1.y);
+						var t2 = world.terrain.terrain.get(c2.x, c2.y);
+
+						if (t1 == WATER || t2 == WATER)
+						{
+							return Math.POSITIVE_INFINITY;
+						}
+					}
+
 					return Distance.Diagonal(a, b);
 				}
 			});
@@ -53,7 +83,7 @@ class MonsterSystem extends System
 			else
 			{
 				trace('no path found');
-				e.remove(Path);
+				e.add(new Path([], []));
 			}
 		});
 	}
