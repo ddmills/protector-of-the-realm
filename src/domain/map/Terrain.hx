@@ -65,7 +65,7 @@ class Terrain extends Object
 		{
 			for (y in 0...height)
 			{
-				var h = p.get(x, y, 14, 3);
+				var h = p.get(x, y, 24, 3);
 				if (h < waterline)
 				{
 					setTerrain(x, y, WATER);

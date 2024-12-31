@@ -67,6 +67,7 @@ class AStar
 			depth++;
 			if (depth >= maxDepth)
 			{
+				trace('max depth reached');
 				break;
 			}
 			var d = open.pop();

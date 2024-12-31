@@ -23,21 +23,14 @@ class MonsterSystem extends System
 
 		query.onEntityAdded(e ->
 		{
-			var collider = e.get(Collider);
 			var p = AStar.GetPath({
 				start: e.pos.toIntPoint(),
 				goal: getRandGoal(e.pos.toIntPoint()),
+				maxDepth: 600,
 				allowDiagonals: true,
 				cost: (a, b) ->
 				{
 					if (world.map.isOutOfBounds(b))
-					{
-						return Math.POSITIVE_INFINITY;
-					}
-
-					var hasCollisions = world.systems.colliders.hasCollisions(collider, [FLG_BUILDING, FLG_OBJECT], b);
-
-					if (hasCollisions)
 					{
 						return Math.POSITIVE_INFINITY;
 					}
@@ -49,24 +42,35 @@ class MonsterSystem extends System
 						return Math.POSITIVE_INFINITY;
 					}
 
-					// TODO: check if corners have [BUILDING]
+					var hasCollisions = world.systems.colliders.hasCollisionFastNav(b, e.id);
+
+					if (hasCollisions)
+					{
+						return Math.POSITIVE_INFINITY;
+					}
+
 					if (a.x != b.x && a.y != b.y)
 					{
-						// going diag
 						var c1 = new IntPoint(a.x, b.y);
 						var c2 = new IntPoint(b.x, a.y);
-						var hasCollisions1 = world.systems.colliders.hasCollisions(collider, [FLG_BUILDING, FLG_OBJECT], c1);
-						var hasCollisions2 = world.systems.colliders.hasCollisions(collider, [FLG_BUILDING, FLG_OBJECT], c2);
-
-						if (hasCollisions1 || hasCollisions2)
-						{
-							return Math.POSITIVE_INFINITY;
-						}
 
 						var t1 = world.terrain.terrain.get(c1.x, c1.y);
 						var t2 = world.terrain.terrain.get(c2.x, c2.y);
 
 						if (t1 == WATER || t2 == WATER)
+						{
+							return Math.POSITIVE_INFINITY;
+						}
+
+						var hasCollisions1 = world.systems.colliders.hasCollisionFastNav(c1, e.id);
+
+						if (hasCollisions1)
+						{
+							return Math.POSITIVE_INFINITY;
+						}
+
+						var hasCollisions2 = world.systems.colliders.hasCollisionFastNav(c2, e.id);
+						if (hasCollisions2)
 						{
 							return Math.POSITIVE_INFINITY;
 						}
@@ -93,7 +97,15 @@ class MonsterSystem extends System
 		for (i in 0...10)
 		{
 			var p = getRandPointInCircle(pos, 25);
+
 			if (world.map.isOutOfBounds(p))
+			{
+				continue;
+			}
+
+			var t = world.terrain.terrain.get(p.x, p.y);
+
+			if (t == WATER)
 			{
 				continue;
 			}
@@ -105,6 +117,7 @@ class MonsterSystem extends System
 				return p;
 			}
 		}
+
 		return pos;
 	}
 

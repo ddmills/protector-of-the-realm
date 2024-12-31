@@ -2,9 +2,8 @@ package domain.systems;
 
 import common.struct.IntPoint;
 import common.struct.Set;
-import common.util.Projection;
+import common.util.BitUtil;
 import core.Frame;
-import core.Game;
 import domain.components.Collider;
 import domain.components.IsDestroyed;
 import domain.components.IsDetached;
@@ -162,6 +161,19 @@ class ColliderSystem extends System
 		collider.spots = [];
 	}
 
+	public function hasCollisionFastNav(pos:IntPoint, entityId:String):Bool
+	{
+		var fm = layer.fastNavGrid.get(pos.x, pos.y);
+
+		if (fm == null)
+		{
+			return false;
+		}
+
+		// return fm.exists(e -> e != entityId);
+		return !fm.isEmpty;
+	}
+
 	private function onEntityMoved(e:Entity)
 	{
 		var moved = e.get(Moved);
@@ -175,7 +187,7 @@ class ColliderSystem extends System
 		collider.spots = collider.getFootprint(moved.current.toIntPoint());
 		for (pos in collider.spots)
 		{
-			addGridId(pos, e.id);
+			addGridId(pos, e.id, collider.flags);
 		}
 
 		redrawDebug = true;
@@ -189,7 +201,7 @@ class ColliderSystem extends System
 		var newFootprint = collider.getFootprint(move.goal.toIntPoint());
 		for (pos in newFootprint)
 		{
-			addGridId(pos, e.id);
+			addGridId(pos, e.id, collider.flags);
 			collider.spots.push(pos);
 		}
 
@@ -202,7 +214,7 @@ class ColliderSystem extends System
 
 		for (pos in footprint)
 		{
-			addGridId(pos, collider.entity.id);
+			addGridId(pos, collider.entity.id, collider.flags);
 			collider.spots.push(pos);
 		}
 
@@ -221,15 +233,23 @@ class ColliderSystem extends System
 		redrawDebug = true;
 	}
 
-	private function addGridId(pos:IntPoint, entityId:String)
+	private function addGridId(pos:IntPoint, entityId:String, flags:Int)
 	{
 		var m = layer.get(pos.x, pos.y);
+
 		if (m == null)
 		{
 			return;
 		}
 
 		m.add(entityId);
+
+		if (BitUtil.hasBit(flags, FLG_OBJECT) || BitUtil.hasBit(flags, FLG_OBJECT))
+		{
+			trace('add to fast nav grid');
+			var fm = layer.getFastNavValue(pos.x, pos.y);
+			fm.add(entityId);
+		}
 	}
 
 	private function removeGridId(pos:IntPoint, entityId:String)
@@ -241,6 +261,15 @@ class ColliderSystem extends System
 		}
 
 		m.remove(entityId);
+
+		var fm = layer.fastNavGrid.get(pos.x, pos.y);
+
+		if (fm == null)
+		{
+			return;
+		}
+
+		fm.remove(entityId);
 	}
 
 	private function updateDebug(value:Bool)
