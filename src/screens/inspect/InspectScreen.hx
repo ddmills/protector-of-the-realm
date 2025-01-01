@@ -8,10 +8,12 @@ import core.input.Command;
 import data.input.groups.CameraInputGroup;
 import data.resources.FontResources;
 import domain.components.ActionQueue;
+import domain.components.Behavior;
 import domain.components.Inspectable;
 import domain.events.QueryActionsEvent;
 import ecs.Entity;
 import h2d.Bitmap;
+import h2d.Text;
 import ui.components.Button;
 
 typedef ActionBtn =
@@ -25,6 +27,7 @@ typedef InspectScreenUi =
 	rootOb:h2d.Object,
 	titleOb:h2d.Object,
 	actionsOb:h2d.Object,
+	titleText:Text,
 	actions:Array<ActionBtn>,
 }
 
@@ -60,6 +63,17 @@ class InspectScreen extends Screen
 			return;
 		}
 
+		var bhv = inspectableEntity.get(Behavior);
+		if (bhv != null)
+		{
+			var lbl = Data.Behaviors.get(bhv.behaviorType).label;
+			ui.titleText.text = inspectable.displayName + ' ' + lbl;
+		}
+		else
+		{
+			ui.titleText.text = inspectable.displayName;
+		}
+
 		if (world.inspection.selected != inspectableEntity && world.inspection.isInspecting)
 		{
 			game.screens.replace(new InspectScreen(world.inspection.selected));
@@ -90,6 +104,7 @@ class InspectScreen extends Screen
 			rootOb: rootOb,
 			titleOb: titleOb,
 			actionsOb: actionsOb,
+			titleText: null,
 			actions: [],
 		};
 
@@ -116,6 +131,8 @@ class InspectScreen extends Screen
 		title.maxWidth = width;
 
 		y = title.textHeight.ciel();
+
+		ui.titleText = title;
 	}
 
 	function renderActions()

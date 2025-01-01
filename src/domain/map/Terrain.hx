@@ -88,7 +88,7 @@ class Terrain extends Object
 		var tile = getTile(terrainType);
 
 		var px = ((x - y) * Game.TILE_WIDTH_HALF) - Game.TILE_WIDTH_HALF;
-		var py = ((x + y) * Game.TILE_HEIGHT_HALF) - Game.TILE_HEIGHT;
+		var py = ((x + y) * Game.TILE_HEIGHT_HALF) - Game.TILE_HEIGHT_HALF;
 
 		tileGroup.add(px, py, tile);
 	}

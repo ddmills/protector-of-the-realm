@@ -2,7 +2,6 @@ package screens.build;
 
 import common.struct.Coordinate;
 import core.Frame;
-import core.Game;
 import core.Screen;
 import core.input.Command;
 import data.input.groups.CameraInputGroup;
@@ -56,9 +55,26 @@ class BuildScreen extends Screen
 
 		var pos = e.pos.toWorld();
 
-		var extendedArea = world.systems.colliders.footprintHasCollisions(building.getFootprint(e, true), [FLG_BUILDING, FLG_OBJECT]);
-		var immediateArea = world.systems.colliders.footprintHasCollisions(building.getFootprint(e, false), [FLG_BUILDING, FLG_OBJECT, FLG_UNIT]);
-		isValid = !extendedArea && !immediateArea;
+		var footprint = building.getFootprint(e, false);
+		var footprintExtended = building.getFootprint(e, true);
+
+		var hasWater = footprintExtended.exists(p ->
+		{
+			var t = world.terrain.terrain.get(p.x, p.y);
+			return t == WATER;
+		});
+
+		if (hasWater)
+		{
+			isValid = false;
+		}
+		else
+		{
+			var extendedArea = world.systems.colliders.footprintHasCollisions(footprintExtended, [FLG_BUILDING, FLG_OBJECT]);
+			var immediateArea = world.systems.colliders.footprintHasCollisions(footprint, [FLG_BUILDING, FLG_OBJECT, FLG_UNIT]);
+
+			isValid = !extendedArea && !immediateArea;
+		}
 
 		var sprite = e.get(Sprite);
 		g.clear();

@@ -7,6 +7,7 @@ import data.domain.ActorType;
 import data.resources.TileKey;
 import domain.components.ActionQueue;
 import domain.components.Actor;
+import domain.components.Blackboard;
 import domain.components.Collider;
 import domain.components.Inspectable;
 import domain.components.IsObservable;
@@ -31,8 +32,9 @@ class ActorDecorator
 	public static function Decorate(entity:Entity, options:ActorOptions)
 	{
 		var actor = Data.Actors.get(options.actorType);
+		var behaviors = actor.getDefaultBehaviors();
 
-		entity.add(new Actor(options.actorType));
+		entity.add(new Actor(options.actorType, behaviors));
 
 		if (options.isPlayer == true)
 		{
@@ -46,6 +48,7 @@ class ActorDecorator
 
 		entity.add(sprite);
 		entity.add(new Label(actor.actorTypeName));
+		entity.add(new Blackboard());
 		entity.add(new Collider(POINT, new IntPoint(0, 0), [FLG_UNIT]));
 		entity.add(new Vision(options.visionRange.or(6)));
 		entity.add(new Monster());

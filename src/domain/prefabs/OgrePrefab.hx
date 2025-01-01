@@ -19,9 +19,9 @@ class OgrePrefab extends Prefab
 
 		var sprite = e.get(Sprite);
 
-		sprite.width = 40;
-		sprite.height = 40;
-		sprite.origin = new FloatPoint(.5, .5);
+		sprite.width = 64;
+		sprite.height = 64;
+		sprite.origin = new FloatPoint(.5, .9);
 
 		return e;
 	}

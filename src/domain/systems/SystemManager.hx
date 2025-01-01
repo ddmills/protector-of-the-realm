@@ -4,6 +4,8 @@ import core.Frame;
 
 class SystemManager
 {
+	public var behaviorScoring(default, null):BehaviorScoringSystem;
+	public var behavior(default, null):BehaviorSystem;
 	public var actionQueue(default, null):ActionQueueSystem;
 	public var vision(default, null):VisionSystem;
 	public var pathing(default, null):PathFollowSystem;
@@ -19,6 +21,8 @@ class SystemManager
 
 	public function initialize()
 	{
+		behaviorScoring = new BehaviorScoringSystem();
+		behavior = new BehaviorSystem();
 		actionQueue = new ActionQueueSystem();
 		vision = new VisionSystem();
 		pathing = new PathFollowSystem();
@@ -33,6 +37,8 @@ class SystemManager
 
 	public function update(frame:Frame)
 	{
+		behaviorScoring.update(frame);
+		behavior.update(frame);
 		actionQueue.update(frame);
 		vision.update(frame);
 		pathing.update(frame);
@@ -47,6 +53,8 @@ class SystemManager
 
 	public function teardown()
 	{
+		behaviorScoring.teardown();
+		behavior.teardown();
 		actionQueue.teardown();
 		vision.teardown();
 		pathing.teardown();

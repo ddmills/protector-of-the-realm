@@ -8,3 +8,13 @@
 - [ ] "Defending x"
 - [ ] "Attacking x"
 - [ ] "Loitering"
+
+
+Actor - something that can have a behavior assigned, and do tasks
+Behavior Tree - collection of behavior nodes
+Behavior Node - sequence, ifelse, try, select, not, or task
+Behavior Task - a small action performed by an actor (move to, pick up, attack, ...)
+Scorer - Assign a score to an actor+behavior pair.
+Behavior Picker - choose a behavior for an actor based on it's best score
+Blackboard - data for an actor shared between tasks
+
