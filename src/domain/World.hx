@@ -90,8 +90,8 @@ class World
 				}
 				else if (rand.bool(.003))
 				{
-					var s:SpawnableType = rand.pick([PALADIN, ROGUE, WIZARD, RANGER, OGRE, GOBLIN, SKELETON]);
-					Spawner.Spawn(s, new Coordinate(x + .5, y + .5, WORLD));
+					// var s:SpawnableType = rand.pick([PALADIN, ROGUE, WIZARD, RANGER, OGRE, GOBLIN, SKELETON]);
+					// Spawner.Spawn(s, new Coordinate(x + .5, y + .5, WORLD));
 				}
 			}
 		}

@@ -16,80 +16,80 @@ class MonsterSystem extends System
 
 	public function new()
 	{
-		query = new Query({
-			all: [Monster, Collider],
-			none: [IsDestroyed, Path],
-		});
+		// query = new Query({
+		// 	all: [Monster, Collider],
+		// 	none: [IsDestroyed, Path],
+		// });
 
-		query.onEntityAdded(e ->
-		{
-			var p = AStar.GetPath({
-				start: e.pos.toIntPoint(),
-				goal: getRandGoal(e.pos.toIntPoint()),
-				maxDepth: 600,
-				allowDiagonals: true,
-				cost: (a, b) ->
-				{
-					if (world.map.isOutOfBounds(b))
-					{
-						return Math.POSITIVE_INFINITY;
-					}
+		// query.onEntityAdded(e ->
+		// {
+		// 	var p = AStar.GetPath({
+		// 		start: e.pos.toIntPoint(),
+		// 		goal: getRandGoal(e.pos.toIntPoint()),
+		// 		maxDepth: 600,
+		// 		allowDiagonals: true,
+		// 		cost: (a, b) ->
+		// 		{
+		// 			if (world.map.isOutOfBounds(b))
+		// 			{
+		// 				return Math.POSITIVE_INFINITY;
+		// 			}
 
-					var t = world.terrain.terrain.get(b.x, b.y);
+		// 			var t = world.terrain.terrain.get(b.x, b.y);
 
-					if (t == WATER)
-					{
-						return Math.POSITIVE_INFINITY;
-					}
+		// 			if (t == WATER)
+		// 			{
+		// 				return Math.POSITIVE_INFINITY;
+		// 			}
 
-					var hasCollisions = world.systems.colliders.hasCollisionFastNav(b, e.id);
+		// 			var hasCollisions = world.systems.colliders.hasCollisionFastNav(b, e.id);
 
-					if (hasCollisions)
-					{
-						return Math.POSITIVE_INFINITY;
-					}
+		// 			if (hasCollisions)
+		// 			{
+		// 				return Math.POSITIVE_INFINITY;
+		// 			}
 
-					if (a.x != b.x && a.y != b.y)
-					{
-						var c1 = new IntPoint(a.x, b.y);
-						var c2 = new IntPoint(b.x, a.y);
+		// 			if (a.x != b.x && a.y != b.y)
+		// 			{
+		// 				var c1 = new IntPoint(a.x, b.y);
+		// 				var c2 = new IntPoint(b.x, a.y);
 
-						var t1 = world.terrain.terrain.get(c1.x, c1.y);
-						var t2 = world.terrain.terrain.get(c2.x, c2.y);
+		// 				var t1 = world.terrain.terrain.get(c1.x, c1.y);
+		// 				var t2 = world.terrain.terrain.get(c2.x, c2.y);
 
-						if (t1 == WATER || t2 == WATER)
-						{
-							return Math.POSITIVE_INFINITY;
-						}
+		// 				if (t1 == WATER || t2 == WATER)
+		// 				{
+		// 					return Math.POSITIVE_INFINITY;
+		// 				}
 
-						var hasCollisions1 = world.systems.colliders.hasCollisionFastNav(c1, e.id);
+		// 				var hasCollisions1 = world.systems.colliders.hasCollisionFastNav(c1, e.id);
 
-						if (hasCollisions1)
-						{
-							return Math.POSITIVE_INFINITY;
-						}
+		// 				if (hasCollisions1)
+		// 				{
+		// 					return Math.POSITIVE_INFINITY;
+		// 				}
 
-						var hasCollisions2 = world.systems.colliders.hasCollisionFastNav(c2, e.id);
-						if (hasCollisions2)
-						{
-							return Math.POSITIVE_INFINITY;
-						}
-					}
+		// 				var hasCollisions2 = world.systems.colliders.hasCollisionFastNav(c2, e.id);
+		// 				if (hasCollisions2)
+		// 				{
+		// 					return Math.POSITIVE_INFINITY;
+		// 				}
+		// 			}
 
-					return Distance.Diagonal(a, b);
-				}
-			});
+		// 			return Distance.Diagonal(a, b);
+		// 		}
+		// 	});
 
-			if (p.success)
-			{
-				e.add(new Path(p.path, [FLG_UNIT, FLG_BUILDING, FLG_OBJECT]));
-			}
-			else
-			{
-				trace('no path found');
-				e.add(new Path([], []));
-			}
-		});
+		// 	if (p.success)
+		// 	{
+		// 		e.add(new Path(p.path, [FLG_UNIT, FLG_BUILDING, FLG_OBJECT]));
+		// 	}
+		// 	else
+		// 	{
+		// 		trace('no path found');
+		// 		e.add(new Path([], []));
+		// 	}
+		// });
 	}
 
 	function getRandGoal(pos:IntPoint):IntPoint

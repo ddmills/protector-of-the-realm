@@ -1,14 +1,28 @@
 package domain.components;
 
-import domain.ai.behaviors.BehaviorType;
+import domain.ai.tree.BehaviorNodeResultType;
+import domain.ai.tree.nodes.BehaviorNode;
 import ecs.Component;
 
 class Behavior extends Component
 {
-	public var behaviorType:BehaviorType;
+	@save public var tree:BehaviorNode;
+	public var result(get, never):BehaviorNodeResultType;
 
-	public function new(behaviorType:BehaviorType)
+	public function new(tree:BehaviorNode)
 	{
-		this.behaviorType = behaviorType;
+		this.tree = tree;
+	}
+
+	public inline function run():BehaviorNodeResultType
+	{
+		tree.execute(entity);
+
+		return result;
+	}
+
+	public inline function get_result():BehaviorNodeResultType
+	{
+		return tree.result;
 	}
 }

@@ -1,14 +1,14 @@
 package core;
 
 import domain.actors.Actors;
-import domain.ai.behaviors.Behaviors;
+import domain.ai.tasks.Tasks;
 import domain.buildings.Buildings;
 
 class Data
 {
 	public static var Buildings(default, null):Buildings;
 	public static var Actors(default, null):Actors;
-	public static var Behaviors(default, null):Behaviors;
+	public static var Tasks(default, null):Tasks;
 
 	// TODO: add fonts, tiles, etc here.
 
@@ -16,6 +16,6 @@ class Data
 	{
 		Buildings = new Buildings();
 		Actors = new Actors();
-		Behaviors = new Behaviors();
+		Tasks = new Tasks();
 	}
 }

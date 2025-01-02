@@ -1,12 +1,11 @@
 package domain.systems;
 
-import core.Data;
 import core.Frame;
 import domain.components.Actor;
 import domain.components.Behavior;
-import domain.components.Blackboard;
 import domain.components.IsDestroyed;
 import domain.components.IsDetached;
+import domain.events.ScoreBehaviorsEvent;
 import ecs.Query;
 import ecs.System;
 
@@ -26,15 +25,21 @@ class BehaviorScoringSystem extends System
 	{
 		for (entity in query)
 		{
-			var best = Data.Behaviors.max(b -> b.score(entity));
+			var evt = entity.fireEvent(new ScoreBehaviorsEvent());
 
-			var bhv = new Behavior(best.type);
-			entity.add(bhv);
+			if (evt.best != null)
+			{
+				trace('start ${evt.best.scorer.type} - ${evt.best.score}');
 
-			var blackboard = entity.get(Blackboard);
-			blackboard.reset();
+				var scorer = evt.best.scorer;
+				var bhv = new Behavior(scorer.build());
 
-			best.start(entity);
+				entity.add(bhv);
+			}
+			else
+			{
+				trace('NO SCORERS FOUND!!');
+			}
 		}
 	}
 }

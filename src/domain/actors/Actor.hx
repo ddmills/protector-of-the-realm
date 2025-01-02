@@ -1,7 +1,6 @@
 package domain.actors;
 
 import data.domain.SpawnableType;
-import domain.ai.behaviors.BehaviorType;
 
 class Actor
 {
@@ -18,10 +17,5 @@ class Actor
 	function get_actorTypeName():String
 	{
 		return "Unknown";
-	}
-
-	public function getDefaultBehaviors():Array<BehaviorType>
-	{
-		return [BHV_IDLE, BHV_WANDER];
 	}
 }

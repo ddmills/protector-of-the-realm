@@ -246,7 +246,6 @@ class ColliderSystem extends System
 
 		if (BitUtil.hasBit(flags, FLG_OBJECT) || BitUtil.hasBit(flags, FLG_OBJECT))
 		{
-			trace('add to fast nav grid');
 			var fm = layer.getFastNavValue(pos.x, pos.y);
 			fm.add(entityId);
 		}

@@ -63,16 +63,16 @@ class InspectScreen extends Screen
 			return;
 		}
 
-		var bhv = inspectableEntity.get(Behavior);
-		if (bhv != null)
-		{
-			var lbl = Data.Behaviors.get(bhv.behaviorType).label;
-			ui.titleText.text = inspectable.displayName + ' ' + lbl;
-		}
-		else
-		{
-			ui.titleText.text = inspectable.displayName;
-		}
+		// var bhv = inspectableEntity.get(Behavior);
+		// if (bhv != null)
+		// {
+		// 	var lbl = bhv.get().label;
+		// 	ui.titleText.text = inspectable.displayName + ' ' + lbl;
+		// }
+		// else
+		// {
+		ui.titleText.text = inspectable.displayName;
+		// }
 
 		if (world.inspection.selected != inspectableEntity && world.inspection.isInspecting)
 		{

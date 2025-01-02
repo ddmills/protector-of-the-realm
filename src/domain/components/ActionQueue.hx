@@ -10,10 +10,6 @@ class ActionQueue extends Component
 
 	public function new()
 	{
-		var a = EntityActionType.HIRE_ACTOR(ACTOR_OGRE).equals(EntityActionType.HIRE_ACTOR(ACTOR_PALADIN));
-
-		trace(a);
-
 		this.actions = [];
 		addHandler(QueryActionsEvent, onQueryActions);
 	}

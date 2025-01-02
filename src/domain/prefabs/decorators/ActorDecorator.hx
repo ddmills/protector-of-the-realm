@@ -16,6 +16,8 @@ import domain.components.Label;
 import domain.components.Monster;
 import domain.components.Sprite;
 import domain.components.Vision;
+import domain.components.behaviors.IdleBehaviorScorer;
+import domain.components.behaviors.WanderBehaviorScorer;
 import ecs.Entity;
 
 typedef ActorOptions =
@@ -32,9 +34,12 @@ class ActorDecorator
 	public static function Decorate(entity:Entity, options:ActorOptions)
 	{
 		var actor = Data.Actors.get(options.actorType);
-		var behaviors = actor.getDefaultBehaviors();
 
-		entity.add(new Actor(options.actorType, behaviors));
+		entity.add(new Actor(options.actorType));
+
+		// BEHAVIORS
+		entity.add(new IdleBehaviorScorer());
+		entity.add(new WanderBehaviorScorer());
 
 		if (options.isPlayer == true)
 		{
