@@ -9,7 +9,6 @@ class SystemManager
 	public var actionQueue(default, null):ActionQueueSystem;
 	public var vision(default, null):VisionSystem;
 	public var pathing(default, null):PathFollowSystem;
-	public var monsters(default, null):MonsterSystem;
 	public var movement(default, null):MovementSystem;
 	public var sprites(default, null):SpriteSystem;
 	public var colliders(default, null):ColliderSystem;
@@ -26,7 +25,6 @@ class SystemManager
 		actionQueue = new ActionQueueSystem();
 		vision = new VisionSystem();
 		pathing = new PathFollowSystem();
-		monsters = new MonsterSystem();
 		movement = new MovementSystem();
 		sprites = new SpriteSystem();
 		colliders = new ColliderSystem();
@@ -42,7 +40,6 @@ class SystemManager
 		actionQueue.update(frame);
 		vision.update(frame);
 		pathing.update(frame);
-		monsters.update(frame);
 		movement.update(frame);
 		sprites.update(frame);
 		colliders.update(frame);
@@ -58,7 +55,6 @@ class SystemManager
 		actionQueue.teardown();
 		vision.teardown();
 		pathing.teardown();
-		monsters.teardown();
 		movement.teardown();
 		sprites.teardown();
 		colliders.teardown();

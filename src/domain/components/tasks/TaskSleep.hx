@@ -1,6 +1,6 @@
 package domain.components.tasks;
 
-class SleepTask extends TaskComponent
+class TaskSleep extends TaskComponent
 {
 	@save public var duration:Float;
 	@save public var progress:Float;

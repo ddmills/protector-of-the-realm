@@ -13,7 +13,6 @@ import domain.components.Inspectable;
 import domain.components.IsObservable;
 import domain.components.IsPlayer;
 import domain.components.Label;
-import domain.components.Monster;
 import domain.components.Sprite;
 import domain.components.Vision;
 import domain.components.behaviors.IdleBehaviorScorer;
@@ -56,7 +55,6 @@ class ActorDecorator
 		entity.add(new Blackboard());
 		entity.add(new Collider(POINT, new IntPoint(0, 0), [FLG_UNIT]));
 		entity.add(new Vision(options.visionRange.or(6)));
-		entity.add(new Monster());
 		entity.add(new Inspectable(actor.actorTypeName, options.clickRadius.or(16)));
 		entity.add(new ActionQueue());
 		entity.add(new IsObservable());

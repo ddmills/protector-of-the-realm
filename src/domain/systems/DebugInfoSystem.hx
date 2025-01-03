@@ -2,10 +2,9 @@ package domain.systems;
 
 import common.struct.Coordinate;
 import core.Frame;
-import core.Game;
 import data.resources.FontResources;
+import domain.components.Actor;
 import domain.components.Label;
-import domain.components.Monster;
 import ecs.Query;
 import ecs.System;
 import h2d.Object;
@@ -18,8 +17,8 @@ typedef DebugInfo =
 	fps:Text,
 	pos:Text,
 	clock:Text,
-	monster:Text,
 	entities:Text,
+	actors:Text,
 	cursor:Text,
 	drawCalls:Text,
 	grid:h2d.Graphics,
@@ -29,12 +28,12 @@ class DebugInfoSystem extends System
 {
 	public var debugInfo:DebugInfo;
 
-	var monsters:Query;
+	var actors:Query;
 
 	public function new()
 	{
-		monsters = new Query({
-			all: [Monster],
+		actors = new Query({
+			all: [Actor],
 		});
 
 		renderDebugInfo();
@@ -57,7 +56,7 @@ class DebugInfoSystem extends System
 		debugInfo.fps.text = game.app.engine.fps.floor().toString();
 		debugInfo.fps.color = getFpsColor(fps).toHxdColor();
 		debugInfo.pos.text = '$wtext $px Z(${game.camera.zoom})';
-		debugInfo.monster.text = 'monsters ${monsters.count().toString()}';
+		debugInfo.actors.text = 'actors ${actors.count().toString()}';
 		debugInfo.entities.text = 'entities ${game.registry.size.toString()}';
 		debugInfo.cursor.text = '${terrainString} ${eString}';
 		debugInfo.clock.text = '${game.clock.tick.floor()} (${game.clock.speed})';
@@ -105,9 +104,9 @@ class DebugInfoSystem extends System
 		pos.color = game.TEXT_COLOR.toHxdColor();
 		pos.y = 16;
 
-		var monster = new Text(FontResources.BIZCAT, ob);
-		monster.color = game.TEXT_COLOR.toHxdColor();
-		monster.y = 32;
+		var actors = new Text(FontResources.BIZCAT, ob);
+		actors.color = game.TEXT_COLOR.toHxdColor();
+		actors.y = 32;
 
 		var entities = new Text(FontResources.BIZCAT, ob);
 		entities.color = game.TEXT_COLOR.toHxdColor();
@@ -184,7 +183,7 @@ class DebugInfoSystem extends System
 			fps: fps,
 			pos: pos,
 			clock: clock,
-			monster: monster,
+			actors: actors,
 			entities: entities,
 			cursor: cursor,
 			grid: grid,

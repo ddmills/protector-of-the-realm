@@ -1,7 +1,6 @@
 package domain.systems;
 
 import common.struct.Coordinate;
-import common.struct.IntPoint;
 import core.Frame;
 import domain.components.Move;
 import domain.components.Path;

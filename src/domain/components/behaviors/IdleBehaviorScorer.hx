@@ -8,12 +8,12 @@ class IdleBehaviorScorer extends BehaviorScorerComponent
 {
 	public function score():Float
 	{
-		return Game.instance.world.rand.float(0, 100);
+		return Game.instance.world.rand.float(0, 50);
 	}
 
 	public function build():BehaviorNode
 	{
-		var duration = Game.instance.world.rand.integer(5, 10);
+		var duration = Game.instance.world.rand.float(1, 10);
 
 		return new TaskNode(TASK_SLEEP(duration));
 	}

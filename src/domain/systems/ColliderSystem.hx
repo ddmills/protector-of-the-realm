@@ -35,6 +35,11 @@ class ColliderSystem extends System
 		debugGraphics = new Graphics();
 		game.render(OVERLAY, debugGraphics);
 
+		var created = new Query({
+			all: [Collider],
+			none: [IsDetached],
+		});
+
 		var moved = new Query({
 			all: [Collider, Moved],
 			none: [IsDetached],
@@ -52,6 +57,7 @@ class ColliderSystem extends System
 
 		moved.onEntityAdded(onEntityMoved);
 		move.onEntityAdded(onEntityMove);
+		created.onEntityAdded(onEntityCreated);
 		destroyed.onEntityAdded(onEntityDestroyed);
 	}
 
@@ -185,6 +191,26 @@ class ColliderSystem extends System
 		}
 
 		collider.spots = collider.getFootprint(moved.current.toIntPoint());
+
+		for (pos in collider.spots)
+		{
+			addGridId(pos, e.id, collider.flags);
+		}
+
+		redrawDebug = true;
+	}
+
+	private function onEntityCreated(e:Entity)
+	{
+		var collider = e.get(Collider);
+
+		for (pos in collider.spots)
+		{
+			removeGridId(pos, e.id);
+		}
+
+		collider.spots = collider.getFootprint(e.pos.toIntPoint());
+
 		for (pos in collider.spots)
 		{
 			addGridId(pos, e.id, collider.flags);
@@ -244,7 +270,7 @@ class ColliderSystem extends System
 
 		m.add(entityId);
 
-		if (BitUtil.hasBit(flags, FLG_OBJECT) || BitUtil.hasBit(flags, FLG_OBJECT))
+		if (BitUtil.hasBit(flags, FLG_OBJECT) || BitUtil.hasBit(flags, FLG_BUILDING))
 		{
 			var fm = layer.getFastNavValue(pos.x, pos.y);
 			fm.add(entityId);
