@@ -37,7 +37,7 @@ class ActorDecorator
 		entity.add(new Actor(options.actorType));
 
 		// BEHAVIORS
-		// entity.add(new IdleBehaviorScorer());
+		entity.add(new IdleBehaviorScorer());
 		entity.add(new WanderBehaviorScorer());
 
 		if (options.isPlayer == true)

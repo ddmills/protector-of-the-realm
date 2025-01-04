@@ -2,22 +2,28 @@ package domain.components;
 
 import common.struct.Coordinate;
 import common.struct.IntPoint;
+import common.struct.Set;
 import core.Data;
 import core.Game;
 import data.domain.BuildingType;
 import domain.events.HireActorEvent;
 import domain.events.QueryActionsEvent;
 import ecs.Component;
+import ecs.Entity;
 
 class Building extends Component
 {
 	@save public var buildingType:BuildingType;
+	@save public var residents:Set<String>;
+	@save public var guests:Set<String>;
 
 	public var building(get, never):domain.buildings.Building;
 
 	public function new(buildingType:BuildingType)
 	{
 		this.buildingType = buildingType;
+		this.residents = new Set();
+		this.guests = new Set();
 
 		addHandler(QueryActionsEvent, onQueryActions);
 		addHandler(HireActorEvent, onHireActor);
@@ -59,8 +65,24 @@ class Building extends Component
 			.add(new Coordinate(.5, .5));
 
 		var actor = Data.Actors.get(evt.actorType);
+		var e = Spawner.Spawn(actor.spawnableType, pos);
+		addResident(e);
+	}
 
-		Spawner.Spawn(actor.spawnableType, pos);
+	public function addResident(e:Entity)
+	{
+		residents.add(e.id);
+		e.add(new Resident(entity.id));
+	}
+
+	override function onRemove()
+	{
+		for (residentId in residents)
+		{
+			var e = Game.instance.registry.getEntity(residentId);
+
+			e.remove(Resident);
+		}
 	}
 
 	function get_building():domain.buildings.Building

@@ -8,6 +8,7 @@ enum EntityActionType
 	HIRE_ACTOR(actorType:ActorType);
 	SELF_DESTRUCT;
 	FOLLOW;
+	VISIT_HOME;
 }
 
 typedef EntityAction =

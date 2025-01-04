@@ -5,7 +5,6 @@ import core.Data;
 import core.Frame;
 import core.Screen;
 import core.input.Command;
-import data.input.groups.CameraInputGroup;
 import data.resources.FontResources;
 import domain.components.ActionQueue;
 import domain.components.Behavior;
@@ -28,6 +27,7 @@ typedef InspectScreenUi =
 	titleOb:h2d.Object,
 	actionsOb:h2d.Object,
 	titleText:Text,
+	residentsOb:h2d.Object,
 	actions:Array<ActionBtn>,
 }
 
@@ -55,7 +55,7 @@ class InspectScreen extends Screen
 			handle(game.commands.next());
 		}
 
-		updateActionProgress();
+		renderActions();
 
 		world.input.camera.update();
 
@@ -101,11 +101,13 @@ class InspectScreen extends Screen
 
 		var titleOb = new h2d.Object(rootOb);
 		var actionsOb = new h2d.Object(rootOb);
+		var residentsOb = new h2d.Object(rootOb);
 
 		ui = {
 			rootOb: rootOb,
 			titleOb: titleOb,
 			actionsOb: actionsOb,
+			residentsOb: residentsOb,
 			titleText: null,
 			actions: [],
 		};
@@ -138,6 +140,78 @@ class InspectScreen extends Screen
 	}
 
 	function renderActions()
+	{
+		y = 40;
+
+		var evt = inspectableEntity.fireEvent(new QueryActionsEvent());
+
+		ui.actions = ui.actions.filter(x ->
+		{
+			if (evt.actions.exists(e -> e.equals(x.actionType)))
+			{
+				return true;
+			}
+
+			x.btnOb.remove();
+			return false;
+		});
+
+		var queue = inspectableEntity.get(ActionQueue);
+
+		if (queue == null)
+		{
+			return;
+		}
+
+		for (action in evt.actions)
+		{
+			var o = ui.actions.find(a -> a.actionType.equals(action));
+
+			if (o == null)
+			{
+				var btn = new Button('test', ui.actionsOb);
+				btn.width = width;
+				btn.onClick = (e) ->
+				{
+					var queue = inspectableEntity.get(ActionQueue);
+					btn.disabled = true;
+					queue.actions.push({
+						actionType: action,
+						current: .01,
+						duration: getActionDuration(action),
+					});
+				};
+
+				o = {
+					actionType: action,
+					btnOb: btn,
+				}
+
+				ui.actions.push(o);
+			}
+
+			o.btnOb.y = y;
+			y += o.btnOb.height;
+
+			var title = getActionTitle(action);
+			var active = queue.actions.find(y -> y.actionType.equals(o.actionType));
+
+			if (active == null)
+			{
+				o.btnOb.disabled = false;
+				o.btnOb.backgroundColor = 0x679c67;
+				o.btnOb.text = title;
+			}
+			else
+			{
+				o.btnOb.disabled = true;
+				o.btnOb.backgroundColor = 0xa36666;
+				o.btnOb.text = '${title} ${active.current.format(1)}/${active.duration}';
+			}
+		}
+	}
+
+	function renderActionsOld()
 	{
 		y = 40;
 
@@ -176,6 +250,7 @@ class InspectScreen extends Screen
 		return switch actionType
 		{
 			case FOLLOW: 0;
+			case VISIT_HOME: 0;
 			case SELF_DESTRUCT: 2;
 			case HIRE_ACTOR(_): 4;
 		}
@@ -185,6 +260,7 @@ class InspectScreen extends Screen
 	{
 		return switch actionType
 		{
+			case VISIT_HOME: 'Visit Home';
 			case FOLLOW: 'Follow';
 			case SELF_DESTRUCT: 'Self Destruct';
 			case HIRE_ACTOR(actorType): {

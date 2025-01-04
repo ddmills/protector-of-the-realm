@@ -41,6 +41,15 @@ class ActionQueue extends Component
 
 			switch action.actionType
 			{
+				case VISIT_HOME:
+					{
+						var building = entity.get(Resident)?.getBuilding();
+
+						if (building != null)
+						{
+							Game.instance.world.input.camera.followEntity(building);
+						}
+					}
 				case FOLLOW:
 					{
 						Game.instance.world.input.camera.followEntity(entity);
