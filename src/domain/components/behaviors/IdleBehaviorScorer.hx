@@ -17,4 +17,9 @@ class IdleBehaviorScorer extends BehaviorScorerComponent
 
 		return new TaskNode(TASK_SLEEP(duration));
 	}
+
+	public function label():String
+	{
+		return 'Idling';
+	}
 }

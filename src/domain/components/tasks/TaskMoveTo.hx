@@ -4,5 +4,14 @@ class TaskMoveTo extends TaskComponent
 {
 	@save public var attempted:Bool = false;
 
-	public function new() {}
+	public function new()
+	{
+		super();
+	}
+
+	public function getLabel():String
+	{
+		var bb = entity.get(Blackboard);
+		return 'Moving to ${bb?.goal?.toString()}';
+	}
 }

@@ -6,6 +6,12 @@ class TaskPickRandomSpot extends TaskComponent
 
 	public function new(radius:Int)
 	{
+		super();
 		this.radius = radius;
+	}
+
+	public function getLabel():String
+	{
+		return "Picking a random spot";
 	}
 }

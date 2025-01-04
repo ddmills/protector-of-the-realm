@@ -7,7 +7,13 @@ class TaskSleep extends TaskComponent
 
 	public function new(duration:Float)
 	{
+		super();
 		this.duration = duration;
 		this.progress = 0;
+	}
+
+	public function getLabel():String
+	{
+		return 'Sleeping ${progress.floor()}/${duration}';
 	}
 }

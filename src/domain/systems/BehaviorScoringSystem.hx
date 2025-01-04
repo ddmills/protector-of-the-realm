@@ -30,7 +30,8 @@ class BehaviorScoringSystem extends System
 			if (evt.best != null)
 			{
 				var scorer = evt.best.scorer;
-				var bhv = new Behavior(scorer.build());
+				var label = scorer.label();
+				var bhv = new Behavior(scorer.build(), label);
 
 				entity.add(bhv);
 			}

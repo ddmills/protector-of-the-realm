@@ -21,5 +21,7 @@ abstract class BehaviorScorerComponent extends Component
 
 	public abstract function score():Float;
 
+	public abstract function label():String;
+
 	public abstract function build():BehaviorNode;
 }

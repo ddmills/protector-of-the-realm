@@ -15,6 +15,11 @@ class WanderBehaviorScorer extends BehaviorScorerComponent
 		return Game.instance.world.rand.float(20, 100);
 	}
 
+	public function label()
+	{
+		return "Wandering";
+	}
+
 	public function build():BehaviorNode
 	{
 		var radius = Game.instance.world.rand.integer(5, 200);
