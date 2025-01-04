@@ -1,5 +1,6 @@
 package domain.components;
 
+import core.Game;
 import domain.events.HireActorEvent;
 import domain.events.QueryActionsEvent;
 import ecs.Component;
@@ -17,6 +18,7 @@ class ActionQueue extends Component
 	function onQueryActions(evt:QueryActionsEvent)
 	{
 		evt.actions.push(SELF_DESTRUCT);
+		evt.actions.push(FOLLOW);
 	}
 
 	public function updateActions(delta:Float)
@@ -39,6 +41,10 @@ class ActionQueue extends Component
 
 			switch action.actionType
 			{
+				case FOLLOW:
+					{
+						Game.instance.world.input.camera.followEntity(entity);
+					}
 				case SELF_DESTRUCT:
 					{
 						entity.add(new IsDestroyed());

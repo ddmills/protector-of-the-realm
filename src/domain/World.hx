@@ -5,6 +5,7 @@ import common.struct.IntPoint;
 import common.tools.Performance;
 import core.Game;
 import data.domain.SpawnableType;
+import data.input.InputGroups;
 import data.resources.AudioKey;
 import data.save.SaveWorld;
 import domain.Spawner;
@@ -24,6 +25,7 @@ class World
 	public var fow(default, null):FogOfWar;
 	public var inspection(default, null):Inspection;
 	public var map(default, null):GameMap;
+	public var input(default, null):InputGroups;
 
 	public var seed:Int = 2;
 
@@ -41,6 +43,7 @@ class World
 		rand = new Rand(seed);
 		map = new GameMap();
 		inspection = new Inspection();
+		input = new InputGroups();
 		systems.initialize();
 	}
 
@@ -61,6 +64,7 @@ class World
 		rand = new Rand(seed);
 		map = new GameMap();
 		inspection = new Inspection();
+		input = new InputGroups();
 		fow = new FogOfWar(map.width, map.height);
 		terrain = new Terrain(map.width, map.height);
 

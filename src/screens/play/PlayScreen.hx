@@ -5,7 +5,6 @@ import core.Frame;
 import core.Screen;
 import core.input.Command;
 import core.input.KeyCode;
-import data.input.groups.CameraInputGroup;
 import domain.Spawner;
 import screens.build.BuildScreen;
 import screens.inspect.InspectScreen;
@@ -29,6 +28,8 @@ class PlayScreen extends Screen
 			game.screens.push(new InspectScreen(world.inspection.selected));
 		}
 
+		world.input.camera.update();
+
 		while (game.commands.hasNext())
 		{
 			handle(game.commands.next());
@@ -37,7 +38,7 @@ class PlayScreen extends Screen
 
 	public override function onMouseMove(pos:Coordinate, previous:Coordinate)
 	{
-		CameraInputGroup.onMouseMove(pos, previous);
+		world.input.camera.onMouseMove(pos, previous);
 	}
 
 	public override function onMouseDown(pos:Coordinate)
@@ -57,12 +58,12 @@ class PlayScreen extends Screen
 
 	public override function onMouseWheelDown(wheelDelta:Float)
 	{
-		CameraInputGroup.onMouseWheelDown(wheelDelta);
+		world.input.camera.onMouseWheelDown(wheelDelta);
 	}
 
 	public override function onMouseWheelUp(wheelDelta:Float)
 	{
-		CameraInputGroup.onMouseWheelUp(wheelDelta);
+		world.input.camera.onMouseWheelUp(wheelDelta);
 	}
 
 	function handle(command:Command)
@@ -72,7 +73,7 @@ class PlayScreen extends Screen
 			case CMD_SAVE:
 				game.screens.push(new SaveScreen(true));
 			case _:
-				CameraInputGroup.handle(command);
+				world.input.camera.handle(command);
 		}
 	}
 

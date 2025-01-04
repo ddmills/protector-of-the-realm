@@ -98,6 +98,7 @@ class BuildScreen extends Screen
 		var x = pos.x - (rectWidth / 2).floor();
 		var y = pos.y - (rectHeight / 2).floor();
 		g.drawIsometricTile(x - .5, y - .5, rectWidth, rectHeight);
+		world.input.camera.update();
 
 		while (game.commands.hasNext())
 		{
@@ -124,19 +125,19 @@ class BuildScreen extends Screen
 
 	override function onMouseMove(pos:Coordinate, previous:Coordinate)
 	{
-		CameraInputGroup.onMouseMove(pos, previous);
+		world.input.camera.onMouseMove(pos, previous);
 
 		e.pos = pos.toWorld().floor().add(new Coordinate(.5, .5));
 	}
 
 	public override function onMouseWheelDown(wheelDelta:Float)
 	{
-		CameraInputGroup.onMouseWheelDown(wheelDelta);
+		world.input.camera.onMouseWheelDown(wheelDelta);
 	}
 
 	public override function onMouseWheelUp(wheelDelta:Float)
 	{
-		CameraInputGroup.onMouseWheelUp(wheelDelta);
+		world.input.camera.onMouseWheelUp(wheelDelta);
 	}
 
 	function handle(command:Command)
@@ -146,7 +147,7 @@ class BuildScreen extends Screen
 			case CMD_CANCEL:
 				game.screens.pop();
 			case _:
-				CameraInputGroup.handle(command);
+				world.input.camera.handle(command);
 		}
 	}
 }

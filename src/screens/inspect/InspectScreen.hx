@@ -57,6 +57,8 @@ class InspectScreen extends Screen
 
 		updateActionProgress();
 
+		world.input.camera.update();
+
 		if (inspectableEntity.isDestroyed)
 		{
 			game.screens.pop();
@@ -156,7 +158,7 @@ class InspectScreen extends Screen
 				queue.actions.push({
 					actionType: action,
 					current: .01,
-					duration: 4,
+					duration: getActionDuration(action),
 				});
 			};
 
@@ -169,10 +171,21 @@ class InspectScreen extends Screen
 		}
 	}
 
+	private function getActionDuration(actionType:EntityActionType):Float
+	{
+		return switch actionType
+		{
+			case FOLLOW: 0;
+			case SELF_DESTRUCT: 2;
+			case HIRE_ACTOR(_): 4;
+		}
+	}
+
 	private function getActionTitle(actionType:EntityActionType):String
 	{
 		return switch actionType
 		{
+			case FOLLOW: 'Follow';
 			case SELF_DESTRUCT: 'Self Destruct';
 			case HIRE_ACTOR(actorType): {
 					var actor = Data.Actors.get(actorType);
@@ -220,17 +233,17 @@ class InspectScreen extends Screen
 
 	public override function onMouseMove(pos:Coordinate, previous:Coordinate)
 	{
-		CameraInputGroup.onMouseMove(pos, previous);
+		world.input.camera.onMouseMove(pos, previous);
 	}
 
 	public override function onMouseWheelDown(wheelDelta:Float)
 	{
-		CameraInputGroup.onMouseWheelDown(wheelDelta);
+		world.input.camera.onMouseWheelDown(wheelDelta);
 	}
 
 	public override function onMouseWheelUp(wheelDelta:Float)
 	{
-		CameraInputGroup.onMouseWheelUp(wheelDelta);
+		world.input.camera.onMouseWheelUp(wheelDelta);
 	}
 
 	function handle(command:Command)
@@ -240,7 +253,7 @@ class InspectScreen extends Screen
 			case CMD_CANCEL:
 				game.screens.pop();
 			case _:
-				CameraInputGroup.handle(command);
+				world.input.camera.handle(command);
 		}
 	}
 }

@@ -1,12 +1,21 @@
 package data.input.groups;
 
 import common.struct.Coordinate;
+import core.Frame;
 import core.Game;
 import core.input.Command;
+import ecs.Entity;
 
 class CameraInputGroup
 {
-	public static function onMouseMove(pos:Coordinate, previous:Coordinate)
+	var follow:Null<Entity>;
+
+	public function new()
+	{
+		follow = null;
+	}
+
+	public function onMouseMove(pos:Coordinate, previous:Coordinate)
 	{
 		var game = Game.instance;
 
@@ -19,24 +28,46 @@ class CameraInputGroup
 
 			game.camera.scroller.x -= diff.x;
 			game.camera.scroller.y -= diff.y;
+
+			follow = null;
 		}
 	}
 
-	public static function onMouseWheelDown(wheelDelta:Float)
+	public function onMouseWheelDown(wheelDelta:Float)
 	{
 		var game = Game.instance;
 		var z = (game.camera.zoom + .1).clamp(.1, 4);
 		game.camera.zoomTo(game.input.mouse, z);
 	}
 
-	public static function onMouseWheelUp(wheelDelta:Float)
+	public function onMouseWheelUp(wheelDelta:Float)
 	{
 		var game = Game.instance;
 		var z = (game.camera.zoom - .1).clamp(.1, 4);
 		game.camera.zoomTo(game.input.mouse, z);
 	}
 
-	public static function handle(command:Command)
+	public function followEntity(entity:Entity)
+	{
+		follow = entity;
+	}
+
+	public function update()
+	{
+		if (follow != null)
+		{
+			if (follow.isDestroyed)
+			{
+				follow = null;
+			}
+			else
+			{
+				Game.instance.camera.focus = follow.pos;
+			}
+		}
+	}
+
+	public function handle(command:Command)
 	{
 		var game = Game.instance;
 
