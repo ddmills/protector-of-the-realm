@@ -12,23 +12,28 @@ class CameraInputGroup
 
 		if (game.input.mmb)
 		{
-			var diff = previous.sub(pos).toFloatPoint().multiply((1 / game.camera.zoom));
+			var diff = previous
+				.sub(pos)
+				.toFloatPoint()
+				.multiply(1);
 
-			game.camera.scroller.x -= diff.x * 10;
-			game.camera.scroller.y -= diff.y * 10;
+			game.camera.scroller.x -= diff.x;
+			game.camera.scroller.y -= diff.y;
 		}
 	}
 
 	public static function onMouseWheelDown(wheelDelta:Float)
 	{
 		var game = Game.instance;
-		game.camera.zoomTo(game.input.mouse, game.camera.zoom + .1);
+		var z = (game.camera.zoom + .1).clamp(.1, 4);
+		game.camera.zoomTo(game.input.mouse, z);
 	}
 
 	public static function onMouseWheelUp(wheelDelta:Float)
 	{
 		var game = Game.instance;
-		game.camera.zoomTo(game.input.mouse, game.camera.zoom - .1);
+		var z = (game.camera.zoom - .1).clamp(.1, 4);
+		game.camera.zoomTo(game.input.mouse, z);
 	}
 
 	public static function handle(command:Command)

@@ -50,10 +50,10 @@ class AStar
 			goal: goal,
 		};
 
-		if (cost(start, goal) == Math.POSITIVE_INFINITY)
-		{
-			return result;
-		}
+		// if (cost(start, goal) == Math.POSITIVE_INFINITY)
+		// {
+		// 	return result;
+		// }
 
 		open.put({
 			key: startKey,

@@ -27,15 +27,8 @@ class BehaviorScoringSystem extends System
 		{
 			var evt = entity.fireEvent(new ScoreBehaviorsEvent());
 
-			for (s in evt.scores)
-			{
-				trace('${s.scorer.type} - ${s.score}');
-			}
-
 			if (evt.best != null)
 			{
-				trace('best ${evt.best.scorer.type} - ${evt.best.score}');
-
 				var scorer = evt.best.scorer;
 				var bhv = new Behavior(scorer.build());
 

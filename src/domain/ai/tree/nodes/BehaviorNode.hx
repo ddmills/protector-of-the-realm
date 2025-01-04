@@ -9,6 +9,8 @@ abstract class BehaviorNode
 
 	abstract private function run(entity:Entity):BehaviorNodeResultType;
 
+	abstract public function reset(entity:Entity):Void;
+
 	public function execute(entity:Entity):BehaviorNodeResultType
 	{
 		result = run(entity);

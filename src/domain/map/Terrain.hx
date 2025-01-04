@@ -58,7 +58,7 @@ class Terrain extends Object
 	private function generate()
 	{
 		var p = new common.rand.Perlin(1);
-		var waterline = .4;
+		var waterline = .35;
 		var dirtline = .5;
 
 		for (x in 0...width)

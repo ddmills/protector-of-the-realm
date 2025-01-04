@@ -12,6 +12,12 @@ class NotNode extends BehaviorNode
 		this.child = child;
 	}
 
+	function reset(entity:Entity)
+	{
+		this.child.reset(entity);
+		result = NOT_STARTED;
+	}
+
 	function run(entity:Entity):BehaviorNodeResultType
 	{
 		return switch child.result

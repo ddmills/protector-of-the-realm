@@ -84,14 +84,14 @@ class World
 
 				var trees = p.get(x, y, 18, 3);
 
-				if (h > .6 && trees > .5 && rand.bool(.25))
+				if (h > .6 && trees > .5 && rand.bool(.2))
 				{
 					Spawner.Spawn(TREE_PINE, new Coordinate(x + .5, y + .5, WORLD));
 				}
-				else if (rand.bool(.003))
+				else if (rand.bool(.0015))
 				{
-					// var s:SpawnableType = rand.pick([PALADIN, ROGUE, WIZARD, RANGER, OGRE, GOBLIN, SKELETON]);
-					// Spawner.Spawn(s, new Coordinate(x + .5, y + .5, WORLD));
+					var s:SpawnableType = rand.pick([PALADIN, ROGUE, WIZARD, RANGER, OGRE, GOBLIN, SKELETON]);
+					Spawner.Spawn(s, new Coordinate(x + .5, y + .5, WORLD));
 				}
 			}
 		}

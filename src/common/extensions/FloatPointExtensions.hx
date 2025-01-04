@@ -38,6 +38,14 @@ class FloatPointExtensions
 		};
 	}
 
+	static public inline function divide(p:FloatPoint, v:Float):FloatPoint
+	{
+		return {
+			x: p.x / v,
+			y: p.y / v,
+		};
+	}
+
 	static public inline function ciel(p:FloatPoint):IntPoint
 	{
 		return {

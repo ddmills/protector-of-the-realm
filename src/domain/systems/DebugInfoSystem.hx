@@ -1,6 +1,7 @@
 package domain.systems;
 
 import common.struct.Coordinate;
+import common.struct.Set;
 import core.Frame;
 import data.resources.FontResources;
 import domain.components.Actor;
@@ -53,7 +54,7 @@ class DebugInfoSystem extends System
 			.map(x -> x.get(Label)?.text ?? 'Unknown')
 			.join(', ');
 
-		debugInfo.fps.text = game.app.engine.fps.floor().toString();
+		debugInfo.fps.text = game.app.engine.fps.floor().toString() + ' ' + frame.fps.floor().toString();
 		debugInfo.fps.color = getFpsColor(fps).toHxdColor();
 		debugInfo.pos.text = '$wtext $px Z(${game.camera.zoom})';
 		debugInfo.actors.text = 'actors ${actors.count().toString()}';

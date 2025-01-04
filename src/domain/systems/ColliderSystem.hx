@@ -138,6 +138,23 @@ class ColliderSystem extends System
 		return false;
 	}
 
+	public function hasCollisionsAt(pos:IntPoint, entityId:String):Bool
+	{
+		var m = layer.get(pos.x, pos.y);
+
+		if (m == null)
+		{
+			return true;
+		}
+
+		if (m.exists(id -> id != entityId))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
 	private function getCollidersAt(pos:IntPoint):Array<Collider>
 	{
 		var m = layer.get(pos.x, pos.y);

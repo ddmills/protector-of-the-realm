@@ -13,6 +13,13 @@ class TaskNode extends BehaviorNode
 		this.task = task;
 	}
 
+	public function reset(entity:Entity)
+	{
+		var t = Data.Tasks.get(task);
+		entity.remove(t);
+		result = NOT_STARTED;
+	}
+
 	public function run(entity:Entity):BehaviorNodeResultType
 	{
 		return switch result

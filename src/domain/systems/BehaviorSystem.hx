@@ -42,12 +42,6 @@ class BehaviorSystem extends System
 		movers = new Query({
 			all: [TaskMoveTo, Blackboard],
 		});
-
-		movers.onEntityAdded((e) ->
-		{
-			var bb = e.get(Blackboard);
-			bb.goal = getRandPointInCircle(e.pos.toIntPoint(), 10);
-		});
 	}
 
 	override function update(frame:Frame)
@@ -78,14 +72,23 @@ class BehaviorSystem extends System
 			}
 		}
 
-		// for (e in spotters)
-		// {
-		// 	var task = e.get(TaskPickRandomSpot);
-		// 	var blackboard = e.get(Blackboard);
+		for (e in spotters)
+		{
+			var task = e.get(TaskPickRandomSpot);
+			var blackboard = e.get(Blackboard);
 
-		// 	blackboard.goal = getRandPointInCircle(e.pos.toIntPoint(), task.radius);
-		// 	task.state = SUCCESS;
-		// }
+			var p = tryGetRandPoint(e.pos.toIntPoint(), task.radius);
+
+			if (p != null)
+			{
+				blackboard.goal = p;
+				task.state = SUCCESS;
+			}
+			else
+			{
+				task.state = FAILED;
+			}
+		}
 
 		for (e in movers)
 		{
@@ -93,9 +96,16 @@ class BehaviorSystem extends System
 			var cpos = e.pos.toIntPoint();
 			var task = e.get(TaskMoveTo);
 
+			if (blackboard.goal == null)
+			{
+				task.state = FAILED;
+				continue;
+			}
+
 			if (task.state != EXECUTING || cpos.equals(blackboard.goal))
 			{
 				task.state = SUCCESS;
+				continue;
 			}
 
 			if (e.has(Move))
@@ -107,16 +117,21 @@ class BehaviorSystem extends System
 
 			if (path == null)
 			{
-				var result = getPath(e, blackboard.goal);
+				if (task.attempted)
+				{
+					task.state = FAILED;
+					continue;
+				}
 
+				var result = getPath(e, blackboard.goal);
 				if (result.success)
 				{
-					trace('Found path!', result.path.length);
-					e.add(new Path(result.path, [FLG_OBJECT, FLG_BUILDING]));
+					e.add(new Path(result.path, [FLG_OBJECT, FLG_BUILDING, FLG_UNIT]));
+					task.attempted = true;
 				}
 				else
 				{
-					trace('FAILURE! no path found');
+					trace('FAILURE! no path found from ${e.pos.toIntPoint().toString()} to ${blackboard.goal.toString()}');
 					task.state = FAILED;
 				}
 			}
@@ -125,10 +140,11 @@ class BehaviorSystem extends System
 
 	function getPath(e:Entity, target:IntPoint):AStarResult
 	{
+		var start = e.pos.toIntPoint();
 		return AStar.GetPath({
-			start: e.pos.toIntPoint(),
+			start: start,
 			goal: target,
-			maxDepth: 600,
+			maxDepth: 20000,
 			allowDiagonals: true,
 			cost: (a, b) ->
 			{
@@ -144,11 +160,25 @@ class BehaviorSystem extends System
 					return Math.POSITIVE_INFINITY;
 				}
 
-				var hasCollisions = world.systems.colliders.hasCollisionFastNav(b, e.id);
+				var dist = Distance.Chebyshev(start, b);
 
-				if (hasCollisions)
+				if (dist == 1)
 				{
-					return Math.POSITIVE_INFINITY;
+					var hasCollisionSlow = world.systems.colliders.hasCollisionsAt(b, e.id);
+
+					if (hasCollisionSlow)
+					{
+						return Math.POSITIVE_INFINITY;
+					}
+				}
+				else
+				{
+					var hasCollisions = world.systems.colliders.hasCollisionFastNav(b, e.id);
+
+					if (hasCollisions)
+					{
+						return Math.POSITIVE_INFINITY;
+					}
 				}
 
 				if (a.x != b.x && a.y != b.y)
@@ -181,6 +211,32 @@ class BehaviorSystem extends System
 				return Distance.Diagonal(a, b);
 			}
 		});
+	}
+
+	function tryGetRandPoint(pos:IntPoint, radius:Int):IntPoint
+	{
+		for (attempt in 0...10)
+		{
+			var point = getRandPointInCircle(pos, radius);
+
+			if (world.map.isOutOfBounds(point))
+			{
+				continue;
+			}
+
+			var terrain = world.terrain.terrain.get(point.x, point.y);
+
+			if (terrain != WATER)
+			{
+				var nav = world.map.collision.getFastNavValue(point.x, point.y);
+				if (nav.length == 0)
+				{
+					return point;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	function getRandPointInCircle(pos:IntPoint, radius:Int):IntPoint
