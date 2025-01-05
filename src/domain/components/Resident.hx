@@ -25,4 +25,19 @@ class Resident extends Component
 	{
 		return Game.instance.registry.getEntity(buildingEntityId);
 	}
+
+	override function onRemove()
+	{
+		var e = getBuilding();
+
+		if (e != null)
+		{
+			var b = e.get(Building);
+
+			if (b != null)
+			{
+				b.residents.remove(entity.id);
+			}
+		}
+	}
 }

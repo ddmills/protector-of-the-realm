@@ -9,6 +9,7 @@ enum EntityActionType
 	SELF_DESTRUCT;
 	FOLLOW;
 	VISIT_HOME;
+	RESIDENT(residentEntityId:String);
 }
 
 typedef EntityAction =

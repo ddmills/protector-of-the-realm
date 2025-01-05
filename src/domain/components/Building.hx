@@ -34,6 +34,11 @@ class Building extends Component
 		var actions = building.getActions(entity);
 
 		evt.addAll(actions);
+
+		for (residentId in residents)
+		{
+			evt.add(RESIDENT(residentId));
+		}
 	}
 
 	private function onHireActor(evt:HireActorEvent)

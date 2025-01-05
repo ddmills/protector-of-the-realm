@@ -251,6 +251,7 @@ class InspectScreen extends Screen
 		{
 			case FOLLOW: 0;
 			case VISIT_HOME: 0;
+			case RESIDENT(_): 0;
 			case SELF_DESTRUCT: 2;
 			case HIRE_ACTOR(_): 4;
 		}
@@ -260,6 +261,7 @@ class InspectScreen extends Screen
 	{
 		return switch actionType
 		{
+			case RESIDENT(entityId): 'Resident ($entityId)';
 			case VISIT_HOME: 'Visit Home';
 			case FOLLOW: 'Follow';
 			case SELF_DESTRUCT: 'Self Destruct';
