@@ -7,6 +7,7 @@ class Blackboard extends Component
 {
 	@save public var timer:Float;
 	@save public var goal:IntPoint;
+	@save public var targetId:String;
 	@save public var path:Array<IntPoint>;
 
 	public function new()
@@ -19,5 +20,6 @@ class Blackboard extends Component
 		timer = 0;
 		goal = null;
 		path = null;
+		targetId = null;
 	}
 }

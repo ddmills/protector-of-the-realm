@@ -6,7 +6,6 @@ import core.Game;
 import domain.components.IsExplorable;
 import domain.components.IsExplored;
 import domain.components.IsVisible;
-import ecs.Entity;
 
 typedef SaveVisionLayer =
 {

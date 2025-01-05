@@ -27,7 +27,6 @@ class NotNode extends BehaviorNode
 			case EXECUTING, NOT_STARTED: {
 					if (child.execute(entity) != EXECUTING)
 					{
-						trace('child state changed... ${EnumValueTools.getName(child.result)}');
 						return run(entity);
 					}
 

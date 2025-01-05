@@ -14,6 +14,7 @@ import domain.components.IsObservable;
 import domain.components.IsPlayer;
 import domain.components.Label;
 import domain.components.Sprite;
+import domain.components.Team;
 import domain.components.Vision;
 import domain.components.behaviors.IdleBehaviorScorer;
 import domain.components.behaviors.WanderBehaviorScorer;
@@ -43,6 +44,11 @@ class ActorDecorator
 		if (options.isPlayer == true)
 		{
 			entity.add(new IsPlayer());
+			entity.add(new Team('Player'));
+		}
+		else
+		{
+			entity.add(new Team('Monster'));
 		}
 
 		var sprite = new Sprite(options.tileKey.or(TK_UNKNOWN), OBJECTS);
