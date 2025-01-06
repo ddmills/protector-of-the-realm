@@ -15,21 +15,25 @@ typedef SaveGameMap =
 class GameMap
 {
 	public var world(get, never):World;
-	public var width(default, null):Int = 320;
+	public var partitionSize(default, null):Int = 8;
+	public var width(default, null):Int = 320; // note, should be divisible by partitionSize
 	public var height(default, null):Int = 320;
 	public var vision(default, null):VisionLayer;
 	public var collision(default, null):CollisionLayer;
 	public var position(default, null):PositionLayer;
+	public var hostility(default, null):HostilityLayer;
 
 	public function new()
 	{
 		vision = new VisionLayer(this);
 		collision = new CollisionLayer(this);
 		position = new PositionLayer(this);
+		hostility = new HostilityLayer(this);
 
 		vision.init();
 		collision.init();
 		position.init();
+		hostility.init();
 
 		Game.instance.app.s2d.renderer.globals.set("mapWidth", width);
 		Game.instance.app.s2d.renderer.globals.set("mapHeight", height);

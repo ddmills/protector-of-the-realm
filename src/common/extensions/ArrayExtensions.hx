@@ -35,6 +35,11 @@ class ArrayExtensions
 		return false;
 	}
 
+	@:generic public static function isEmpty<T>(a:Array<T>):Bool
+	{
+		return a.length == 0;
+	}
+
 	@:generic public static function last<T>(a:Array<T>):Null<T>
 	{
 		return a.length == 0 ? null : a[a.length - 1];

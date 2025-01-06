@@ -13,6 +13,7 @@ class Path extends Component
 	public var length(get, never):Int;
 	public var remaining(get, never):Int;
 	public var current(get, never):IntPoint;
+	public var goal(get, never):IntPoint;
 
 	public function new(instructions:Array<IntPoint>, collider_flags:Array<ColliderFlag>)
 	{
@@ -39,14 +40,19 @@ class Path extends Component
 	/**
 	 * Advance the current node in the path
 	**/
-	public function next():IntPoint
+	public inline function next():IntPoint
 	{
 		curIdx++;
 		return current;
 	}
 
-	public function hasNext():Bool
+	public inline function hasNext():Bool
 	{
 		return remaining > 0;
+	}
+
+	inline function get_goal():IntPoint
+	{
+		return instructions[length - 1];
 	}
 }

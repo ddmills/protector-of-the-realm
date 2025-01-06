@@ -12,6 +12,6 @@ class TaskMoveTo extends TaskComponent
 	public function getLabel():String
 	{
 		var bb = entity.get(Blackboard);
-		return 'Moving to ${bb?.goal?.toString()}';
+		return 'Moving to ${bb?.goals[0]?.toString()}';
 	}
 }

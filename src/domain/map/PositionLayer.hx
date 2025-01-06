@@ -2,6 +2,7 @@ package domain.map;
 
 import common.struct.Grid;
 import common.struct.GridMap;
+import common.struct.IntPoint;
 
 class PositionLayer extends MapLayer
 {
@@ -15,6 +16,11 @@ class PositionLayer extends MapLayer
 	public function getEntityIdsAt(x:Int, y:Int):Array<String>
 	{
 		return entities.get(x, y);
+	}
+
+	public function getPosition(entityId:String):IntPoint
+	{
+		return entities.getPosition(entityId);
 	}
 
 	public function updateEntityPosition(entityId:String, x:Int, y:Int)

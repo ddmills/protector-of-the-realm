@@ -13,7 +13,7 @@ class RoguePrefab extends Prefab
 		ActorDecorator.Decorate(e, {
 			actorType: ACTOR_ROGUE,
 			tileKey: TK_ROGUE,
-			isPlayer: true,
+			team: PLAYER,
 		});
 
 		return e;

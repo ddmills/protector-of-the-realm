@@ -54,11 +54,13 @@ class BehaviorSystem extends System
 			if (result == SUCCESS)
 			{
 				e.remove(bhv);
+				e.get(Blackboard).reset();
 			}
 
 			if (result == FAILED)
 			{
 				e.remove(bhv);
+				e.get(Blackboard).reset();
 			}
 		}
 
@@ -81,7 +83,7 @@ class BehaviorSystem extends System
 
 			if (p != null)
 			{
-				blackboard.goal = p;
+				blackboard.goals = [p];
 				task.state = SUCCESS;
 			}
 			else
@@ -96,13 +98,30 @@ class BehaviorSystem extends System
 			var cpos = e.pos.toIntPoint();
 			var task = e.get(TaskMoveTo);
 
-			if (blackboard.goal == null)
+			if (blackboard.targetId != null)
+			{
+				var tpos = world.map.position.getPosition(blackboard.targetId);
+				if (tpos == null)
+				{
+					task.state = FAILED;
+					continue;
+				}
+
+				blackboard.goals = [
+					new IntPoint(tpos.x, tpos.y - 1),
+					new IntPoint(tpos.x - 1, tpos.y),
+					new IntPoint(tpos.x + 1, tpos.y),
+					new IntPoint(tpos.x, tpos.y + 1)
+				];
+			}
+
+			if (blackboard.goals == null || blackboard.goals.isEmpty())
 			{
 				task.state = FAILED;
 				continue;
 			}
 
-			if (task.state != EXECUTING || cpos.equals(blackboard.goal))
+			if (task.state != EXECUTING || blackboard.goals.exists(g -> cpos.equals(g)))
 			{
 				task.state = SUCCESS;
 				continue;
@@ -115,6 +134,13 @@ class BehaviorSystem extends System
 
 			var path = e.get(Path);
 
+			if (path != null && !blackboard.goals.exists(g -> path.goal.equals(g)))
+			{
+				trace('goal moved');
+				task.attempted = false;
+				e.remove(Path);
+			}
+
 			if (path == null)
 			{
 				if (task.attempted)
@@ -123,7 +149,7 @@ class BehaviorSystem extends System
 					continue;
 				}
 
-				var result = getPath(e, blackboard.goal);
+				var result = getPath(e, blackboard.goals);
 				if (result.success)
 				{
 					e.add(new Path(result.path, [FLG_OBJECT, FLG_BUILDING, FLG_UNIT]));
@@ -131,19 +157,19 @@ class BehaviorSystem extends System
 				}
 				else
 				{
-					trace('FAILURE! no path found from ${e.pos.toIntPoint().toString()} to ${blackboard.goal.toString()}');
+					trace('FAILURE! no path found from ${e.pos.toIntPoint().toString()} to ${blackboard.goals.toString()}');
 					task.state = FAILED;
 				}
 			}
 		}
 	}
 
-	function getPath(e:Entity, target:IntPoint):AStarResult
+	function getPath(e:Entity, goals:Array<IntPoint>):AStarResult
 	{
 		var start = e.pos.toIntPoint();
 		return AStar.GetPath({
 			start: start,
-			goal: target,
+			goals: goals,
 			maxDepth: 20000,
 			allowDiagonals: true,
 			cost: (a, b) ->

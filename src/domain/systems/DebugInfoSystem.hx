@@ -54,12 +54,23 @@ class DebugInfoSystem extends System
 			.map(x -> x.get(Label)?.text ?? 'Unknown')
 			.join(', ');
 
+		var pentities = world.map.hostility.getWithinRange(PLAYER, w.x, w.y, 12);
+		var pString = pentities
+			.map(x ->
+			{
+				var e = game.registry.getEntity(x.entityId);
+				var lbl = e.get(Label)?.text ?? 'Unknown';
+
+				return '$lbl (${x.distance})';
+			})
+			.join(', ');
+
 		debugInfo.fps.text = game.app.engine.fps.floor().toString() + ' ' + frame.fps.floor().toString();
 		debugInfo.fps.color = getFpsColor(fps).toHxdColor();
 		debugInfo.pos.text = '$wtext $px Z(${game.camera.zoom})';
 		debugInfo.actors.text = 'actors ${actors.count().toString()}';
 		debugInfo.entities.text = 'entities ${game.registry.size.toString()}';
-		debugInfo.cursor.text = '${terrainString} ${eString}';
+		debugInfo.cursor.text = '${terrainString} ${eString} --- ${pString}';
 		debugInfo.clock.text = '${game.clock.tick.floor()} (${game.clock.speed})';
 		debugInfo.drawCalls.text = 'draw ${game.app.engine.drawCalls}';
 	}
@@ -131,7 +142,7 @@ class DebugInfoSystem extends System
 
 		for (x in 0...world.map.width)
 		{
-			if (x % 16 == 0)
+			if (x % 8 == 0)
 			{
 				grid.lineStyle(2, 0x4373D1, .6);
 			}
@@ -156,7 +167,7 @@ class DebugInfoSystem extends System
 
 		for (y in 0...world.map.height)
 		{
-			if (y % 16 == 0)
+			if (y % 8 == 0)
 			{
 				grid.lineStyle(2, 0x4373D1, .6);
 			}

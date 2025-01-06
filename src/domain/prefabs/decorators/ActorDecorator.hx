@@ -5,6 +5,7 @@ import common.struct.IntPoint;
 import core.Data;
 import data.domain.ActorType;
 import data.resources.TileKey;
+import domain.actors.TeamType;
 import domain.components.ActionQueue;
 import domain.components.Actor;
 import domain.components.Blackboard;
@@ -16,6 +17,7 @@ import domain.components.Label;
 import domain.components.Sprite;
 import domain.components.Team;
 import domain.components.Vision;
+import domain.components.behaviors.FollowBehaviorScorer;
 import domain.components.behaviors.IdleBehaviorScorer;
 import domain.components.behaviors.WanderBehaviorScorer;
 import ecs.Entity;
@@ -26,7 +28,7 @@ typedef ActorOptions =
 	?tileKey:Null<TileKey>,
 	?visionRange:Null<Int>,
 	?clickRadius:Null<Int>,
-	?isPlayer:Bool,
+	?team:TeamType,
 }
 
 class ActorDecorator
@@ -40,15 +42,16 @@ class ActorDecorator
 		// BEHAVIORS
 		entity.add(new IdleBehaviorScorer());
 		entity.add(new WanderBehaviorScorer());
+		entity.add(new FollowBehaviorScorer());
 
-		if (options.isPlayer == true)
+		if (options.team == PLAYER)
 		{
 			entity.add(new IsPlayer());
-			entity.add(new Team('Player'));
+			entity.add(new Team(PLAYER));
 		}
 		else
 		{
-			entity.add(new Team('Monster'));
+			entity.add(new Team(MONSTER));
 		}
 
 		var sprite = new Sprite(options.tileKey.or(TK_UNKNOWN), OBJECTS);

@@ -10,6 +10,7 @@ import domain.components.Building;
 import domain.components.Collider;
 import domain.components.IsDestroyed;
 import domain.components.Sprite;
+import domain.components.Team;
 import ecs.Entity;
 import h2d.Graphics;
 
@@ -118,6 +119,7 @@ class BuildScreen extends Screen
 		{
 			e.get(Sprite).bm.alpha = 1;
 			e.add(c);
+			e.add(new Team(PLAYER));
 			isPlaced = true;
 			game.screens.pop();
 		}

@@ -22,8 +22,8 @@ class WanderBehaviorScorer extends BehaviorScorerComponent
 
 	public function build():BehaviorNode
 	{
-		var radius = Game.instance.world.rand.integer(5, 200);
-		var sleep = Game.instance.world.rand.float(0, 2);
+		var radius = Game.instance.world.rand.integer(5, 100);
+		var sleep = Game.instance.world.rand.float(0, 1);
 
 		return new SequenceNode([
 			new TaskNode(TASK_PICK_RAND_SPOT(radius)),

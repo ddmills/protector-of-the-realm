@@ -7,7 +7,7 @@ import common.struct.PriorityQueue;
 typedef AStarSettings =
 {
 	start:IntPoint,
-	goal:IntPoint,
+	goals:Array<IntPoint>,
 	allowDiagonals:Bool,
 	?includeGoal:Bool,
 	cost:(current:IntPoint, next:IntPoint) -> Float,
@@ -21,7 +21,7 @@ typedef AStarResult =
 	var costs:Array<Float>;
 	var cost:Float;
 	var start:IntPoint;
-	var goal:IntPoint;
+	var goal:Null<IntPoint>;
 };
 
 class AStar
@@ -30,7 +30,7 @@ class AStar
 	{
 		var heuristic:DistanceFormula = settings.allowDiagonals ? DIAGONAL : MANHATTAN;
 		var start = settings.start;
-		var goal = settings.goal;
+		var goals = settings.goals;
 		var cost = settings.cost;
 		var maxDepth = settings.maxDepth.or(10000);
 		var includeGoal = settings.includeGoal ?? true;
@@ -40,14 +40,14 @@ class AStar
 		var from = new Map<String, IntPoint>();
 		var costs = new Map<String, Float>();
 		var startKey = Key(start);
-		var goalKey = Key(goal);
+		var goalKeys = goals.map(g -> Key(g));
 		var result:AStarResult = {
 			success: false,
 			path: new Array(),
 			costs: new Array(),
 			cost: Math.POSITIVE_INFINITY,
 			start: start,
-			goal: goal,
+			goal: null,
 		};
 
 		// if (cost(start, goal) == Math.POSITIVE_INFINITY)
@@ -62,6 +62,8 @@ class AStar
 
 		costs[startKey] = 0;
 
+		var resultGoalKey = '';
+
 		while (!open.isEmpty)
 		{
 			depth++;
@@ -74,9 +76,11 @@ class AStar
 			var current = d.pos;
 			var currentKey = d.key;
 
-			if (currentKey == goalKey)
+			if (goalKeys.contains(currentKey))
 			{
 				result.success = true;
+				result.goal = current;
+				resultGoalKey = currentKey;
 				break;
 			}
 
@@ -86,7 +90,7 @@ class AStar
 			{
 				var nextKey = Key(next);
 
-				var graphCost = (nextKey == goalKey && !includeGoal) ? 0 : cost(current, next);
+				var graphCost = (!includeGoal && goalKeys.contains(nextKey)) ? 0 : cost(current, next);
 
 				if (graphCost == Math.POSITIVE_INFINITY)
 				{
@@ -99,7 +103,8 @@ class AStar
 				{
 					costs[nextKey] = newCost;
 
-					var priority = newCost + Distance.Get(next, goal, heuristic);
+					var minDist = goals.minValue(g -> Distance.Get(next, g, heuristic));
+					var priority = newCost + minDist;
 
 					open.put({
 						key: nextKey,
@@ -116,11 +121,11 @@ class AStar
 			return result;
 		}
 
-		result.path = [goal];
-		result.cost = costs[goalKey];
-		result.costs = [costs[goalKey]];
+		result.path = [result.goal];
+		result.cost = costs[resultGoalKey];
+		result.costs = [costs[resultGoalKey]];
 
-		var previous = from[Key(goal)];
+		var previous = from[resultGoalKey];
 
 		while (previous != null)
 		{

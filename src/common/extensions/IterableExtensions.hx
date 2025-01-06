@@ -40,6 +40,25 @@ class IterableExtensions
 		return cur;
 	}
 
+	public static function minValue<T>(it:Iterable<T>, fn:(value:T) -> Float):Float
+	{
+		var cur = null;
+		var curWeight = Math.POSITIVE_INFINITY;
+
+		for (value in it)
+		{
+			var weight = fn(value);
+
+			if (cur == null || weight < curWeight)
+			{
+				curWeight = weight;
+				cur = value;
+			}
+		}
+
+		return curWeight;
+	}
+
 	public static inline function avg<T>(it:Iterable<T>, fn:(value:T) -> Float):Float
 	{
 		return it.sum(fn) / it.count();

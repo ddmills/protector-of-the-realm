@@ -10,6 +10,7 @@ class SystemManager
 	public var vision(default, null):VisionSystem;
 	public var pathing(default, null):PathFollowSystem;
 	public var movement(default, null):MovementSystem;
+	public var hostility(default, null):HostilitySystem;
 	public var sprites(default, null):SpriteSystem;
 	public var colliders(default, null):ColliderSystem;
 	public var destroy(default, null):DestroySystem;
@@ -26,6 +27,7 @@ class SystemManager
 		vision = new VisionSystem();
 		pathing = new PathFollowSystem();
 		movement = new MovementSystem();
+		hostility = new HostilitySystem();
 		sprites = new SpriteSystem();
 		colliders = new ColliderSystem();
 		destroy = new DestroySystem();
@@ -41,6 +43,7 @@ class SystemManager
 		vision.update(frame);
 		pathing.update(frame);
 		movement.update(frame);
+		hostility.update(frame);
 		sprites.update(frame);
 		colliders.update(frame);
 		destroy.update(frame);
@@ -56,6 +59,7 @@ class SystemManager
 		vision.teardown();
 		pathing.teardown();
 		movement.teardown();
+		hostility.teardown();
 		sprites.teardown();
 		colliders.teardown();
 		destroy.teardown();

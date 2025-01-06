@@ -6,7 +6,7 @@ import ecs.Component;
 class Blackboard extends Component
 {
 	@save public var timer:Float;
-	@save public var goal:IntPoint;
+	@save public var goals:Array<IntPoint>;
 	@save public var targetId:String;
 	@save public var path:Array<IntPoint>;
 
@@ -18,7 +18,7 @@ class Blackboard extends Component
 	public function reset()
 	{
 		timer = 0;
-		goal = null;
+		goals = [];
 		path = null;
 		targetId = null;
 	}

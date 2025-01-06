@@ -4,7 +4,9 @@ class SpriteShader extends hxsl.Shader
 {
 	static var SRC =
 		{
-			var pixelColor:Vec4;
+			@:import h3d.shader.Base2d;
+			@borrow(h3d.shader.Base2d)
+			var texture:Sampler2D;
 			@param var isShrouded:Int;
 			@param var shroudTint:Vec3;
 			function fragment()

@@ -239,12 +239,12 @@ class Entity
 		return w;
 	}
 
-	function get_x():Float
+	inline function get_x():Float
 	{
 		return _x;
 	}
 
-	function get_y():Float
+	inline function get_y():Float
 	{
 		return _y;
 	}

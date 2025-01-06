@@ -4,7 +4,6 @@ import common.struct.Coordinate;
 import common.struct.FloatPoint;
 import common.struct.IntPoint;
 import core.Data;
-import core.Game;
 import domain.components.ActionQueue;
 import domain.components.Building;
 import domain.components.Collider;

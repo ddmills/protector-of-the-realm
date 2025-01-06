@@ -1,13 +1,14 @@
 package domain.components;
 
+import domain.actors.TeamType;
 import ecs.Component;
 
 class Team extends Component
 {
-	public var team:String;
+	public var teamType:TeamType;
 
-	public function new(team:String)
+	public function new(teamType:TeamType)
 	{
-		this.team = team;
+		this.teamType = teamType;
 	}
 }

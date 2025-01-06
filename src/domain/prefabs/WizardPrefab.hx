@@ -13,7 +13,7 @@ class WizardPrefab extends Prefab
 		ActorDecorator.Decorate(e, {
 			actorType: ACTOR_WIZARD,
 			tileKey: TK_WIZARD,
-			isPlayer: true,
+			team: PLAYER,
 		});
 
 		return e;

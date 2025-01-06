@@ -30,7 +30,7 @@ import common.struct.Grid.GridSave;
 		return grid.idx(x, y);
 	}
 
-	public function coord(idx:Int)
+	public inline function coord(idx:Int)
 	{
 		return grid.coord(idx);
 	}
