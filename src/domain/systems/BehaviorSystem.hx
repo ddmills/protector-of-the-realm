@@ -136,14 +136,14 @@ class BehaviorSystem extends System
 
 			if (path != null && !blackboard.goals.exists(g -> path.goal.equals(g)))
 			{
-				trace('goal moved');
-				task.attempted = false;
+				task.retryAttempts = 0;
 				e.remove(Path);
 			}
 
 			if (path == null)
 			{
-				if (task.attempted)
+				task.retryAttempts++;
+				if (task.retryAttempts >= task.maxRetryAttempts)
 				{
 					task.state = FAILED;
 					continue;
@@ -153,7 +153,7 @@ class BehaviorSystem extends System
 				if (result.success)
 				{
 					e.add(new Path(result.path, [FLG_OBJECT, FLG_BUILDING, FLG_UNIT]));
-					task.attempted = true;
+					task.retryAttempts = 0;
 				}
 				else
 				{

@@ -14,9 +14,8 @@ class Tasks
 		return switch taskType
 		{
 			case TASK_SLEEP(duration): new TaskSleep(duration);
-			case TASK_PICK_RAND_SPOT(radius):
-				new TaskPickRandomSpot(radius);
-			case TASK_MOVE_TO: new TaskMoveTo();
+			case TASK_PICK_RAND_SPOT(radius): new TaskPickRandomSpot(radius);
+			case TASK_MOVE_TO(retryAttempts): new TaskMoveTo(retryAttempts);
 		}
 	}
 
@@ -26,7 +25,7 @@ class Tasks
 		{
 			case TASK_SLEEP(_): TaskSleep;
 			case TASK_PICK_RAND_SPOT(_): TaskPickRandomSpot;
-			case TASK_MOVE_TO: TaskMoveTo;
+			case TASK_MOVE_TO(_): TaskMoveTo;
 		}
 	}
 }

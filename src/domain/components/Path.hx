@@ -1,6 +1,7 @@
 package domain.components;
 
 import common.struct.IntPoint;
+import core.Game;
 import domain.systems.ColliderSystem.ColliderFlag;
 import ecs.Component;
 
@@ -15,10 +16,14 @@ class Path extends Component
 	public var current(get, never):IntPoint;
 	public var goal(get, never):IntPoint;
 
+	public var waitDuration:Float;
+	public var maxWaitDuration:Float;
+
 	public function new(instructions:Array<IntPoint>, collider_flags:Array<ColliderFlag>)
 	{
 		this.instructions = instructions;
 		this.collider_flags = collider_flags;
+		maxWaitDuration = Game.instance.world.rand.float(1, 4);
 		curIdx = 0;
 	}
 
@@ -35,6 +40,14 @@ class Path extends Component
 	inline function get_remaining():Int
 	{
 		return (length - 1) - curIdx;
+	}
+
+	/**
+	 * Peek at the next node in the path
+	**/
+	public inline function peek():IntPoint
+	{
+		return instructions[curIdx + 1];
 	}
 
 	/**

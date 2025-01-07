@@ -2,11 +2,8 @@ package domain.components.behaviors;
 
 import core.Game;
 import domain.ai.tree.nodes.BehaviorNode;
-import domain.ai.tree.nodes.FailNode;
-import domain.ai.tree.nodes.RetryNode;
 import domain.ai.tree.nodes.SequenceNode;
 import domain.ai.tree.nodes.TaskNode;
-import domain.ai.tree.nodes.TryNode;
 
 class FollowBehaviorScorer extends BehaviorScorerComponent
 {
@@ -63,12 +60,7 @@ class FollowBehaviorScorer extends BehaviorScorerComponent
 
 		blackboard.targetId = targetId;
 
-		var sleep = Game.instance.world.rand.float(0, 1);
-
-		return new SequenceNode([
-			new RetryNode(new TryNode(new TaskNode(TASK_MOVE_TO), new SequenceNode([new TaskNode(TASK_SLEEP(sleep)), new FailNode()])), 5),
-			new TaskNode(TASK_SLEEP(2))
-		]);
+		return new SequenceNode([new TaskNode(TASK_MOVE_TO(3)), new TaskNode(TASK_SLEEP(2))]);
 	}
 
 	public function label():String

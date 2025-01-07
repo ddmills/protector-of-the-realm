@@ -2,11 +2,8 @@ package domain.components.behaviors;
 
 import core.Game;
 import domain.ai.tree.nodes.BehaviorNode;
-import domain.ai.tree.nodes.FailNode;
-import domain.ai.tree.nodes.RetryNode;
 import domain.ai.tree.nodes.SequenceNode;
 import domain.ai.tree.nodes.TaskNode;
-import domain.ai.tree.nodes.TryNode;
 
 class WanderBehaviorScorer extends BehaviorScorerComponent
 {
@@ -23,11 +20,12 @@ class WanderBehaviorScorer extends BehaviorScorerComponent
 	public function build():BehaviorNode
 	{
 		var radius = Game.instance.world.rand.integer(5, 100);
-		var sleep = Game.instance.world.rand.float(0, 1);
+		var sleep = Game.instance.world.rand.float(.5, 1);
 
+		// TODO: logic for path/movement interruption should be moved to a system and generic
 		return new SequenceNode([
 			new TaskNode(TASK_PICK_RAND_SPOT(radius)),
-			new RetryNode(new TryNode(new TaskNode(TASK_MOVE_TO), new SequenceNode([new TaskNode(TASK_SLEEP(sleep)), new FailNode()])), 5),
+			new TaskNode(TASK_MOVE_TO(3)),
 			new TaskNode(TASK_SLEEP(2))
 		]);
 	}

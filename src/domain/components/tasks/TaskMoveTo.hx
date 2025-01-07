@@ -2,11 +2,14 @@ package domain.components.tasks;
 
 class TaskMoveTo extends TaskComponent
 {
-	@save public var attempted:Bool = false;
+	@save public var retryAttempts:Int;
+	@save public var maxRetryAttempts:Int;
 
-	public function new()
+	public function new(retryAttempts:Int)
 	{
 		super();
+		this.maxRetryAttempts = retryAttempts;
+		this.retryAttempts = 0;
 	}
 
 	public function getLabel():String

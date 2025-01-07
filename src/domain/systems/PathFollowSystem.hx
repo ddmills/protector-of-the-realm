@@ -45,16 +45,26 @@ class PathFollowSystem extends System
 
 			if (path.hasNext())
 			{
-				var next = path.next();
-
+				var next = path.peek();
 				var collisions = world.systems.colliders.getCollisionsAt(next, path.collider_flags);
 
 				if (collisions.exists(v -> v != e.id))
 				{
-					e.remove(path);
+					path.waitDuration += game.clock.deltaTick;
+
+					var fastNavBlocked = world.systems.colliders.hasCollisionFastNav(next, e.id);
+
+					if (fastNavBlocked || path.waitDuration > path.maxWaitDuration)
+					{
+						e.remove(Path);
+					}
+
 					continue;
 				}
 
+				path.next();
+
+				path.waitDuration = 0;
 				var target = new Coordinate(next.x + .5, next.y + .5, WORLD);
 				var speed = .03;
 
