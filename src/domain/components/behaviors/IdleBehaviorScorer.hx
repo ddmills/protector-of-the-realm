@@ -15,7 +15,7 @@ class IdleBehaviorScorer extends BehaviorScorerComponent
 	{
 		var duration = Game.instance.world.rand.float(1, 10);
 
-		return new TaskNode(TASK_SLEEP(duration));
+		return new TaskNode(TASK_WAIT(duration));
 	}
 
 	public function label():String

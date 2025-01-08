@@ -8,17 +8,34 @@ import core.input.Command;
 import data.resources.FontResources;
 import domain.components.ActionQueue;
 import domain.components.Behavior;
+import domain.components.Health;
 import domain.components.Inspectable;
 import domain.events.QueryActionsEvent;
 import ecs.Entity;
 import h2d.Bitmap;
+import h2d.Object;
 import h2d.Text;
+import h2d.Tile;
 import ui.components.Button;
 
 typedef ActionBtn =
 {
 	actionType:EntityActionType,
 	btnOb:Button,
+}
+
+typedef HealthBar =
+{
+	ob:Bitmap,
+	bar:Bitmap,
+	text:h2d.Text,
+}
+
+typedef BehaviorBar =
+{
+	ob:Bitmap,
+	behavior:Text,
+	task:Text,
 }
 
 typedef InspectScreenUi =
@@ -28,6 +45,8 @@ typedef InspectScreenUi =
 	actionsOb:h2d.Object,
 	titleText:Text,
 	residentsOb:h2d.Object,
+	health:HealthBar,
+	behavior:BehaviorBar,
 	actions:Array<ActionBtn>,
 }
 
@@ -55,6 +74,8 @@ class InspectScreen extends Screen
 			handle(game.commands.next());
 		}
 
+		renderBehavior();
+		renderHealth();
 		renderActions();
 
 		world.input.camera.update();
@@ -63,17 +84,6 @@ class InspectScreen extends Screen
 		{
 			game.screens.pop();
 			return;
-		}
-
-		var bhv = inspectableEntity.get(Behavior);
-		if (bhv != null)
-		{
-			var lbl = bhv.getLabels();
-			ui.titleText.text = inspectable.displayName + ' ' + lbl.behavior + ' - ' + lbl.task;
-		}
-		else
-		{
-			ui.titleText.text = inspectable.displayName;
 		}
 
 		if (world.inspection.selected != inspectableEntity && world.inspection.isInspecting)
@@ -92,14 +102,16 @@ class InspectScreen extends Screen
 		}
 
 		var rootOb = new Bitmap();
-		rootOb.tile = h2d.Tile.fromColor(0x242529, 1, 1);
+		rootOb.tile = h2d.Tile.fromColor(0x1D1D1F, 1, 1);
 		rootOb.width = width;
 		rootOb.height = width;
 
 		var blocker = new h2d.Interactive(width, width, rootOb);
 		blocker.cursor = null;
 
-		var titleOb = new h2d.Object(rootOb);
+		var titleOb = new Bitmap(Tile.fromColor(0x2A3B44), rootOb);
+		titleOb.height = 20;
+		titleOb.width = width;
 		var actionsOb = new h2d.Object(rootOb);
 		var residentsOb = new h2d.Object(rootOb);
 
@@ -109,10 +121,13 @@ class InspectScreen extends Screen
 			actionsOb: actionsOb,
 			residentsOb: residentsOb,
 			titleText: null,
+			health: null,
+			behavior: null,
 			actions: [],
 		};
 
 		renderTitle();
+		renderBehavior();
 		renderActions();
 
 		game.render(HUD, ui.rootOb);
@@ -139,9 +154,85 @@ class InspectScreen extends Screen
 		ui.titleText = title;
 	}
 
+	function renderBehavior()
+	{
+		y = 30;
+
+		if (ui.behavior == null)
+		{
+			var ob = new Bitmap(Tile.fromColor(0x202727), ui.rootOb);
+			var bhvText = new h2d.Text(FontResources.BIZCAT, ob);
+			var taskText = new h2d.Text(FontResources.BIZCAT, ob);
+
+			ui.behavior = {
+				ob: ob,
+				behavior: bhvText,
+				task: taskText,
+			};
+
+			bhvText.maxWidth = width;
+			bhvText.textAlign = Center;
+			taskText.maxWidth = width;
+			taskText.textAlign = Center;
+		}
+
+		var bhv = inspectableEntity.get(Behavior);
+
+		if (bhv != null)
+		{
+			ui.behavior.ob.visible = true;
+
+			var lbl = bhv.getLabels();
+			ui.behavior.ob.y = y;
+			ui.behavior.behavior.text = lbl.behavior;
+			ui.behavior.task.text = lbl.task;
+			ui.behavior.task.y = ui.behavior.behavior.textHeight;
+		}
+		else
+		{
+			ui.behavior.ob.visible = false;
+		}
+	}
+
+	function renderHealth()
+	{
+		y = 80;
+
+		var hp = inspectableEntity.get(Health);
+
+		if (hp == null)
+		{
+			return;
+		}
+
+		if (ui.health == null)
+		{
+			var ob = new Bitmap(Tile.fromColor(0x202727), ui.rootOb);
+			var bar = new Bitmap(Tile.fromColor(0x7e3b3b), ob);
+			var txt = new h2d.Text(FontResources.BIZCAT, ob);
+
+			ui.health = {
+				ob: ob,
+				bar: bar,
+				text: txt,
+			};
+
+			ob.y = y;
+			ob.width = width;
+			ob.height = 20;
+			bar.width = 80;
+			bar.height = 20;
+			txt.maxWidth = width;
+			txt.textAlign = Center;
+		}
+
+		ui.health.bar.width = hp.percent * width;
+		ui.health.text.text = '${hp.value}/${hp.max}';
+	}
+
 	function renderActions()
 	{
-		y = 40;
+		y = 100;
 
 		var evt = inspectableEntity.fireEvent(new QueryActionsEvent());
 
@@ -211,40 +302,6 @@ class InspectScreen extends Screen
 		}
 	}
 
-	function renderActionsOld()
-	{
-		y = 40;
-
-		ui.actionsOb.removeChildren();
-		ui.actions = [];
-
-		var evt = inspectableEntity.fireEvent(new QueryActionsEvent());
-
-		for (action in evt.actions)
-		{
-			var btn = new Button('test', ui.actionsOb);
-			btn.width = width;
-			btn.y = y;
-			btn.onClick = (e) ->
-			{
-				var queue = inspectableEntity.get(ActionQueue);
-				btn.disabled = true;
-				queue.actions.push({
-					actionType: action,
-					current: .01,
-					duration: getActionDuration(action),
-				});
-			};
-
-			y += btn.height;
-
-			ui.actions.push({
-				actionType: action,
-				btnOb: btn,
-			});
-		}
-	}
-
 	private function getActionDuration(actionType:EntityActionType):Float
 	{
 		return switch actionType
@@ -269,35 +326,6 @@ class InspectScreen extends Screen
 					var actor = Data.Actors.get(actorType);
 					return 'Hire ${actor.actorTypeName}';
 				}
-		}
-	}
-
-	function updateActionProgress()
-	{
-		var queue = inspectableEntity.get(ActionQueue);
-
-		if (queue == null)
-		{
-			return;
-		}
-
-		for (x in ui.actions)
-		{
-			var cur = queue.actions.find(y -> y.actionType.equals(x.actionType));
-
-			if (cur != null)
-			{
-				x.btnOb.disabled = true;
-				x.btnOb.backgroundColor = 0xa36666;
-				var t = getActionTitle(x.actionType);
-				x.btnOb.text = '${t} ${cur.current.format(1)}/${cur.duration}';
-			}
-			else
-			{
-				x.btnOb.disabled = false;
-				x.btnOb.backgroundColor = 0x679c67;
-				x.btnOb.text = getActionTitle(x.actionType);
-			}
 		}
 	}
 

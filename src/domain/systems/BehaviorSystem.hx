@@ -7,12 +7,15 @@ import core.Frame;
 import domain.components.Actor;
 import domain.components.Behavior;
 import domain.components.Blackboard;
+import domain.components.IsDead;
 import domain.components.IsDestroyed;
 import domain.components.Move;
 import domain.components.Path;
 import domain.components.tasks.TaskMoveTo;
 import domain.components.tasks.TaskPickRandomSpot;
-import domain.components.tasks.TaskSleep;
+import domain.components.tasks.TaskTryMelee;
+import domain.components.tasks.TaskWait;
+import domain.events.AttackedEvent;
 import ecs.Entity;
 import ecs.Query;
 import ecs.System;
@@ -23,6 +26,7 @@ class BehaviorSystem extends System
 	var sleepers:Query;
 	var spotters:Query;
 	var movers:Query;
+	var attackers:Query;
 
 	public function new()
 	{
@@ -32,7 +36,7 @@ class BehaviorSystem extends System
 		});
 
 		sleepers = new Query({
-			all: [TaskSleep]
+			all: [TaskWait]
 		});
 
 		spotters = new Query({
@@ -41,6 +45,10 @@ class BehaviorSystem extends System
 
 		movers = new Query({
 			all: [TaskMoveTo, Blackboard],
+		});
+
+		attackers = new Query({
+			all: [TaskTryMelee, Blackboard],
 		});
 	}
 
@@ -66,12 +74,39 @@ class BehaviorSystem extends System
 
 		for (e in sleepers)
 		{
-			var task = e.get(TaskSleep);
+			var task = e.get(TaskWait);
 			task.progress += game.clock.deltaTick;
 			if (task.progress > task.duration)
 			{
 				task.state = SUCCESS;
 			}
+		}
+
+		for (e in attackers)
+		{
+			var task = e.get(TaskTryMelee);
+			var bb = e.get(Blackboard);
+			var target = game.registry.getEntity(bb.targetId);
+
+			if (target == null)
+			{
+				task.state = FAILED;
+				continue;
+			}
+
+			if (target.has(IsDead))
+			{
+				task.state = SUCCESS;
+				continue;
+			}
+
+			var attack:Attack = {
+				attacker: e,
+				defender: target,
+				damage: 10,
+			};
+			target.fireEvent(new AttackedEvent(attack));
+			task.state = SUCCESS;
 		}
 
 		for (e in spotters)

@@ -1,6 +1,6 @@
 package domain.components.tasks;
 
-class TaskSleep extends TaskComponent
+class TaskWait extends TaskComponent
 {
 	@save public var duration:Float;
 	@save public var progress:Float;
@@ -14,6 +14,7 @@ class TaskSleep extends TaskComponent
 
 	public function getLabel():String
 	{
-		return 'Sleeping ${progress.floor()}/${duration}';
+		var percent = (progress / duration) * 100;
+		return 'Waiting ${percent.floor()}%';
 	}
 }

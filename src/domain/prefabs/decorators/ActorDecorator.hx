@@ -10,6 +10,7 @@ import domain.components.ActionQueue;
 import domain.components.Actor;
 import domain.components.Blackboard;
 import domain.components.Collider;
+import domain.components.Health;
 import domain.components.Inspectable;
 import domain.components.IsObservable;
 import domain.components.IsPlayer;
@@ -17,8 +18,8 @@ import domain.components.Label;
 import domain.components.Sprite;
 import domain.components.Team;
 import domain.components.Vision;
-import domain.components.behaviors.FollowBehaviorScorer;
 import domain.components.behaviors.IdleBehaviorScorer;
+import domain.components.behaviors.MeleeFightScorer.MeleeFightBehaviorScorer;
 import domain.components.behaviors.WanderBehaviorScorer;
 import ecs.Entity;
 
@@ -29,6 +30,7 @@ typedef ActorOptions =
 	?visionRange:Null<Int>,
 	?clickRadius:Null<Int>,
 	?team:TeamType,
+	?maxHealth:Int,
 }
 
 class ActorDecorator
@@ -42,7 +44,8 @@ class ActorDecorator
 		// BEHAVIORS
 		entity.add(new IdleBehaviorScorer());
 		entity.add(new WanderBehaviorScorer());
-		entity.add(new FollowBehaviorScorer());
+		// entity.add(new FollowBehaviorScorer());
+		entity.add(new MeleeFightBehaviorScorer());
 
 		if (options.team == PLAYER)
 		{
@@ -67,5 +70,6 @@ class ActorDecorator
 		entity.add(new Inspectable(actor.actorTypeName, options.clickRadius.or(16)));
 		entity.add(new ActionQueue());
 		entity.add(new IsObservable());
+		entity.add(new Health(options.maxHealth.or(200)));
 	}
 }

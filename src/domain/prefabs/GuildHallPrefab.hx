@@ -7,6 +7,7 @@ import core.Data;
 import domain.components.ActionQueue;
 import domain.components.Building;
 import domain.components.Collider;
+import domain.components.Health;
 import domain.components.Inspectable;
 import domain.components.IsExplorable;
 import domain.components.IsPlayer;
@@ -31,7 +32,7 @@ class GuildHallPrefab extends Prefab
 
 		sprite.width = 128;
 		sprite.height = 192;
-		sprite.origin = new FloatPoint(.5, 175 / 192);
+		sprite.origin = new FloatPoint(.5, 159 / 192);
 
 		e.add(sprite);
 
@@ -41,6 +42,7 @@ class GuildHallPrefab extends Prefab
 		e.add(new Inspectable(building.name, 64));
 		e.add(new IsExplorable());
 		e.add(new Vision(10));
+		e.add(new Health(1000));
 
 		return e;
 	}
