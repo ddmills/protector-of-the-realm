@@ -45,14 +45,9 @@ class PlayScreen extends Screen
 	{
 		var offset = new Coordinate(.5, .5, WORLD);
 
-		if (game.input.lmb)
-		{
-			// Spawner.Spawn(HERO, pos.toWorld().floor().add(offset));
-		}
-
 		if (game.input.rmb)
 		{
-			Spawner.Spawn(TREE_PINE, pos.toWorld().floor().add(offset));
+			Spawner.Spawn(GOBLIN, pos.toWorld().floor().add(offset));
 		}
 	}
 

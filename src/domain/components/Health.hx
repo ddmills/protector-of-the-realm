@@ -17,7 +17,6 @@ class Health extends Component
 		this.max = max;
 		_value = max;
 
-		trace('spawned', this.value, _value, this.max);
 		addHandler(AttackedEvent, onAttacked);
 	}
 

@@ -67,4 +67,9 @@ class FollowBehaviorScorer extends BehaviorScorerComponent
 	{
 		return 'Following ${targetId}';
 	}
+
+	public function behaviorId():String
+	{
+		return "follow";
+	}
 }

@@ -8,7 +8,7 @@ class IdleBehaviorScorer extends BehaviorScorerComponent
 {
 	public function score():Float
 	{
-		return Game.instance.world.rand.float(0, 50);
+		return Game.instance.world.rand.float(0, 20);
 	}
 
 	public function build():BehaviorNode
@@ -21,5 +21,10 @@ class IdleBehaviorScorer extends BehaviorScorerComponent
 	public function label():String
 	{
 		return 'Idling';
+	}
+
+	public function behaviorId():String
+	{
+		return "idle";
 	}
 }

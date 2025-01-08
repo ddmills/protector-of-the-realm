@@ -61,13 +61,13 @@ class BehaviorSystem extends System
 
 			if (result == SUCCESS)
 			{
-				e.remove(bhv);
+				bhv.completed();
 				e.get(Blackboard).reset();
 			}
 
 			if (result == FAILED)
 			{
-				e.remove(bhv);
+				bhv.completed();
 				e.get(Blackboard).reset();
 			}
 		}
@@ -143,10 +143,14 @@ class BehaviorSystem extends System
 				}
 
 				blackboard.goals = [
+					new IntPoint(tpos.x - 1, tpos.y - 1),
 					new IntPoint(tpos.x, tpos.y - 1),
+					new IntPoint(tpos.x + 1, tpos.y - 1),
 					new IntPoint(tpos.x - 1, tpos.y),
 					new IntPoint(tpos.x + 1, tpos.y),
-					new IntPoint(tpos.x, tpos.y + 1)
+					new IntPoint(tpos.x - 1, tpos.y + 1),
+					new IntPoint(tpos.x, tpos.y + 1),
+					new IntPoint(tpos.x + 1, tpos.y + 1)
 				];
 			}
 

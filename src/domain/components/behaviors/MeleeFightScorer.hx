@@ -42,17 +42,16 @@ class MeleeFightBehaviorScorer extends BehaviorScorerComponent
 				return true;
 			});
 
-		// var rand = Game.instance.world.rand.pick(nearby);
-		var rand = nearby.min((v) -> v.distance);
+		var closest = nearby.min((v) -> v.distance);
 
-		if (rand == null)
+		if (closest == null)
 		{
 			return 0;
 		}
 
-		targetId = rand.entityId;
+		targetId = closest.entityId;
 
-		return 100;
+		return 80 - (closest.distance * 5);
 	}
 
 	public function build():BehaviorNode
@@ -73,5 +72,10 @@ class MeleeFightBehaviorScorer extends BehaviorScorerComponent
 	public function label():String
 	{
 		return 'Melee Fighting';
+	}
+
+	public function behaviorId():String
+	{
+		return 'melee-$targetId';
 	}
 }

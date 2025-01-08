@@ -8,6 +8,7 @@ import data.resources.TileKey;
 import domain.actors.TeamType;
 import domain.components.ActionQueue;
 import domain.components.Actor;
+import domain.components.Behavior;
 import domain.components.Blackboard;
 import domain.components.Collider;
 import domain.components.Health;
@@ -71,5 +72,6 @@ class ActorDecorator
 		entity.add(new ActionQueue());
 		entity.add(new IsObservable());
 		entity.add(new Health(options.maxHealth.or(200)));
+		entity.add(new Behavior());
 	}
 }

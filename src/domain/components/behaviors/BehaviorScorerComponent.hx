@@ -19,6 +19,8 @@ abstract class BehaviorScorerComponent extends Component
 		});
 	}
 
+	public abstract function behaviorId():String;
+
 	public abstract function score():Float;
 
 	public abstract function label():String;

@@ -16,24 +16,41 @@ class BehaviorScoringSystem extends System
 	public function new()
 	{
 		query = new Query({
-			all: [Actor],
-			none: [Behavior, IsDestroyed, IsDetached],
+			all: [Actor, Behavior],
+			none: [IsDestroyed, IsDetached],
 		});
 	}
 
 	override function update(frame:Frame)
 	{
+		var tick = game.clock.tick;
+
 		for (entity in query)
 		{
+			var bhv = entity.get(Behavior);
+
+			if ((tick - bhv.lastCheckTick) < bhv.updateRate)
+			{
+				continue;
+			}
+
+			bhv.lastCheckTick = tick;
+
 			var evt = entity.fireEvent(new ScoreBehaviorsEvent());
 
 			if (evt.best != null)
 			{
-				var scorer = evt.best.scorer;
-				var label = scorer.label();
-				var bhv = new Behavior(scorer.build(), label);
+				if (evt.best.scorer.behaviorId() != bhv.currentId)
+				{
+					var diff = evt.best.score - bhv.score;
 
-				entity.add(bhv);
+					if (diff > 10)
+					{
+						// trace('Change what ur doin! $diff', bhv.currentId, '->', evt.best.scorer.behaviorId());
+
+						bhv.assign(evt.best.scorer, evt.best.score);
+					}
+				}
 			}
 			else
 			{

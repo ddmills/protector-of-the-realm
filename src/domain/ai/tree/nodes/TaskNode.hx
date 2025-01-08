@@ -16,7 +16,14 @@ class TaskNode extends BehaviorNode
 	public function reset(entity:Entity)
 	{
 		var t = Data.Tasks.get(task);
-		entity.remove(t);
+		var c = entity.get(t);
+
+		if (c != null)
+		{
+			c.reset();
+			entity.remove(c);
+		}
+
 		result = NOT_STARTED;
 	}
 
