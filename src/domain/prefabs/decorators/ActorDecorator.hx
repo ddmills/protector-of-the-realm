@@ -19,6 +19,7 @@ import domain.components.Label;
 import domain.components.Sprite;
 import domain.components.Team;
 import domain.components.Vision;
+import domain.components.behaviors.FleeBehaviorScorer;
 import domain.components.behaviors.IdleBehaviorScorer;
 import domain.components.behaviors.MeleeFightScorer.MeleeFightBehaviorScorer;
 import domain.components.behaviors.WanderBehaviorScorer;
@@ -52,9 +53,12 @@ class ActorDecorator
 		{
 			entity.add(new IsPlayer());
 			entity.add(new Team(PLAYER));
+			entity.add(new FleeBehaviorScorer());
+			entity.add(new Health(options.maxHealth.or(200)));
 		}
 		else
 		{
+			entity.add(new Health(options.maxHealth.or(50)));
 			entity.add(new Team(MONSTER));
 		}
 
@@ -71,7 +75,6 @@ class ActorDecorator
 		entity.add(new Inspectable(actor.actorTypeName, options.clickRadius.or(16)));
 		entity.add(new ActionQueue());
 		entity.add(new IsObservable());
-		entity.add(new Health(options.maxHealth.or(200)));
 		entity.add(new Behavior());
 	}
 }

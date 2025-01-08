@@ -23,26 +23,9 @@ class MeleeFightBehaviorScorer extends BehaviorScorerComponent
 
 		var vision = entity.get(Vision).range;
 
-		var nearby = Game.instance.world.map.hostility
+		var closest = Game.instance.world.map.hostility
 			.getWithinRange(enemyTeamType, entity.x.floor(), entity.y.floor(), vision)
-			.filter(x ->
-			{
-				if (x.entityId == entity.id)
-				{
-					return false;
-				}
-
-				var e = Game.instance.registry.getEntity(x.entityId);
-
-				if (e == null)
-				{
-					return false;
-				}
-
-				return true;
-			});
-
-		var closest = nearby.min((v) -> v.distance);
+			.min((v) -> v.distance);
 
 		if (closest == null)
 		{
