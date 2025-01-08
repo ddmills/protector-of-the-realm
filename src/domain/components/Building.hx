@@ -3,6 +3,7 @@ package domain.components;
 import common.struct.Coordinate;
 import common.struct.IntPoint;
 import common.struct.Set;
+import common.struct.Shape;
 import core.Data;
 import core.Game;
 import data.domain.BuildingType;
@@ -39,6 +40,13 @@ class Building extends Component
 		{
 			evt.add(RESIDENT(residentId));
 		}
+	}
+
+	public function getNeighborTiles():Array<IntPoint>
+	{
+		var bldg = building;
+
+		return Shape.RECTANGLE(bldg.width + 2, bldg.height + 2).getFootprint(entity.pos.toIntPoint());
 	}
 
 	private function onHireActor(evt:HireActorEvent)

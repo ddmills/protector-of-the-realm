@@ -38,24 +38,30 @@ class BehaviorScoringSystem extends System
 
 			var evt = entity.fireEvent(new ScoreBehaviorsEvent());
 
-			if (evt.best != null)
-			{
-				if (evt.best.scorer.behaviorId() != bhv.currentId)
-				{
-					var diff = evt.best.score - bhv.score;
-
-					if (diff > 10)
-					{
-						// trace('Change what ur doin! $diff', bhv.currentId, '->', evt.best.scorer.behaviorId());
-
-						bhv.assign(evt.best.scorer, evt.best.score);
-					}
-				}
-			}
-			else
+			if (evt.best == null)
 			{
 				trace('NO SCORERS FOUND!!');
+				continue;
 			}
+
+			if (evt.best.scorer.behaviorId() == bhv.currentId)
+			{
+				continue;
+			}
+
+			var cur = evt.scores.find(x -> x.scorer.behaviorId() == bhv.currentId);
+
+			if (cur != null && cur.score > 0)
+			{
+				var diff = evt.best.score - cur.score;
+
+				if (diff < 10)
+				{
+					continue;
+				}
+			}
+
+			bhv.assign(evt.best.scorer, evt.best.score);
 		}
 	}
 }

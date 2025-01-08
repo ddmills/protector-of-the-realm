@@ -20,6 +20,7 @@ import domain.components.Sprite;
 import domain.components.Team;
 import domain.components.Vision;
 import domain.components.behaviors.FleeBehaviorScorer;
+import domain.components.behaviors.GoHomeBehaviorScorer;
 import domain.components.behaviors.IdleBehaviorScorer;
 import domain.components.behaviors.MeleeFightScorer.MeleeFightBehaviorScorer;
 import domain.components.behaviors.WanderBehaviorScorer;
@@ -53,8 +54,10 @@ class ActorDecorator
 		{
 			entity.add(new IsPlayer());
 			entity.add(new Team(PLAYER));
-			entity.add(new FleeBehaviorScorer());
 			entity.add(new Health(options.maxHealth.or(200)));
+
+			entity.add(new FleeBehaviorScorer());
+			entity.add(new GoHomeBehaviorScorer());
 		}
 		else
 		{
