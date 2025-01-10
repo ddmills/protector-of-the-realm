@@ -1,6 +1,5 @@
 package domain.components.behaviors;
 
-import core.Game;
 import domain.ai.tree.nodes.BehaviorNode;
 import domain.ai.tree.nodes.SequenceNode;
 import domain.ai.tree.nodes.TaskNode;
@@ -36,7 +35,11 @@ class GoHomeBehaviorScorer extends BehaviorScorerComponent
 
 		bb.goals = goals;
 
-		return new TaskNode(TASK_MOVE_TO(3));
+		return new SequenceNode([
+			new TaskNode(TASK_MOVE_TO(3)),
+			new TaskNode(TASK_ENTER_BUILDING(buildingEnt.id)),
+			new TaskNode(TASK_WAIT(20))
+		]);
 	}
 
 	public function behaviorId():String

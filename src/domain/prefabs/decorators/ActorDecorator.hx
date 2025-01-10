@@ -19,10 +19,12 @@ import domain.components.Label;
 import domain.components.Sprite;
 import domain.components.Team;
 import domain.components.Vision;
+import domain.components.behaviors.AttackRangeBehaviorScorer;
 import domain.components.behaviors.FleeBehaviorScorer;
+import domain.components.behaviors.FollowBehaviorScorer;
 import domain.components.behaviors.GoHomeBehaviorScorer;
 import domain.components.behaviors.IdleBehaviorScorer;
-import domain.components.behaviors.MeleeFightScorer.MeleeFightBehaviorScorer;
+import domain.components.behaviors.MeleeFightScorer.AttackMeleeBehaviorScorer;
 import domain.components.behaviors.WanderBehaviorScorer;
 import ecs.Entity;
 
@@ -31,6 +33,7 @@ typedef ActorOptions =
 	?actorType:ActorType,
 	?tileKey:Null<TileKey>,
 	?visionRange:Null<Int>,
+	?isRangedAttacker:Null<Bool>,
 	?clickRadius:Null<Int>,
 	?team:TeamType,
 	?maxHealth:Int,
@@ -47,21 +50,29 @@ class ActorDecorator
 		// BEHAVIORS
 		entity.add(new IdleBehaviorScorer());
 		entity.add(new WanderBehaviorScorer());
-		// entity.add(new FollowBehaviorScorer());
-		entity.add(new MeleeFightBehaviorScorer());
+
+		if (options.isRangedAttacker.or(false))
+		{
+			entity.add(new AttackRangeBehaviorScorer());
+		}
+		else
+		{
+			entity.add(new AttackMeleeBehaviorScorer());
+		}
 
 		if (options.team == PLAYER)
 		{
 			entity.add(new IsPlayer());
 			entity.add(new Team(PLAYER));
-			entity.add(new Health(options.maxHealth.or(200)));
+			entity.add(new Health(options.maxHealth.or(180)));
 
 			entity.add(new FleeBehaviorScorer());
 			entity.add(new GoHomeBehaviorScorer());
+			entity.add(new FollowBehaviorScorer());
 		}
 		else
 		{
-			entity.add(new Health(options.maxHealth.or(50)));
+			entity.add(new Health(options.maxHealth.or(80)));
 			entity.add(new Team(MONSTER));
 		}
 

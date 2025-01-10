@@ -51,7 +51,7 @@ class FollowBehaviorScorer extends BehaviorScorerComponent
 
 		targetId = rand.entityId;
 
-		return Game.instance.world.rand.float(50, 100);
+		return Game.instance.world.rand.float(20, 30);
 	}
 
 	public function build():BehaviorNode

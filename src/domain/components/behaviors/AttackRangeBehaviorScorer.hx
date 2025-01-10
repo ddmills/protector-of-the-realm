@@ -6,7 +6,7 @@ import domain.ai.tree.nodes.BehaviorNode;
 import domain.ai.tree.nodes.SequenceNode;
 import domain.ai.tree.nodes.TaskNode;
 
-class AttackMeleeBehaviorScorer extends BehaviorScorerComponent
+class AttackRangeBehaviorScorer extends BehaviorScorerComponent
 {
 	var targetId:String;
 
@@ -34,7 +34,7 @@ class AttackMeleeBehaviorScorer extends BehaviorScorerComponent
 
 		targetId = closest.entityId;
 
-		return 80 - (closest.distance * 5);
+		return 100 - (closest.distance * 5);
 	}
 
 	public function build():BehaviorNode
@@ -45,20 +45,16 @@ class AttackMeleeBehaviorScorer extends BehaviorScorerComponent
 
 		var sleep = Game.instance.world.rand.float(.5, 1.5);
 
-		return new SequenceNode([
-			new TaskNode(TASK_MOVE_TO(3)),
-			new TaskNode(TASK_ATTACK_MELEE),
-			new TaskNode(TASK_WAIT(sleep))
-		]);
+		return new SequenceNode([new TaskNode(TASK_ATTACK_RANGE), new TaskNode(TASK_WAIT(sleep))]);
 	}
 
 	public function label():String
 	{
-		return 'Melee Fighting';
+		return 'Range Fighting';
 	}
 
 	public function behaviorId():String
 	{
-		return 'melee-$targetId';
+		return 'range-$targetId';
 	}
 }

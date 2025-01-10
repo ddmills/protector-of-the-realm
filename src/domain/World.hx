@@ -94,7 +94,7 @@ class World
 				}
 				else if (rand.bool(.0015))
 				{
-					var s:SpawnableType = rand.pick([PALADIN, ROGUE, WIZARD, RANGER, OGRE, GOBLIN, SKELETON]);
+					var s:SpawnableType = rand.pick([OGRE, GOBLIN, SKELETON]);
 					Spawner.Spawn(s, new Coordinate(x + .5, y + .5, WORLD));
 				}
 			}

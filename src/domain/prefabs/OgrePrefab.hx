@@ -15,6 +15,7 @@ class OgrePrefab extends Prefab
 		ActorDecorator.Decorate(e, {
 			actorType: ACTOR_OGRE,
 			tileKey: TK_OGRE,
+			maxHealth: 120,
 		});
 
 		var sprite = e.get(Sprite);

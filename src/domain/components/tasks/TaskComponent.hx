@@ -18,10 +18,7 @@ abstract class TaskComponent extends Component
 		evt.setLabel(getLabel());
 	}
 
-	public function reset()
-	{
-		entity.remove(Path);
-	}
+	public function reset() {}
 
 	public abstract function getLabel():String;
 }

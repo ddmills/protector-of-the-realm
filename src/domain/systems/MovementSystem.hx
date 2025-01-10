@@ -2,6 +2,7 @@ package domain.systems;
 
 import common.struct.Coordinate;
 import core.Frame;
+import domain.components.Guest;
 import domain.components.IsDestroyed;
 import domain.components.Move;
 import domain.components.MoveComplete;
@@ -21,6 +22,16 @@ class MovementSystem extends System
 			all: [Move],
 			none: [MoveComplete, IsDestroyed]
 		});
+
+		var guests = new Query({
+			all: [Move, Guest],
+		});
+
+		guests.onEntityAdded((e) ->
+		{
+			e.remove(Guest);
+		});
+
 		completed = new Query({
 			all: [MoveComplete],
 			none: [IsDestroyed],

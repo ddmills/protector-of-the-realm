@@ -88,6 +88,12 @@ class Building extends Component
 		e.add(new Resident(entity.id));
 	}
 
+	public function addGuest(e:Entity)
+	{
+		guests.add(e.id);
+		e.add(new Guest(entity.id));
+	}
+
 	override function onRemove()
 	{
 		for (residentId in residents)

@@ -5,6 +5,7 @@ import common.struct.Set;
 import common.util.BitUtil;
 import core.Frame;
 import domain.components.Collider;
+import domain.components.Guest;
 import domain.components.IsDestroyed;
 import domain.components.IsDetached;
 import domain.components.Move;
@@ -37,22 +38,22 @@ class ColliderSystem extends System
 
 		var created = new Query({
 			all: [Collider],
-			none: [IsDetached],
+			none: [IsDetached, Guest],
 		});
 
 		var moved = new Query({
 			all: [Collider, Moved],
-			none: [IsDetached],
+			none: [IsDetached, Guest],
 		});
 
 		var move = new Query({
 			all: [Collider, Move],
-			none: [IsDetached],
+			none: [IsDetached, Guest],
 		});
 
 		var destroyed = new Query({
 			all: [Collider],
-			any: [IsDestroyed, IsDetached],
+			any: [IsDestroyed, IsDetached, Guest],
 		});
 
 		moved.onEntityAdded(onEntityMoved);

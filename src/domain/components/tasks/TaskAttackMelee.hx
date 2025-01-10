@@ -2,7 +2,7 @@ package domain.components.tasks;
 
 import core.Game;
 
-class TaskTryMelee extends TaskComponent
+class TaskAttackMelee extends TaskComponent
 {
 	@save public var duration:Float;
 	@save public var progress:Float;

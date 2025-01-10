@@ -12,6 +12,11 @@ class TaskMoveTo extends TaskComponent
 		this.retryAttempts = 0;
 	}
 
+	override function reset()
+	{
+		entity.remove(Path);
+	}
+
 	public function getLabel():String
 	{
 		var bb = entity.get(Blackboard);

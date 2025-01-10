@@ -1,6 +1,7 @@
 package domain.systems;
 
 import core.Frame;
+import domain.components.Guest;
 import domain.components.Moved;
 import domain.components.Team;
 import ecs.Query;
@@ -14,6 +15,7 @@ class HostilitySystem extends System
 	{
 		var teams = new Query({
 			all: [Team],
+			none: [Guest],
 		});
 
 		teams.onEntityAdded((e) ->

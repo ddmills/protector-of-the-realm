@@ -5,11 +5,11 @@ import ecs.Component;
 
 class Health extends Component
 {
-	@save var _value:Int;
+	@save var _value:Float;
 
 	@save public var max:Int;
 
-	public var value(get, set):Int;
+	public var value(get, set):Float;
 	public var percent(get, never):Float;
 
 	public function new(max:Int)
@@ -30,7 +30,7 @@ class Health extends Component
 		}
 	}
 
-	function set_value(value:Int):Int
+	function set_value(value:Float):Float
 	{
 		_value = value.clamp(0, max);
 
@@ -42,7 +42,7 @@ class Health extends Component
 		return _value / max;
 	}
 
-	function get_value():Int
+	function get_value():Float
 	{
 		return _value;
 	}

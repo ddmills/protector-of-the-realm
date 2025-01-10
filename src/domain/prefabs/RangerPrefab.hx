@@ -15,6 +15,7 @@ class RangerPrefab extends Prefab
 			tileKey: TK_RANGER,
 			visionRange: 10,
 			team: PLAYER,
+			isRangedAttacker: true,
 		});
 
 		return e;

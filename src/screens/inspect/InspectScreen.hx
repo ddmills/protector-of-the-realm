@@ -227,7 +227,7 @@ class InspectScreen extends Screen
 		}
 
 		ui.health.bar.width = hp.percent * width;
-		ui.health.text.text = '${hp.value}/${hp.max}';
+		ui.health.text.text = '${hp.value.ciel()}/${hp.max}';
 	}
 
 	function renderActions()

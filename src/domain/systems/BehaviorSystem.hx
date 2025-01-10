@@ -7,13 +7,16 @@ import core.Frame;
 import domain.components.Actor;
 import domain.components.Behavior;
 import domain.components.Blackboard;
+import domain.components.Building;
 import domain.components.IsDead;
 import domain.components.IsDestroyed;
 import domain.components.Move;
 import domain.components.Path;
+import domain.components.tasks.TaskAttackMelee;
+import domain.components.tasks.TaskAttackRange;
+import domain.components.tasks.TaskEnterBuilding;
 import domain.components.tasks.TaskMoveTo;
 import domain.components.tasks.TaskPickRandomSpot;
-import domain.components.tasks.TaskTryMelee;
 import domain.components.tasks.TaskWait;
 import domain.events.AttackedEvent;
 import ecs.Entity;
@@ -26,7 +29,9 @@ class BehaviorSystem extends System
 	var sleepers:Query;
 	var spotters:Query;
 	var movers:Query;
-	var attackers:Query;
+	var melees:Query;
+	var rangers:Query;
+	var bldgEnter:Query;
 
 	public function new()
 	{
@@ -47,8 +52,16 @@ class BehaviorSystem extends System
 			all: [TaskMoveTo, Blackboard],
 		});
 
-		attackers = new Query({
-			all: [TaskTryMelee, Blackboard],
+		melees = new Query({
+			all: [TaskAttackMelee, Blackboard],
+		});
+
+		rangers = new Query({
+			all: [TaskAttackRange, Blackboard],
+		});
+
+		bldgEnter = new Query({
+			all: [TaskEnterBuilding, Blackboard],
 		});
 	}
 
@@ -82,9 +95,45 @@ class BehaviorSystem extends System
 			}
 		}
 
-		for (e in attackers)
+		for (e in bldgEnter)
 		{
-			var task = e.get(TaskTryMelee);
+			var task = e.get(TaskEnterBuilding);
+			var bldgEnt = game.registry.getEntity(task.buildingEntityId);
+			var bldg = bldgEnt.get(Building);
+			bldg.addGuest(e);
+			task.state = SUCCESS;
+		}
+
+		for (e in melees)
+		{
+			var task = e.get(TaskAttackMelee);
+			var bb = e.get(Blackboard);
+			var target = game.registry.getEntity(bb.targetId);
+
+			if (target == null)
+			{
+				task.state = FAILED;
+				continue;
+			}
+
+			if (target.has(IsDead))
+			{
+				task.state = SUCCESS;
+				continue;
+			}
+
+			var attack:Attack = {
+				attacker: e,
+				defender: target,
+				damage: 10,
+			};
+			target.fireEvent(new AttackedEvent(attack));
+			task.state = SUCCESS;
+		}
+
+		for (e in rangers)
+		{
+			var task = e.get(TaskAttackRange);
 			var bb = e.get(Blackboard);
 			var target = game.registry.getEntity(bb.targetId);
 
@@ -160,14 +209,14 @@ class BehaviorSystem extends System
 				continue;
 			}
 
-			if (task.state != EXECUTING || blackboard.goals.exists(g -> cpos.equals(g)))
+			if (e.has(Move))
 			{
-				task.state = SUCCESS;
 				continue;
 			}
 
-			if (e.has(Move))
+			if (task.state != EXECUTING || blackboard.goals.exists(g -> cpos.equals(g)))
 			{
+				task.state = SUCCESS;
 				continue;
 			}
 

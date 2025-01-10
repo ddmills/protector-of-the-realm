@@ -1,8 +1,7 @@
 package domain.systems;
 
-import common.util.Projection;
 import core.Frame;
-import core.Game;
+import domain.components.Guest;
 import domain.components.IsDestroyed;
 import domain.components.IsDetached;
 import domain.components.IsExplorable;
@@ -101,12 +100,12 @@ class VisionSystem extends System
 
 		var moved = new Query({
 			all: [Vision, IsPlayer, Moved],
-			none: [IsDestroyed, IsDetached],
+			none: [IsDestroyed, IsDetached, Guest],
 		});
 
 		var destroyed = new Query({
 			all: [Vision, IsPlayer],
-			any: [IsDestroyed, IsDetached],
+			any: [IsDestroyed, IsDetached, Guest],
 		});
 
 		moved.onEntityAdded(onEntityMoved);
@@ -152,14 +151,14 @@ class VisionSystem extends System
 
 	private function onEntityDestroyed(e:Entity)
 	{
-		var collider = e.get(Vision);
+		var vision = e.get(Vision);
 
-		for (pos in collider.current)
+		for (pos in vision.current)
 		{
 			layer.removeVisibleForEntity(pos.x, pos.y, e.id);
 		}
 
-		collider.current = [];
+		vision.current = [];
 	}
 
 	private function updateDebug(value:Bool)

@@ -14,6 +14,7 @@ class GoblinPrefab extends Prefab
 		ActorDecorator.Decorate(e, {
 			actorType: ACTOR_GOBLIN,
 			tileKey: TK_GOBLIN,
+			isRangedAttacker: true,
 		});
 
 		var sprite = e.get(Sprite);

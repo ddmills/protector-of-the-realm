@@ -11,6 +11,7 @@ class SystemManager
 	public var pathing(default, null):PathFollowSystem;
 	public var movement(default, null):MovementSystem;
 	public var hostility(default, null):HostilitySystem;
+	public var guest(default, null):GuestSystem;
 	public var death(default, null):DeathSystem;
 	public var sprites(default, null):SpriteSystem;
 	public var colliders(default, null):ColliderSystem;
@@ -29,6 +30,7 @@ class SystemManager
 		pathing = new PathFollowSystem();
 		movement = new MovementSystem();
 		hostility = new HostilitySystem();
+		guest = new GuestSystem();
 		death = new DeathSystem();
 		sprites = new SpriteSystem();
 		colliders = new ColliderSystem();
@@ -46,6 +48,7 @@ class SystemManager
 		pathing.update(frame);
 		movement.update(frame);
 		hostility.update(frame);
+		guest.update(frame);
 		death.update(frame);
 		sprites.update(frame);
 		colliders.update(frame);
@@ -63,6 +66,7 @@ class SystemManager
 		pathing.teardown();
 		movement.teardown();
 		hostility.teardown();
+		guest.teardown();
 		death.teardown();
 		sprites.teardown();
 		colliders.teardown();
